@@ -1,8 +1,10 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import logo from "./logo.svg";
+import "./App.css";
+import { db } from "./service/firebase";
 
 function App() {
+  console.log(db);
   return (
     <div className="App">
       <header className="App-header">
