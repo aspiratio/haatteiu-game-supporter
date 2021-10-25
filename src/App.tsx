@@ -1,8 +1,8 @@
 import React from "react";
 import logo from "./logo.svg";
 import "./App.css";
-import { db, firebaseConfig } from "./service/firebase";
-import { getDoc, doc, collection } from "@firebase/firestore";
+import { db } from "./service/firebase";
+import { getDoc, doc } from "@firebase/firestore";
 
 async function test() {
   const userRef = doc(db, "users", "SXh73ZwkamCv3a3m0nrJ");
