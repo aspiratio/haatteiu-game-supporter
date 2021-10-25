@@ -1,10 +1,17 @@
 import React from "react";
 import logo from "./logo.svg";
 import "./App.css";
-import { db } from "./service/firebase";
+import { db, firebaseConfig } from "./service/firebase";
+import { getDoc, doc, collection } from "@firebase/firestore";
+
+async function test() {
+  const userRef = doc(db, "users", "SXh73ZwkamCv3a3m0nrJ");
+  await getDoc(userRef)
+    .then((doc) => console.log(doc.data()))
+    .catch((error) => console.log(error));
+}
 
 function App() {
-  console.log(db);
   return (
     <div className="App">
       <header className="App-header">
@@ -12,14 +19,7 @@ function App() {
         <p>
           Edit <code>src/App.tsx</code> and save to reload.
         </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
+        <button onClick={test}>Learn React</button>
       </header>
     </div>
   );
