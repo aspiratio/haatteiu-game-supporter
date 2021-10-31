@@ -12,11 +12,11 @@ function App() {
     <BrowserRouter>
       <Header />
       <div>
-        <Link to="/">Top</Link>
+        {/* <Link to="/">Top</Link>
         <Link to="/create-room">CreateRoom</Link>
         <Link to="/join-room">JoinRoom</Link>
         <Link to="/entrance">Entrance</Link>
-        <Link to="/game">Game</Link>
+        <Link to="/game">Game</Link> */}
       </div>
       <Switch>
         <Route exact path="/">
