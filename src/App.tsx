@@ -4,7 +4,7 @@ import { Header } from "./components/Header";
 import { CreateRoom } from "./pages/CreateRoom";
 import { Entrance } from "./pages/Entrance";
 import { Game } from "./pages/Game";
-import { JoinRoom } from "./pages/JoinRoom";
+import { EnterRoom } from "./pages/EnterRoom";
 import { Top } from "./pages/Top";
 
 function App() {
@@ -29,8 +29,8 @@ function App() {
         </Route>
       </Switch>
       <Switch>
-        <Route path="/join-room">
-          <JoinRoom />
+        <Route path="/enter-room">
+          <EnterRoom />
         </Route>
       </Switch>
       <Switch>

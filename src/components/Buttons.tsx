@@ -6,11 +6,15 @@ import { FaTwitter, FaQuestionCircle } from "react-icons/fa";
 
 type Props = {
   text: string;
+  onClick?: () => void;
 };
 
-const StartButton: VFC<Props> = ({ text }) => {
+const StartButton: VFC<Props> = ({ text, onClick }) => {
   return (
-    <button className="shadow-lg px-12 py-8 text-3xl rounded-3xl font-bold bg-yellow-300 text-white  hover:bg-yellow-400 hover:shadow-sm hover:translate-y-0.5 transform transition">
+    <button
+      onClick={onClick}
+      className="shadow-lg px-12 py-8 text-3xl rounded-3xl font-bold bg-yellow-300 text-white  hover:bg-yellow-400 hover:shadow-sm hover:translate-y-0.5 transform transition"
+    >
       {text}
     </button>
   );
