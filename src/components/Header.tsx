@@ -1,12 +1,29 @@
+import { Link } from "react-router-dom";
+import { Menu, MenuItem, MenuButton } from "@szhsin/react-menu";
+import "@szhsin/react-menu/dist/index.css";
+
 export const Header = () => {
   return (
-    <div className="flex justify-center bg-yellow-300">
-      <h1 className="text-2xl font-medium p-1 text-white">HGS</h1>
-      <div className="tham tham-e-squeeze tham-w-6 absolute right-2 mt-3 mr-3">
-        <div className="tham-box tham-w-8">
-          <div className="tham-inner bg-yellow-800" />
-        </div>
+    <>
+      <div className="flex justify-center bg-yellow-300">
+        <h1 className="text-2xl font-medium p-1 text-white">HGS</h1>
       </div>
-    </div>
+      <Menu
+        menuButton={
+          <MenuButton className="sm:text-lg absolute right-2 top-2 text-yellow-50">
+            メニュー
+          </MenuButton>
+        }
+        direction={"bottom"}
+        arrow={true}
+      >
+        <div className="underline text-sm text-gray-500">
+          <MenuItem>
+            <Link to="/">トップ画面へ</Link>
+          </MenuItem>
+          <MenuItem>使い方をみる</MenuItem>
+        </div>
+      </Menu>
+    </>
   );
 };
