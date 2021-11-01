@@ -12,7 +12,6 @@ export const Top = () => {
 
   const openModal = () => {
     setIsOpen(true);
-    console.log(isOpen);
   };
 
   const closeModal = () => {
