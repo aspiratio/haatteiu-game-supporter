@@ -1,8 +1,9 @@
+import { VFC } from "react";
 import { Link } from "react-router-dom";
 import { Menu, MenuItem, MenuButton } from "@szhsin/react-menu";
 import "@szhsin/react-menu/dist/index.css";
 
-export const Header = () => {
+export const Header: VFC = () => {
   return (
     <>
       <div className="flex justify-center bg-yellow-300">
