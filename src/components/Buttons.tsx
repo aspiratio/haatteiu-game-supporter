@@ -2,11 +2,12 @@ import { VFC } from "react";
 import "tailwindcss/colors";
 import { FaTwitter, FaQuestionCircle } from "react-icons/fa";
 
-// サイズまで固定しているが、必要に応じてサイズを変更するpropsを渡すように書き換えてもいいかも
-
 type Props = {
   text: string;
   onClick?: () => void;
+  fontSize?: number;
+  width?: number;
+  height?: number;
 };
 
 const StartButton: VFC<Props> = ({ text, onClick }) => {
@@ -20,9 +21,21 @@ const StartButton: VFC<Props> = ({ text, onClick }) => {
   );
 };
 
-const PrimaryButton: VFC<Props> = ({ text }) => {
+const PrimaryButton: VFC<Props> = ({
+  text,
+  onClick,
+  width = 32,
+  height = 8,
+}) => {
   return (
-    <button className="px-6 py-2 text-xl rounded-lg border-2 border-blue-600 bg-blue-500 text-white hover:bg-blue-300">
+    <button
+      onClick={onClick}
+      className={`text-xl sm:text-2xl w-${width} sm:w-${
+        width * 2
+      } h-${height} sm:h-${
+        height * 2
+      } rounded-lg border-2 border-blue-600 bg-blue-500 text-white hover:bg-blue-300`}
+    >
       {text}
     </button>
   );
