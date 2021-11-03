@@ -1,4 +1,5 @@
 import { ChangeEvent, useState, VFC } from "react";
+import { useHistory } from "react-router";
 import { PrimaryButton } from "../components/Buttons";
 import { InputBox } from "../components/InputBox";
 
@@ -11,6 +12,9 @@ export const EnterRoom: VFC = () => {
   const onChangeUserName = (event: ChangeEvent<HTMLInputElement>) => {
     setUserName(event.target.value);
   };
+
+  const history = useHistory();
+
   const onClickCreateRoom = () => {
     if (!roomId) {
       alert("ルームIDを入力してください");
@@ -19,7 +23,9 @@ export const EnterRoom: VFC = () => {
       alert("名前を入力してください");
       return;
     }
-    console.log("create room");
+    console.log("enter room");
+    // TODO:途中入室を可能にする必要あり
+    history.push("/entrance", { roomId, userName });
   };
 
   return (

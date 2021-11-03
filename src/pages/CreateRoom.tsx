@@ -1,4 +1,5 @@
 import { ChangeEvent, useState, VFC } from "react";
+import { useHistory } from "react-router";
 import { PrimaryButton } from "../components/Buttons";
 import { InputBox } from "../components/InputBox";
 
@@ -7,12 +8,15 @@ export const CreateRoom: VFC = () => {
   const onChangeUserName = (event: ChangeEvent<HTMLInputElement>) => {
     setUserName(event.target.value);
   };
+  const history = useHistory();
+
   const onClickCreateRoom = () => {
     if (!userName) {
       alert("名前を入力してください");
       return;
     }
     console.log("create room");
+    history.push("/entrance", { userName });
   };
 
   return (
