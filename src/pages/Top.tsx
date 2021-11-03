@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, VFC } from "react";
 import {
   HowToUseButton,
   StartButton,
@@ -7,12 +7,11 @@ import {
 import { Dialog } from "@headlessui/react";
 import { Link } from "react-router-dom";
 
-export const Top = () => {
+export const Top: VFC = () => {
   const [isOpen, setIsOpen] = useState(false);
 
   const openModal = () => {
     setIsOpen(true);
-    console.log(isOpen);
   };
 
   const closeModal = () => {

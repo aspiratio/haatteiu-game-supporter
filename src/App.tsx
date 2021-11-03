@@ -9,41 +9,43 @@ import { Top } from "./pages/Top";
 
 function App() {
   return (
-    <BrowserRouter>
-      <Header />
-      <div>
-        {/* <Link to="/">Top</Link>
+    <div className="h-screen bg-yellow-50">
+      <BrowserRouter>
+        <Header />
+        <div>
+          {/* <Link to="/">Top</Link>
         <Link to="/create-room">CreateRoom</Link>
         <Link to="/join-room">JoinRoom</Link>
         <Link to="/entrance">Entrance</Link>
         <Link to="/game">Game</Link> */}
-      </div>
-      <Switch>
-        <Route exact path="/">
-          <Top />
-        </Route>
-      </Switch>
-      <Switch>
-        <Route path="/create-room">
-          <CreateRoom />
-        </Route>
-      </Switch>
-      <Switch>
-        <Route path="/enter-room">
-          <EnterRoom />
-        </Route>
-      </Switch>
-      <Switch>
-        <Route path="/entrance">
-          <Entrance />
-        </Route>
-      </Switch>
-      <Switch>
-        <Route path="/game">
-          <Game />
-        </Route>
-      </Switch>
-    </BrowserRouter>
+        </div>
+        <Switch>
+          <Route exact path="/">
+            <Top />
+          </Route>
+        </Switch>
+        <Switch>
+          <Route path="/create-room">
+            <CreateRoom />
+          </Route>
+        </Switch>
+        <Switch>
+          <Route path="/enter-room">
+            <EnterRoom />
+          </Route>
+        </Switch>
+        <Switch>
+          <Route path="/entrance">
+            <Entrance />
+          </Route>
+        </Switch>
+        <Switch>
+          <Route path="/game">
+            <Game />
+          </Route>
+        </Switch>
+      </BrowserRouter>
+    </div>
   );
 }
 
