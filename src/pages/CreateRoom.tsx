@@ -16,7 +16,7 @@ export const CreateRoom: VFC = () => {
       return;
     }
     console.log("create room");
-    history.push("/entrance", { userName });
+    history.push("/host-entrance", { userName });
   };
 
   return (

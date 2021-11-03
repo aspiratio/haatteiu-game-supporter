@@ -25,7 +25,7 @@ export const EnterRoom: VFC = () => {
     }
     console.log("enter room");
     // TODO:途中入室を可能にする必要あり
-    history.push("/entrance", { roomId, userName });
+    history.push("/guest-entrance", { roomId, userName });
   };
 
   return (

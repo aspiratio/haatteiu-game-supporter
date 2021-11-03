@@ -41,9 +41,20 @@ const PrimaryButton: VFC<Props> = ({
   );
 };
 
-const SecondButton: VFC<Props> = ({ text }) => {
+const SecondButton: VFC<Props> = ({
+  text,
+  onClick,
+  width = 32,
+  height = 8,
+}) => {
   return (
-    <button className="px-6 py-2 text-xl rounded-lg border-2 bg-blue-100 border-blue-500 text-blue-500 hover:text-white hover:bg-blue-400">
+    <button
+      className={`text-xl sm:text-2xl w-${width} sm:w-${
+        width * 2
+      } h-${height} sm:h-${
+        height * 2
+      } rounded-lg border-2 bg-blue-100 border-blue-500 text-blue-500 hover:text-white hover:bg-blue-400`}
+    >
       {text}
     </button>
   );
