@@ -21,8 +21,7 @@ export const CreateRoom: VFC = () => {
         <p className="text-center sm:text-xl md:text-2xl">
           ゲームで表示する名前を入力してください
         </p>
-        <br />
-        <div className="flex flex-col space-y-8 items-center ">
+        <div className="flex flex-col space-y-8 items-center mt-7 ">
           <InputBox onChange={onChangeUserName} />
           <PrimaryButton text={"ルーム作成"} onClick={onClickCreateRoom} />
         </div>
