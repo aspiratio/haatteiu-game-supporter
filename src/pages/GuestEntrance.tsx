@@ -1,11 +1,28 @@
-import { useLocation } from "react-router";
+import { useState } from "react";
+import { useHistory, useLocation } from "react-router";
 import { SecondButton } from "../components/Buttons";
+import { ConfirmModal } from "../components/ConfirmModal";
 import { Information } from "../components/Information";
+import { LeavingRoom } from "../util/LeavingRoom";
 
 // 前ページでuseHistoryでstateを渡している。stateがundefinedのときはエラー表示が出るようにすれば、url直入力で入れなくさせられるはず。
 export const GuestEntrance = () => {
   const state = useLocation().state as any;
-  console.log(state.roomId);
+  const [isOpen, setIsOpen] = useState(false);
+  const history = useHistory();
+
+  const openModal = () => {
+    setIsOpen(true);
+  };
+  const closeModal = () => {
+    setIsOpen(false);
+  };
+
+  const returnToTopPage = () => {
+    history.push("/");
+    LeavingRoom();
+  };
+
   return (
     <>
       <Information roomId={state.roomId} userName={state.userName} />
@@ -14,8 +31,14 @@ export const GuestEntrance = () => {
           ゲームの開始を待っています...
         </p>
         <div className="pt-20">
-          <SecondButton text={"退室"} />
+          <SecondButton text={"退室"} onClick={openModal} />
         </div>
+        <ConfirmModal
+          isOpen={isOpen}
+          onClose={closeModal}
+          text={"ルームを退室しますか？"}
+          onClick={returnToTopPage}
+        />
       </div>
     </>
   );

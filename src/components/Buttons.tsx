@@ -49,6 +49,7 @@ const SecondButton: VFC<Props> = ({
 }) => {
   return (
     <button
+      onClick={onClick}
       className={`text-xl sm:text-2xl w-${width} sm:w-${
         width * 2
       } h-${height} sm:h-${
