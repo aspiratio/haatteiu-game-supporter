@@ -18,7 +18,7 @@ export const Header: VFC = () => {
         direction={"bottom"}
         arrow={true}
       >
-        <div className="underline text-sm">
+        <div className="underline text-sm text-gray-500">
           <MenuItem>
             <Link to="/">トップ画面へ</Link>
           </MenuItem>
