@@ -86,9 +86,7 @@ const HowToUseButton: VFC = () => {
     <>
       <button className="inline-flex rounded-md shadow-lg bg-gray-300 hover:bg-gray-400">
         <FaQuestionCircle className="h-auto w-auto p-2 rounded-md" />
-        <span className="text-sm pr-2 pl-0 my-auto rounded-md text-gray-500">
-          使い方
-        </span>
+        <span className="text-sm pr-2 pl-0 my-auto rounded-md">使い方</span>
       </button>
     </>
   );

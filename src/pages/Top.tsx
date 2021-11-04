@@ -42,7 +42,7 @@ export const Top: VFC = () => {
         </div>
       </Dialog>
       <div className="flex flex-col mx-auto max-w-sm sm:max-w-xl">
-        <h2 className="mx-auto mt-10 text-lg sm:text-xl text-gray-500">
+        <h2 className="mx-auto mt-10 text-lg sm:text-xl">
           オンライン投票！自動で集計！
         </h2>
         <img

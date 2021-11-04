@@ -10,7 +10,7 @@ import { GuestEntrance } from "./pages/GuestEntrance";
 
 function App() {
   return (
-    <div className="h-screen bg-yellow-50">
+    <div className="h-screen bg-yellow-50 text-gray-500">
       <BrowserRouter>
         <Header />
         <div>
