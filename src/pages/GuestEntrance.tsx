@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useHistory, useLocation } from "react-router";
 import { SecondButton } from "../components/Buttons";
-import { ConfirmModal } from "../components/ConfirmModal";
+import { ConfirmModal } from "../components/Modals";
 import { Information } from "../components/Information";
 import { LeavingRoom } from "../util/LeavingRoom";
 

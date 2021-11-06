@@ -2,6 +2,8 @@ import { VFC } from "react";
 import "tailwindcss/colors";
 import { FaTwitter, FaQuestionCircle } from "react-icons/fa";
 
+// TODO：型定義から可能な限り？を除く ツイートボタン、使い方ボタンにpropsを持たせる
+
 type Props = {
   text?: string;
   onClick?: () => void;
