@@ -19,8 +19,9 @@ export const GuestEntrance = () => {
   };
 
   const returnToTopPage = () => {
-    history.push("/");
+    closeModal();
     LeavingRoom();
+    history.push("/");
   };
 
   return (

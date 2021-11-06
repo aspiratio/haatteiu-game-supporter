@@ -18,6 +18,10 @@ export const Top: VFC = () => {
     setIsOpen(false);
   };
 
+  const test = () => {
+    console.log("test");
+  };
+
   return (
     <>
       <Dialog open={isOpen} onClose={closeModal}>
@@ -55,7 +59,7 @@ export const Top: VFC = () => {
         <StartButton text={"ゲームを始める"} onClick={openModal} />
         <div className="flex space-x-12 justify-center mt-5">
           <TwitterButton />
-          <HowToUseButton />
+          <HowToUseButton onClick={test} />
         </div>
       </div>
     </>

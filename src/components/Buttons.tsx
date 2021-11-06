@@ -3,7 +3,7 @@ import "tailwindcss/colors";
 import { FaTwitter, FaQuestionCircle } from "react-icons/fa";
 
 type Props = {
-  text: string;
+  text?: string;
   onClick?: () => void;
   fontSize?: number;
   width?: number;
@@ -82,10 +82,13 @@ const TwitterButton: VFC = () => {
   );
 };
 
-const HowToUseButton: VFC = () => {
+const HowToUseButton: VFC<Props> = ({ onClick }) => {
   return (
     <>
-      <button className="inline-flex rounded-md shadow-lg bg-gray-300 hover:bg-gray-400">
+      <button
+        onClick={onClick}
+        className="inline-flex rounded-md shadow-lg bg-gray-300 hover:bg-gray-400"
+      >
         <FaQuestionCircle className="h-auto w-auto p-2 rounded-md" />
         <span className="text-sm pr-2 pl-0 my-auto rounded-md">使い方</span>
       </button>
