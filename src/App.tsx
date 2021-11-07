@@ -2,21 +2,23 @@ import { BrowserRouter, Link, Switch, Route } from "react-router-dom";
 
 import { Header } from "./components/Header";
 import { CreateRoom } from "./pages/CreateRoom";
-import { Entrance } from "./pages/Entrance";
+import { HostEntrance } from "./pages/HostEntrance";
 import { Game } from "./pages/Game";
 import { EnterRoom } from "./pages/EnterRoom";
 import { Top } from "./pages/Top";
+import { GuestEntrance } from "./pages/GuestEntrance";
 
 function App() {
   return (
-    <div className="h-screen bg-yellow-50">
+    <div className="h-screen w-screen font-body bg-yellow-50 text-gray-500">
       <BrowserRouter>
         <Header />
         <div>
           {/* <Link to="/">Top</Link>
         <Link to="/create-room">CreateRoom</Link>
         <Link to="/join-room">JoinRoom</Link>
-        <Link to="/entrance">Entrance</Link>
+        <Link to="/host-entrance">Entrance</Link>
+        <Link to="/guest-entrance">Entrance</Link>
         <Link to="/game">Game</Link> */}
         </div>
         <Switch>
@@ -35,8 +37,13 @@ function App() {
           </Route>
         </Switch>
         <Switch>
-          <Route path="/entrance">
-            <Entrance />
+          <Route path="/host-entrance">
+            <HostEntrance />
+          </Route>
+        </Switch>
+        <Switch>
+          <Route path="/guest-entrance">
+            <GuestEntrance />
           </Route>
         </Switch>
         <Switch>

@@ -16,12 +16,12 @@ export const CreateRoom: VFC = () => {
       return;
     }
     console.log("create room");
-    history.push("/entrance", { userName });
+    history.push("/host-entrance", { userName });
   };
 
   return (
     <>
-      <div className="w-3/4 sm:w-1/2 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-gray-500">
+      <div className="w-3/4 sm:w-1/2 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
         <p className="text-center sm:text-xl md:text-2xl">
           ゲームで表示する名前を入力してください
         </p>

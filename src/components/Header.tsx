@@ -6,12 +6,12 @@ import "@szhsin/react-menu/dist/index.css";
 export const Header: VFC = () => {
   return (
     <>
-      <div className="flex justify-center bg-yellow-300">
-        <h1 className="text-2xl font-medium p-1 text-white">HGS</h1>
+      <div className="flex justify-center h-8 p-0.5 bg-yellow-300">
+        <h1 className="text-xl font-medium text-white">HGS</h1>
       </div>
       <Menu
         menuButton={
-          <MenuButton className="sm:text-lg absolute right-2 top-2 text-yellow-50">
+          <MenuButton className="sm:text-lg absolute right-2 top-1 text-yellow-50">
             メニュー
           </MenuButton>
         }

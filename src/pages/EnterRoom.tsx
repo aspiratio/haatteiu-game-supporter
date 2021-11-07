@@ -25,12 +25,12 @@ export const EnterRoom: VFC = () => {
     }
     console.log("enter room");
     // TODO:途中入室を可能にする必要あり
-    history.push("/entrance", { roomId, userName });
+    history.push("/guest-entrance", { roomId, userName });
   };
 
   return (
     <>
-      <div className="text-center w-3/4 sm:w-1/2 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-gray-500">
+      <div className="text-center w-3/4 sm:w-1/2 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
         <p className="sm:text-xl md:text-2xl">
           入室するルームIDとゲームで表示する名前を入力してください
         </p>

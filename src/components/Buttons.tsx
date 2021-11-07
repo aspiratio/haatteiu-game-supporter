@@ -2,8 +2,10 @@ import { VFC } from "react";
 import "tailwindcss/colors";
 import { FaTwitter, FaQuestionCircle } from "react-icons/fa";
 
+// TODO：型定義から可能な限り？を除く ツイートボタン、使い方ボタンにpropsを持たせる
+
 type Props = {
-  text: string;
+  text?: string;
   onClick?: () => void;
   fontSize?: number;
   width?: number;
@@ -41,17 +43,32 @@ const PrimaryButton: VFC<Props> = ({
   );
 };
 
-const SecondButton: VFC<Props> = ({ text }) => {
+const SecondButton: VFC<Props> = ({
+  text,
+  onClick,
+  width = 32,
+  height = 8,
+}) => {
   return (
-    <button className="px-6 py-2 text-xl rounded-lg border-2 bg-blue-100 border-blue-500 text-blue-500 hover:text-white hover:bg-blue-400">
+    <button
+      onClick={onClick}
+      className={`text-xl sm:text-2xl w-${width} sm:w-${
+        width * 2
+      } h-${height} sm:h-${
+        height * 2
+      } rounded-lg border-2 bg-blue-100 border-blue-500 text-blue-500 hover:text-white hover:bg-blue-400`}
+    >
       {text}
     </button>
   );
 };
 
-const ThirdButton: VFC<Props> = ({ text }) => {
+const ThirdButton: VFC<Props> = ({ text, onClick, width }) => {
   return (
-    <button className="px-2 py-1 text-md rounded-lg border-2 bg-gray-200 border-gray-500 text-gray-600 hover:text-white hover:bg-gray-500">
+    <button
+      onClick={onClick}
+      className={`px-1 py-1 text-xs w-${width} rounded-lg border-2 bg-gray-200 border-gray-500 text-gray-600 hover:text-white hover:bg-gray-500`}
+    >
       {text}
     </button>
   );
@@ -70,14 +87,15 @@ const TwitterButton: VFC = () => {
   );
 };
 
-const HowToUseButton: VFC = () => {
+const HowToUseButton: VFC<Props> = ({ onClick }) => {
   return (
     <>
-      <button className="inline-flex rounded-md shadow-lg bg-gray-300 hover:bg-gray-400">
+      <button
+        onClick={onClick}
+        className="inline-flex rounded-md shadow-lg bg-gray-300 hover:bg-gray-400"
+      >
         <FaQuestionCircle className="h-auto w-auto p-2 rounded-md" />
-        <span className="text-sm pr-2 pl-0 my-auto rounded-md text-gray-500">
-          使い方
-        </span>
+        <span className="text-sm pr-2 pl-0 my-auto rounded-md">使い方</span>
       </button>
     </>
   );
