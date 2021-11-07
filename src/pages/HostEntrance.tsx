@@ -1,7 +1,7 @@
 import { message, Upload } from "antd";
 import "antd/dist/antd.css";
 import { useState } from "react";
-import { useHistory, useLocation } from "react-router";
+import { useHistory } from "react-router";
 import {
   PrimaryButton,
   SecondButton,
@@ -12,15 +12,26 @@ import { ConfirmModal } from "../components/Modals";
 // 前ページでuseHistoryでstateを渡している。stateがundefinedのときはエラー表示が出るようにすれば、url直入力で入れなくさせられるはず。
 export const HostEntrance = () => {
   const history = useHistory();
-  const [isOpen, setIsOpen] = useState(false);
-  const openModal = () => {
-    setIsOpen(true);
+  const [isOpenStart, setIsOpenStart] = useState(false);
+  const [isOpenCancel, setIsOpenCancel] = useState(false);
+  const openStartModal = () => {
+    setIsOpenStart(true);
   };
-  const closeModal = () => {
-    setIsOpen(false);
+  const closeStartModal = () => {
+    setIsOpenStart(false);
   };
-  const deleteGame = () => {
-    console.log("Delete this game");
+  const startGame = () => {
+    console.log("Start the game");
+    history.push("/game");
+  };
+  const openCancelModal = () => {
+    setIsOpenCancel(true);
+  };
+  const closeCancelModal = () => {
+    setIsOpenCancel(false);
+  };
+  const cancelGame = () => {
+    console.log("Cancel the game");
     history.push("/");
   };
 
@@ -99,13 +110,19 @@ export const HostEntrance = () => {
         </ul>
         <p className="text-center">参加人数 {participants.length}人</p>
         <div className="text-center space-x-2">
-          <PrimaryButton text={"ゲーム開始"} />
-          <SecondButton text={"中止"} onClick={openModal} />
+          <PrimaryButton text={"ゲーム開始"} onClick={openStartModal} />
+          <SecondButton text={"中止"} onClick={openCancelModal} />
           <ConfirmModal
-            isOpen={isOpen}
-            onClose={closeModal}
-            text={"ルームを退室しますか？"}
-            onClick={deleteGame}
+            isOpen={isOpenStart}
+            onClose={closeStartModal}
+            text={"開始してよろしいですか？"}
+            onClick={startGame}
+          />
+          <ConfirmModal
+            isOpen={isOpenCancel}
+            onClose={closeCancelModal}
+            text={"ルーム作成を中止しますか？"}
+            onClick={cancelGame}
           />
         </div>
       </div>
