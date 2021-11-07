@@ -63,9 +63,12 @@ const SecondButton: VFC<Props> = ({
   );
 };
 
-const ThirdButton: VFC<Props> = ({ text }) => {
+const ThirdButton: VFC<Props> = ({ text, onClick, width }) => {
   return (
-    <button className="px-2 py-1 text-md rounded-lg border-2 bg-gray-200 border-gray-500 text-gray-600 hover:text-white hover:bg-gray-500">
+    <button
+      onClick={onClick}
+      className={`px-1 py-1 text-xs w-${width} rounded-lg border-2 bg-gray-200 border-gray-500 text-gray-600 hover:text-white hover:bg-gray-500`}
+    >
       {text}
     </button>
   );

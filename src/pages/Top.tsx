@@ -25,7 +25,7 @@ export const Top: VFC = () => {
     <>
       <GameStartModal isOpen={isOpen} onClose={closeModal} />
       <div className="flex flex-col mx-auto max-w-sm sm:max-w-xl">
-        <h2 className="mx-auto mt-10 text-lg sm:text-xl">
+        <h2 className="mx-auto mt-10 text-lg sm:text-xl text-gray-500">
           オンライン投票！自動で集計！
         </h2>
         <img
