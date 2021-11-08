@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, VFC } from "react";
 import { useHistory, useLocation } from "react-router";
 import { SecondButton } from "../components/Buttons";
 import { ConfirmModal } from "../components/Modals";
@@ -6,7 +6,7 @@ import { Information } from "../components/Information";
 import { LeavingRoom } from "../util/LeavingRoom";
 
 // 前ページでuseHistoryでstateを渡している。stateがundefinedのときはエラー表示が出るようにすれば、url直入力で入れなくさせられるはず。
-export const GuestEntrance = () => {
+export const GuestEntrance: VFC = () => {
   const state = useLocation().state as any;
   const [isOpen, setIsOpen] = useState(false);
   const history = useHistory();
