@@ -30,8 +30,8 @@ export const Top: VFC = () => {
       <div className="flex flex-col max-w-xs mx-auto sm:max-w-md">
         <StartButton text={"ゲームを始める"} onClick={() => openModal()} />
         <div className="flex space-x-12 justify-center mt-5">
-          <TwitterButton />
-          <HowToUseButton onClick={test} />
+          <TwitterButton text={"ツイート"} onClick={test} />
+          <HowToUseButton text={"使い方"} onClick={test} />
         </div>
       </div>
     </>
