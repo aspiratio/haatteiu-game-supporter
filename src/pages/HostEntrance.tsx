@@ -1,6 +1,6 @@
+import { VFC } from "react";
 import { message, Upload } from "antd";
 import "antd/dist/antd.css";
-import { useState } from "react";
 import { useHistory } from "react-router";
 import {
   PrimaryButton,
@@ -8,28 +8,18 @@ import {
   ThirdButton,
 } from "../components/Buttons";
 import { ConfirmModal } from "../components/Modals";
+import { useModals } from "../hooks/useModals";
 
 // 前ページでuseHistoryでstateを渡している。stateがundefinedのときはエラー表示が出るようにすれば、url直入力で入れなくさせられるはず。
-export const HostEntrance = () => {
+export const HostEntrance: VFC = () => {
   const history = useHistory();
-  const [isOpenStart, setIsOpenStart] = useState(false);
-  const [isOpenCancel, setIsOpenCancel] = useState(false);
-  const openStartModal = () => {
-    setIsOpenStart(true);
-  };
-  const closeStartModal = () => {
-    setIsOpenStart(false);
-  };
+  const { isOpen, openModal, closeModal } = useModals();
+
   const startGame = () => {
     console.log("Start the game");
     history.push("/game");
   };
-  const openCancelModal = () => {
-    setIsOpenCancel(true);
-  };
-  const closeCancelModal = () => {
-    setIsOpenCancel(false);
-  };
+
   const cancelGame = () => {
     console.log("Cancel the game");
     history.push("/");
@@ -104,23 +94,30 @@ export const HostEntrance = () => {
       <div>
         <p className="mb-1">STEP3 : 参加者が揃ったらゲーム開始</p>
         <ul className="flex flex-wrap ml-8 mb-1">
-          {participants.map((e) => {
-            return <li className="w-1/2">{e}</li>;
+          {participants.map((e, i) => {
+            return (
+              <li key={i} className="w-1/2">
+                {e}
+              </li>
+            );
           })}
         </ul>
         <p className="text-center">参加人数 {participants.length}人</p>
         <div className="text-center space-x-2">
-          <PrimaryButton text={"ゲーム開始"} onClick={openStartModal} />
-          <SecondButton text={"中止"} onClick={openCancelModal} />
+          <PrimaryButton
+            text={"ゲーム開始"}
+            onClick={() => openModal("start")}
+          />
+          <SecondButton text={"中止"} onClick={() => openModal("cancel")} />
           <ConfirmModal
-            isOpen={isOpenStart}
-            onClose={closeStartModal}
+            isOpen={isOpen === "start"}
+            onClose={closeModal}
             text={"開始してよろしいですか？"}
             onClick={startGame}
           />
           <ConfirmModal
-            isOpen={isOpenCancel}
-            onClose={closeCancelModal}
+            isOpen={isOpen === "cancel"}
+            onClose={closeModal}
             text={"ルーム作成を中止しますか？"}
             onClick={cancelGame}
           />
