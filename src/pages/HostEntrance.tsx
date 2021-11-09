@@ -44,9 +44,9 @@ export const HostEntrance: VFC = () => {
   ];
 
   return (
-    <div className="w-11/12 sm:w-8/12 h-9/10 mx-auto mt-2 space-y-3">
+    <div className="text-sm w-11/12 sm:w-8/12 h-9/10 mx-auto mt-3 space-y-4">
       <h2 className="text-center font-bold underline text-gray-500">
-        ゲーム開始までの手順
+        ゲーム開始の手順
       </h2>
       <div>
         <p className="mb-2">STEP1 : 下記のどちらかを他の参加者に共有</p>
@@ -102,7 +102,7 @@ export const HostEntrance: VFC = () => {
           })}
         </ul>
         <p className="text-center">参加人数 {participants.length}人</p>
-        <div className="text-center space-x-2">
+        <div className="text-center space-x-2 mt-4">
           <PrimaryButton
             text={"ゲーム開始"}
             onClick={() => openModal("start")}
