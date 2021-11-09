@@ -1,6 +1,5 @@
 import { VFC } from "react";
 import { message, Upload } from "antd";
-import "antd/dist/antd.css";
 import { useHistory } from "react-router";
 import {
   PrimaryButton,
