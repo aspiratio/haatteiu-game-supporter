@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { GameTabs } from "../components/GameTabs";
 import { Information } from "../components/Information";
-import { ThemeContent } from "../components/Content/ThemeContent";
+import { ThemeContent } from "../components/contents/ThemeContent";
 
 export const Game = () => {
   // useHistoryで渡すか、firestoreから取得する
