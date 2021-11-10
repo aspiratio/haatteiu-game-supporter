@@ -32,7 +32,7 @@ export const HostEntrance: VFC = () => {
     message.success("コピーしました");
   };
 
-  const participants = [
+  const users = [
     "ドナルド",
     "スティーブ",
     "太郎",
@@ -93,7 +93,7 @@ export const HostEntrance: VFC = () => {
       <div>
         <p className="mb-1">STEP3 : 参加者が揃ったらゲーム開始</p>
         <ul className="flex flex-wrap ml-8 mb-1">
-          {participants.map((e, i) => {
+          {users.map((e, i) => {
             return (
               <li key={i} className="w-1/2">
                 {e}
@@ -101,7 +101,7 @@ export const HostEntrance: VFC = () => {
             );
           })}
         </ul>
-        <p className="text-center">参加人数 {participants.length}人</p>
+        <p className="text-center">参加人数 {users.length}人</p>
         <div className="text-center space-x-2 mt-4">
           <PrimaryButton
             text={"ゲーム開始"}

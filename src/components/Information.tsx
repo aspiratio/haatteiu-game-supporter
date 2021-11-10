@@ -11,7 +11,9 @@ export const Information: VFC<Props> = ({ roomId, userName, userAlphabet }) => {
     <div>
       <p>ルームID：{roomId}</p>
       <p>あなた：{userName}</p>
-      {userAlphabet && <p>あなたのアルファベット：{userAlphabet}</p>}
+      {userAlphabet && (
+        <p className="text-blue-400">あなたのアルファベット：{userAlphabet}</p>
+      )}
     </div>
   );
 };
