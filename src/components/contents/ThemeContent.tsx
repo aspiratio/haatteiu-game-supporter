@@ -1,4 +1,6 @@
-export const ThemeContent = () => {
+import { VFC } from "react";
+
+export const ThemeContent: VFC = () => {
   return (
     <img
       className="max-h-60v max-w-full mx-auto mt-3"

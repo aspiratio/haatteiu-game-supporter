@@ -2,6 +2,7 @@ import { useState } from "react";
 import { GameTabs } from "../components/GameTabs";
 import { Information } from "../components/Information";
 import { ThemeContent } from "../components/contents/ThemeContent";
+import { AnswersContent } from "../components/contents/AnswersContent";
 
 export const Game = () => {
   // useHistoryで渡すか、firestoreから取得する
@@ -9,9 +10,9 @@ export const Game = () => {
   const userName = "麻歩";
   const userAlphabet = "A";
 
-  const [acterNumber, setActerNumber] = useState(1);
+  const [actorNumber, setActorNumber] = useState(8);
   // firestoreから取得（演技順をfirestoreに登録する必要あり？）
-  const users = [
+  const usersName = [
     "ドナルド",
     "スティーブ",
     "太郎",
@@ -21,6 +22,8 @@ export const Game = () => {
     "ジョブズ",
     "ザッカーバーグ",
   ];
+
+  const isFinished = actorNumber === usersName.length;
 
   type Tab = "theme" | "answers" | "points";
   const [activeTab, setActiveTab] = useState<Tab>("theme");
@@ -41,10 +44,17 @@ export const Game = () => {
         userName={userName}
         userAlphabet={userAlphabet}
       />
-      {/* 真っ赤な色を追加する */}
-      <p className="my-2v text-xl text-center text-vivid-red">
-        {acterNumber}人目の演者は{users[acterNumber - 1]}さん
-      </p>
+      {isFinished ? (
+        <p className="h-10v flex justify-center items-center text-vivid-red">
+          全員の演技が終わりました
+          <br />
+          正解を発表し点数を確認してください
+        </p>
+      ) : (
+        <p className="h-10v flex text-xl justify-center items-center text-vivid-red">
+          {actorNumber + 1}人目の演者は{usersName[actorNumber]}さん
+        </p>
+      )}
       <GameTabs
         activeTab={activeTab}
         onClickTheme={onClickTheme}
@@ -52,6 +62,13 @@ export const Game = () => {
         onClickPoints={onClickPoints}
       />
       {activeTab === "theme" && <ThemeContent />}
+      {activeTab === "answers" && (
+        <AnswersContent
+          usersName={usersName}
+          actorNumber={actorNumber}
+          isFinished={isFinished}
+        />
+      )}
     </>
   );
 };

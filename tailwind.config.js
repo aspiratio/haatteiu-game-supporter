@@ -55,6 +55,10 @@ module.exports = {
   variants: {
     extend: {},
   },
-  plugins: [],
+  plugins: [
+    require("tailwindcss-writing-mode")({
+      variants: ["responsive", "hover"],
+    }),
+  ],
   important: true,
 };
