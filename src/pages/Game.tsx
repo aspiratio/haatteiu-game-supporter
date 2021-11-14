@@ -3,6 +3,7 @@ import { GameTabs } from "../components/GameTabs";
 import { Information } from "../components/Information";
 import { ThemeContent } from "../components/contents/ThemeContent";
 import { AnswersContent } from "../components/contents/AnswersContent";
+import { PointsContent } from "../components/contents/PointsContent";
 
 export const Game = () => {
   // useHistoryで渡すか、firestoreから取得する
@@ -17,10 +18,10 @@ export const Game = () => {
     "スティーブ",
     "太郎",
     "炭治郎",
-    "ジョセフィーヌ",
+    "優柔ふだ子",
     "マイケル",
     "ジョブズ",
-    "ザッカーバーグ",
+    "ミーナミーナ",
   ];
 
   const isFinished = actorNumber === usersName.length;
@@ -69,6 +70,7 @@ export const Game = () => {
           isFinished={isFinished}
         />
       )}
+      {activeTab === "points" && <PointsContent usersName={usersName} />}
     </>
   );
 };

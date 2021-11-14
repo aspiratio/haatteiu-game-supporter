@@ -37,7 +37,7 @@ export const AnswersContent: VFC<Props> = ({
     <>
       {isFinished ? (
         <div className="w-9/10 overflow-x-scroll mx-auto mt-2">
-          <table className="table-fixed bg-white border-2 whitespace-nowrap w-32 writing-mode-vertical-lr">
+          <table className="table-fixed bg-white border-2 whitespace-nowrap writing-mode-vertical-lr">
             <thead>
               <tr>
                 <th className="w-20 h-6v text-lg font-thin sticky left-0 z-10 bg-gray-400 text-white">
@@ -49,29 +49,29 @@ export const AnswersContent: VFC<Props> = ({
                     演技
                   </span>
                 </th>
-                {usersName.map((userName, i) => {
-                  const fontSize = userName.length <= 5 ? "text-sm" : "text-xs";
+                {usersName.map((name, i) => {
+                  const fontSize = name.length <= 5 ? "text-sm" : "text-xs";
                   const bgColor = i % 2 === 1 ? "bg-white" : "bg-gray-100";
                   return (
                     <th
-                      className={`w-20 border-2 h-6v writing-mode-horizontal sticky left-0 z-10 ${fontSize} ${bgColor}`}
-                      key={userName}
+                      className={`border-2 h-6v writing-mode-horizontal sticky left-0 z-10 ${fontSize} ${bgColor}`}
+                      key={name}
                     >
-                      {userName}
+                      {name}
                     </th>
                   );
                 })}
               </tr>
             </thead>
             <tbody>
-              {usersName.map((userName) => {
-                const fontSize = userName.length <= 5 ? "text-sm" : "text-xs";
+              {usersName.map((name) => {
+                const fontSize = name.length <= 5 ? "text-sm" : "text-xs";
                 return (
-                  <tr key={userName}>
+                  <tr key={name}>
                     <th
                       className={`w-20 border-2 h-6v writing-mode-horizontal ${fontSize}`}
                     >
-                      {userName}
+                      {name}
                     </th>
                     {["A", "B", "C", "D", "E", "F", "G", "H"].map(
                       (alphabet, i) => {
@@ -125,12 +125,12 @@ export const AnswersContent: VFC<Props> = ({
             <div>
               <p>順番</p>
               <ul>
-                {usersName.map((userName, i) => {
+                {usersName.map((name, i) => {
                   let fontColor;
                   if (i === actorNumber) fontColor = "text-vivid-red";
                   return (
-                    <li key={userName} className={`text-left ${fontColor}`}>
-                      {userName}
+                    <li key={name} className={`text-left ${fontColor}`}>
+                      {name}
                     </li>
                   );
                 })}
