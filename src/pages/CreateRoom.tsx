@@ -1,15 +1,8 @@
-import {
-  addDoc,
-  collection,
-  doc,
-  serverTimestamp,
-  setDoc,
-} from "@firebase/firestore";
 import { ChangeEvent, useState, VFC } from "react";
 import { useHistory } from "react-router";
 import { PrimaryButton } from "../components/Buttons";
 import { InputBox } from "../components/InputBox";
-import { db } from "../service/firebase";
+import { createNewRoom } from "../utils/firestore/createNewRoom";
 
 export const CreateRoom: VFC = () => {
   const [userName, setUserName] = useState<string>();
@@ -23,11 +16,7 @@ export const CreateRoom: VFC = () => {
       alert("名前を入力してください");
       return;
     }
-
-    const newRoomRef = doc(collection(db, "hgs/v1/rooms"));
-    const usersRef = doc(collection(db, `hgs/v1/rooms/${newRoomRef.id}/users`));
-    await setDoc(newRoomRef, { createdAt: serverTimestamp() });
-    await setDoc(usersRef, { displayName: userName, isHost: true });
+    createNewRoom(userName);
     history.push("/host-entrance", { userName });
   };
 
