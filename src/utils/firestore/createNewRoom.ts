@@ -6,4 +6,5 @@ export const createNewRoom = async (name: string) => {
   const usersRef = doc(collection(db, `hgs/v1/rooms/${newRoomRef.id}/users`));
   await setDoc(newRoomRef, { createdAt: serverTimestamp() });
   await setDoc(usersRef, { displayName: name, isHost: true });
+  return newRoomRef.id;
 };

@@ -16,8 +16,8 @@ export const CreateRoom: VFC = () => {
       alert("名前を入力してください");
       return;
     }
-    createNewRoom(userName);
-    history.push("/host-entrance", { userName });
+    const roomId = await createNewRoom(userName);
+    history.push("/host-entrance", { userName, roomId });
   };
 
   return (
