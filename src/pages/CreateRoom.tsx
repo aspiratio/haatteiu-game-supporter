@@ -2,6 +2,7 @@ import { ChangeEvent, useState, VFC } from "react";
 import { useHistory } from "react-router";
 import { PrimaryButton } from "../components/Buttons";
 import { InputBox } from "../components/InputBox";
+import { createNewRoom } from "../utils/firestore/createNewRoom";
 
 export const CreateRoom: VFC = () => {
   const [userName, setUserName] = useState<string>();
@@ -10,12 +11,12 @@ export const CreateRoom: VFC = () => {
   };
   const history = useHistory();
 
-  const onClickCreateRoom = () => {
+  const onClickCreateRoom = async () => {
     if (!userName) {
       alert("名前を入力してください");
       return;
     }
-    console.log("create room");
+    createNewRoom(userName);
     history.push("/host-entrance", { userName });
   };
 
