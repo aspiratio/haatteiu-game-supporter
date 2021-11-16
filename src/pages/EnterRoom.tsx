@@ -2,6 +2,7 @@ import { ChangeEvent, useState, VFC } from "react";
 import { useHistory } from "react-router";
 import { PrimaryButton } from "../components/Buttons";
 import { InputBox } from "../components/InputBox";
+import { addGuestUser } from "../utils/firestore/addGuestUser";
 
 export const EnterRoom: VFC = () => {
   const [roomId, setRoomId] = useState<string>();
@@ -15,7 +16,7 @@ export const EnterRoom: VFC = () => {
 
   const history = useHistory();
 
-  const onClickCreateRoom = () => {
+  const onClickCreateRoom = async () => {
     if (!roomId) {
       alert("ルームIDを入力してください");
       return;
@@ -23,9 +24,14 @@ export const EnterRoom: VFC = () => {
       alert("名前を入力してください");
       return;
     }
-    console.log("enter room");
+    try {
+      await addGuestUser(roomId, userName);
+    } catch (e) {
+      console.log(e);
+      return;
+    }
     // TODO:途中入室を可能にする必要あり
-    history.push("/guest-entrance", { roomId, userName });
+    history.push(`/guest-entrance/${roomId}`, { roomId, userName });
   };
 
   return (
