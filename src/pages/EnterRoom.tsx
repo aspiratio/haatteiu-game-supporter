@@ -26,12 +26,12 @@ export const EnterRoom: VFC = () => {
     }
     try {
       await addGuestUser(roomId, userName);
+      history.push(`/guest-entrance/${roomId}`, { roomId, userName });
     } catch (e) {
       console.log(e);
-      return;
+      alert("通信エラーです。もう一度お試しください");
     }
     // TODO:途中入室を可能にする必要あり
-    history.push(`/guest-entrance/${roomId}`, { roomId, userName });
   };
 
   return (
