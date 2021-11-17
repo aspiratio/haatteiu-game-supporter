@@ -25,8 +25,8 @@ export const EnterRoom: VFC = () => {
       return;
     }
     try {
-      await addGuestUser(roomId, userName);
-      history.push(`/guest-entrance/${roomId}`, { roomId, userName });
+      const userId = await addGuestUser(roomId, userName);
+      history.push(`/guest-entrance/${roomId}`, { roomId, userName, userId });
     } catch (e) {
       console.log(e);
       alert("通信エラーです。もう一度お試しください");

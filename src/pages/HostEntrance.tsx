@@ -8,6 +8,8 @@ import {
 } from "../components/Buttons";
 import { ConfirmModal } from "../components/Modals";
 import { useModals } from "../hooks/useModals";
+import { doc, onSnapshot } from "@firebase/firestore";
+import { db } from "../service/firebase";
 
 // 前ページでuseHistoryでstateを渡している。stateがundefinedのときは404ページに遷移するようにすれば、url直入力で入れなくさせられるはず。
 
@@ -19,6 +21,10 @@ type State = {
 export const HostEntrance: VFC = () => {
   const location = useLocation<State>();
   const { userName, roomId } = location.state;
+
+  const snapshot = onSnapshot(doc(db, `hgs/v1/rooms`, `${roomId}`), (doc) => {
+    console.log(doc.data());
+  });
 
   const history = useHistory();
   const { isOpen, openModal, closeModal } = useModals();
@@ -41,7 +47,7 @@ export const HostEntrance: VFC = () => {
   };
 
   const users = [
-    "ドナルド",
+    userName,
     "スティーブ",
     "太郎",
     "炭治郎",
