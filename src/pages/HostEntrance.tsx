@@ -1,4 +1,4 @@
-import { VFC } from "react";
+import { useEffect, useState, VFC } from "react";
 import { message, Upload } from "antd";
 import { useHistory, useLocation } from "react-router";
 import {
@@ -10,6 +10,7 @@ import { ConfirmModal } from "../components/Modals";
 import { useModals } from "../hooks/useModals";
 import { doc, onSnapshot } from "@firebase/firestore";
 import { db } from "../service/firebase";
+import { createNewGame } from "../utils/firestore/createNewGame";
 
 // 前ページでuseHistoryでstateを渡している。stateがundefinedのときは404ページに遷移するようにすれば、url直入力で入れなくさせられるはず。
 
@@ -21,17 +22,30 @@ type State = {
 export const HostEntrance: VFC = () => {
   const location = useLocation<State>();
   const { userName, roomId } = location.state;
+  const [usersName, setUsersName] = useState([userName]);
 
-  const snapshot = onSnapshot(doc(db, `hgs/v1/rooms`, `${roomId}`), (doc) => {
-    console.log(doc.data());
-  });
+  useEffect(() => {
+    onSnapshot(doc(db, `hgs/v1/rooms/${roomId}`), (doc) => {
+      console.log("snapshot start");
+      const data = doc.data();
+      if (data) {
+        setUsersName(data.usersName);
+      }
+    });
+  }, [roomId]);
 
   const history = useHistory();
   const { isOpen, openModal, closeModal } = useModals();
 
-  const startGame = () => {
-    console.log("Start the game");
-    history.push("/game");
+  const startGame = async () => {
+    try {
+      await createNewGame(roomId);
+      console.log("Start the game");
+      history.push("/game");
+    } catch (e) {
+      console.log(e);
+      alert("通信エラーです。もう一度お試しください");
+    }
   };
 
   const cancelGame = () => {
@@ -45,17 +59,6 @@ export const HostEntrance: VFC = () => {
     navigator.clipboard.writeText(data);
     message.success("コピーしました");
   };
-
-  const users = [
-    userName,
-    "スティーブ",
-    "太郎",
-    "炭治郎",
-    "ジョセフィーヌ",
-    "マイケル",
-    "ジョブズ",
-    "ザッカーバーグ",
-  ];
 
   return (
     <div className="text-sm w-11/12 sm:w-8/12 h-9/10 mx-auto mt-3 space-y-4">
@@ -112,7 +115,7 @@ export const HostEntrance: VFC = () => {
       <div>
         <p className="mb-1">STEP3 : 参加者が揃ったらゲーム開始</p>
         <ul className="flex flex-wrap ml-8 mb-1">
-          {users.map((e, i) => {
+          {usersName.map((e, i) => {
             return (
               <li key={i} className="w-1/2">
                 {e}
@@ -120,7 +123,7 @@ export const HostEntrance: VFC = () => {
             );
           })}
         </ul>
-        <p className="text-center">参加人数 {users.length}人</p>
+        <p className="text-center">参加人数 {usersName.length}人</p>
         <div className="text-center space-x-2 mt-4">
           <PrimaryButton
             text={"ゲーム開始"}
