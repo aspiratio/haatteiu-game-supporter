@@ -1,10 +1,12 @@
-import { useState, VFC } from "react";
+import { useEffect, useState, VFC } from "react";
 import { useHistory, useLocation } from "react-router";
 import { SecondButton } from "../components/Buttons";
 import { ConfirmModal } from "../components/Modals";
 import { Information } from "../components/Information";
 import { LeavingRoom } from "../utils/LeavingRoom";
 import { removeUser } from "../utils/firestore/removeUser";
+import { doc, onSnapshot } from "@firebase/firestore";
+import { db } from "../service/firebase";
 
 // 前ページでuseHistoryでstateを渡している。stateがundefinedのときはエラー表示が出るようにすれば、url直入力で入れなくさせられるはず。
 type State = {
@@ -34,6 +36,15 @@ export const GuestEntrance: VFC = () => {
     removeUser(roomId, userName, userId);
     history.push("/");
   };
+
+  useEffect(() => {
+    return onSnapshot(doc(db, `hgs/v1/rooms/${roomId}`), (doc) => {
+      const data = doc.data();
+      if (data) {
+        if (data.isDuringGame === true) history.push("/game");
+      }
+    });
+  }, [history, roomId]);
 
   return (
     <>

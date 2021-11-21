@@ -20,6 +20,7 @@ export const createNewGame = async (roomId: string) => {
       const newGameCount: number = roomDoc.data().gameCount + 1;
       transaction.update(roomRef, {
         gameCount: newGameCount,
+        isDuringGame: true,
       });
       const gameId = `game${newGameCount}`;
       usersDoc.forEach((userDoc) => {
