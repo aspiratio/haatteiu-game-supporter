@@ -3,7 +3,6 @@ import { useHistory, useLocation } from "react-router";
 import { SecondButton } from "../components/Buttons";
 import { ConfirmModal } from "../components/Modals";
 import { Information } from "../components/Information";
-import { LeavingRoom } from "../utils/LeavingRoom";
 import { removeUser } from "../utils/firestore/removeUser";
 import { doc, onSnapshot } from "@firebase/firestore";
 import { db } from "../service/firebase";
@@ -14,10 +13,6 @@ type State = {
   userName: string;
   userId: string;
 };
-
-// HostEntranceと書き方を統一
-// useContextについて復習
-// userIdをremoveUser関数に渡す
 
 export const GuestEntrance: VFC = () => {
   const location = useLocation<State>();

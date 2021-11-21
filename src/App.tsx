@@ -32,7 +32,7 @@ function App() {
           </Route>
         </Switch>
         <Switch>
-          <Route path="/enter-room">
+          <Route path="/enter-room/:id">
             <EnterRoom />
           </Route>
         </Switch>

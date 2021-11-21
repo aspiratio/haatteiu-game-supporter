@@ -1,6 +1,7 @@
 import { ChangeEvent, VFC } from "react";
 
 type Props = {
+  value?: string;
   onChange: (event: ChangeEvent<HTMLInputElement>) => void;
   id?: string;
   fontSize?: string;
@@ -9,6 +10,7 @@ type Props = {
 };
 
 export const InputBox: VFC<Props> = ({
+  value,
   onChange,
   id,
   fontSize = "xl",
@@ -18,6 +20,7 @@ export const InputBox: VFC<Props> = ({
   return (
     <>
       <input
+        value={value}
         onChange={onChange}
         id={id}
         className={`inline-block border-2 rounded-md font-${fontSize} w-${width} h-${height} sm:w-${
