@@ -1,10 +1,16 @@
 import { ChangeEvent, useState, VFC } from "react";
-import { useHistory } from "react-router";
+import { useHistory, useParams } from "react-router";
 import { PrimaryButton } from "../components/Buttons";
 import { InputBox } from "../components/InputBox";
+import { addGuestUser } from "../utils/firestore/addGuestUser";
+
+type Params = {
+  id: string;
+};
 
 export const EnterRoom: VFC = () => {
-  const [roomId, setRoomId] = useState<string>();
+  const { id } = useParams<Params>();
+  const [roomId, setRoomId] = useState<string>(id);
   const [userName, setUserName] = useState<string>();
   const onChangeRoomId = (event: ChangeEvent<HTMLInputElement>) => {
     setRoomId(event.target.value);
@@ -15,7 +21,7 @@ export const EnterRoom: VFC = () => {
 
   const history = useHistory();
 
-  const onClickCreateRoom = () => {
+  const onClickCreateRoom = async () => {
     if (!roomId) {
       alert("ルームIDを入力してください");
       return;
@@ -23,9 +29,14 @@ export const EnterRoom: VFC = () => {
       alert("名前を入力してください");
       return;
     }
-    console.log("enter room");
+    try {
+      const userId = await addGuestUser(roomId, userName);
+      history.push(`/guest-entrance/${roomId}`, { roomId, userName, userId });
+    } catch (e) {
+      console.log(e);
+      alert("通信エラーです。もう一度お試しください");
+    }
     // TODO:途中入室を可能にする必要あり
-    history.push("/guest-entrance", { roomId, userName });
   };
 
   return (
@@ -38,7 +49,7 @@ export const EnterRoom: VFC = () => {
         <div className="flex flex-col space-y-8 items-center mt-7 mb-14 ">
           <div className="text-center">
             <p className="text-xl sm:text-2xl pb-2">ルームID</p>
-            <InputBox onChange={onChangeRoomId} />
+            <InputBox value={roomId} onChange={onChangeRoomId} />
           </div>
           <div className="text-center">
             <p className="text-xl sm:text-2xl pb-2">名前</p>

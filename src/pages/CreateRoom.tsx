@@ -16,8 +16,13 @@ export const CreateRoom: VFC = () => {
       alert("名前を入力してください");
       return;
     }
-    createNewRoom(userName);
-    history.push("/host-entrance", { userName });
+    try {
+      const roomId = await createNewRoom(userName);
+      history.push("/host-entrance", { userName, roomId });
+    } catch (e) {
+      console.log(e);
+      alert("通信エラーです。もう一度お試しください");
+    }
   };
 
   return (
