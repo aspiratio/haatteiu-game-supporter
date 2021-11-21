@@ -25,11 +25,11 @@ export const HostEntrance: VFC = () => {
   const [usersName, setUsersName] = useState([userName]);
 
   useEffect(() => {
-    onSnapshot(doc(db, `hgs/v1/rooms/${roomId}`), (doc) => {
-      console.log("snapshot start");
+    return onSnapshot(doc(db, `hgs/v1/rooms/${roomId}`), (doc) => {
       const data = doc.data();
       if (data) {
         setUsersName(data.usersName);
+        console.log("changed");
       }
     });
   }, [roomId]);
