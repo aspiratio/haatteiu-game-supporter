@@ -1,6 +1,6 @@
 import { useEffect, useState, VFC } from "react";
 import { message, Upload } from "antd";
-import { useHistory, useLocation } from "react-router";
+import { useHistory } from "react-router";
 import {
   PrimaryButton,
   SecondButton,
@@ -11,27 +11,15 @@ import { useModals } from "../hooks/useModals";
 import { doc, onSnapshot } from "@firebase/firestore";
 import { db } from "../service/firebase";
 import { createNewGame } from "../utils/firestore/createNewGame";
-
-// 前ページでuseHistoryでstateを渡している。stateがundefinedのときは404ページに遷移するようにすれば、url直入力で入れなくさせられるはず。
-
-type State = {
-  userName: string;
-  roomId: string;
-};
+import { getObjFromLocalStorage } from "../utils/getObjFromLocalStorage";
+import { browserBackProtection } from "../utils/browserBackProtection";
 
 export const HostEntrance: VFC = () => {
-  const location = useLocation<State>();
-  const { userName, roomId } = location.state
-    ? location.state
-    : window.history.state;
+  const { userName, roomId } = getObjFromLocalStorage("userInfo");
   const [usersName, setUsersName] = useState([userName]);
-  console.log(location.state);
-  // console.log(window.history.state);
-  const storageRoomId = localStorage.getItem("roomId");
-  console.log(storageRoomId);
 
   useEffect(() => {
-    window.history.pushState(location.state, "", null);
+    browserBackProtection();
     return onSnapshot(doc(db, `hgs/v1/rooms/${roomId}`), (doc) => {
       const data = doc.data();
       if (data) {
@@ -39,7 +27,7 @@ export const HostEntrance: VFC = () => {
         console.log("changed");
       }
     });
-  }, [location.state, roomId]);
+  }, [roomId]);
 
   const history = useHistory();
   const { isOpen, openModal, closeModal } = useModals();
@@ -57,6 +45,7 @@ export const HostEntrance: VFC = () => {
 
   const cancelGame = () => {
     console.log("Cancel the game");
+    localStorage.clear();
     history.push("/");
   };
 

@@ -17,8 +17,10 @@ export const CreateRoom: VFC = () => {
       return;
     }
     try {
-      const roomId = await createNewRoom(userName);
-      history.push("/host-entrance", { userName, roomId });
+      const ids = await createNewRoom(userName);
+      const userInfo = { ...ids, userName };
+      localStorage.setItem("userInfo", JSON.stringify(userInfo));
+      history.push("/host-entrance");
     } catch (e) {
       console.log(e);
       alert("通信エラーです。もう一度お試しください");
