@@ -21,10 +21,17 @@ type State = {
 
 export const HostEntrance: VFC = () => {
   const location = useLocation<State>();
-  const { userName, roomId } = location.state;
+  const { userName, roomId } = location.state
+    ? location.state
+    : window.history.state;
   const [usersName, setUsersName] = useState([userName]);
+  console.log(location.state);
+  // console.log(window.history.state);
+  const storageRoomId = localStorage.getItem("roomId");
+  console.log(storageRoomId);
 
   useEffect(() => {
+    window.history.pushState(location.state, "", null);
     return onSnapshot(doc(db, `hgs/v1/rooms/${roomId}`), (doc) => {
       const data = doc.data();
       if (data) {
@@ -32,7 +39,7 @@ export const HostEntrance: VFC = () => {
         console.log("changed");
       }
     });
-  }, [roomId]);
+  }, [location.state, roomId]);
 
   const history = useHistory();
   const { isOpen, openModal, closeModal } = useModals();
