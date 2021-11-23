@@ -38,7 +38,9 @@ export const EnterRoom: VFC = () => {
     }
     try {
       const userId = await addGuestUser(roomId, userName);
-      history.push(`/guest-entrance/${roomId}`, { roomId, userName, userId });
+      const userInfo = { roomId, userId, userName };
+      localStorage.setItem("userInfo", JSON.stringify(userInfo));
+      history.push(`/guest-entrance`);
     } catch (e) {
       console.log(e);
       alert("通信エラーです。もう一度お試しください");

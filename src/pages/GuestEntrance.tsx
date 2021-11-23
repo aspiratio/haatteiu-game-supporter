@@ -1,22 +1,16 @@
 import { useEffect, useState, VFC } from "react";
-import { useHistory, useLocation } from "react-router";
+import { useHistory } from "react-router";
 import { SecondButton } from "../components/Buttons";
 import { ConfirmModal } from "../components/Modals";
 import { Information } from "../components/Information";
 import { removeUser } from "../utils/firestore/removeUser";
 import { doc, onSnapshot } from "@firebase/firestore";
 import { db } from "../service/firebase";
-
-// 前ページでuseHistoryでstateを渡している。stateがundefinedのときはエラー表示が出るようにすれば、url直入力で入れなくさせられるはず。
-type State = {
-  roomId: string;
-  userName: string;
-  userId: string;
-};
+import { getObjFromLocalStorage } from "../utils/getObjFromLocalStorage";
+import { browserBackProtection } from "../utils/browserBackProtection";
 
 export const GuestEntrance: VFC = () => {
-  const location = useLocation<State>();
-  const { userName, roomId, userId } = location.state;
+  const { userName, roomId, userId } = getObjFromLocalStorage("userInfo");
   const [isOpen, setIsOpen] = useState(false);
   const history = useHistory();
 
@@ -29,17 +23,20 @@ export const GuestEntrance: VFC = () => {
 
   const returnToTopPage = () => {
     removeUser(roomId, userName, userId);
+    localStorage.clear();
     history.push("/");
   };
 
   useEffect(() => {
+    browserBackProtection();
     return onSnapshot(doc(db, `hgs/v1/rooms/${roomId}`), (doc) => {
+      if (!doc) returnToTopPage();
       const data = doc.data();
       if (data) {
         if (data.isDuringGame === true) history.push("/game");
       }
     });
-  }, [history, roomId]);
+  }, [roomId]);
 
   return (
     <>
