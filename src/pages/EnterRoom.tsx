@@ -1,4 +1,4 @@
-import { ChangeEvent, useState, VFC } from "react";
+import { ChangeEvent, useEffect, useState, VFC } from "react";
 import { useHistory, useParams } from "react-router";
 import { PrimaryButton } from "../components/Buttons";
 import { InputBox } from "../components/InputBox";
@@ -10,8 +10,15 @@ type Params = {
 
 export const EnterRoom: VFC = () => {
   const { id } = useParams<Params>();
-  const [roomId, setRoomId] = useState<string>(id);
-  const [userName, setUserName] = useState<string>();
+  const [roomId, setRoomId] = useState<string>("");
+  const [userName, setUserName] = useState<string>("");
+
+  useEffect(() => {
+    if (id) {
+      setRoomId(id);
+    }
+  }, [id, setRoomId]);
+
   const onChangeRoomId = (event: ChangeEvent<HTMLInputElement>) => {
     setRoomId(event.target.value);
   };

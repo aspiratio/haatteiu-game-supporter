@@ -5,7 +5,7 @@ import { InputBox } from "../components/InputBox";
 import { createNewRoom } from "../utils/firestore/createNewRoom";
 
 export const CreateRoom: VFC = () => {
-  const [userName, setUserName] = useState<string>();
+  const [userName, setUserName] = useState<string>("");
   const onChangeUserName = (event: ChangeEvent<HTMLInputElement>) => {
     setUserName(event.target.value);
   };
