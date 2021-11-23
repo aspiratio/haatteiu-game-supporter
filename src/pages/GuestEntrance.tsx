@@ -1,4 +1,4 @@
-import { useEffect, useState, VFC } from "react";
+import { useContext, useEffect, useState, VFC } from "react";
 import { useHistory, useLocation } from "react-router";
 import { SecondButton } from "../components/Buttons";
 import { ConfirmModal } from "../components/Modals";
@@ -6,6 +6,7 @@ import { Information } from "../components/Information";
 import { removeUser } from "../utils/firestore/removeUser";
 import { doc, onSnapshot } from "@firebase/firestore";
 import { db } from "../service/firebase";
+import { InformationContext } from "../provider/InformationProvider";
 
 // 前ページでuseHistoryでstateを渡している。stateがundefinedのときはエラー表示が出るようにすれば、url直入力で入れなくさせられるはず。
 type State = {
@@ -15,8 +16,8 @@ type State = {
 };
 
 export const GuestEntrance: VFC = () => {
-  const location = useLocation<State>();
-  const { userName, roomId, userId } = location.state;
+  const { roomId, setRoomId, userName, setUserName, userId, setUserId } =
+    useContext(InformationContext);
   const [isOpen, setIsOpen] = useState(false);
   const history = useHistory();
 

@@ -1,7 +1,8 @@
-import { ChangeEvent, useState, VFC } from "react";
+import { ChangeEvent, useContext, useEffect, useState, VFC } from "react";
 import { useHistory, useParams } from "react-router";
 import { PrimaryButton } from "../components/Buttons";
 import { InputBox } from "../components/InputBox";
+import { InformationContext } from "../provider/InformationProvider";
 import { addGuestUser } from "../utils/firestore/addGuestUser";
 
 type Params = {
@@ -10,8 +11,15 @@ type Params = {
 
 export const EnterRoom: VFC = () => {
   const { id } = useParams<Params>();
-  const [roomId, setRoomId] = useState<string>(id);
-  const [userName, setUserName] = useState<string>();
+  const { roomId, setRoomId, userName, setUserName, setUserId } =
+    useContext(InformationContext);
+
+  useEffect(() => {
+    if (id) {
+      setRoomId(id);
+    }
+  }, [id, setRoomId]);
+
   const onChangeRoomId = (event: ChangeEvent<HTMLInputElement>) => {
     setRoomId(event.target.value);
   };
@@ -29,9 +37,11 @@ export const EnterRoom: VFC = () => {
       alert("名前を入力してください");
       return;
     }
+    // locationのstateを削除！！！！！
     try {
-      const userId = await addGuestUser(roomId, userName);
-      history.push(`/guest-entrance/${roomId}`, { roomId, userName, userId });
+      const newUserId = await addGuestUser(roomId, userName);
+      setUserId(newUserId);
+      history.push("/guest-entrance");
     } catch (e) {
       console.log(e);
       alert("通信エラーです。もう一度お試しください");
@@ -53,7 +63,7 @@ export const EnterRoom: VFC = () => {
           </div>
           <div className="text-center">
             <p className="text-xl sm:text-2xl pb-2">名前</p>
-            <InputBox onChange={onChangeUserName} />
+            <InputBox value={userName} onChange={onChangeUserName} />
           </div>
         </div>
         <PrimaryButton text={"ルーム入室"} onClick={onClickCreateRoom} />

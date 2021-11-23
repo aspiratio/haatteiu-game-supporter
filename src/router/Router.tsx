@@ -5,31 +5,34 @@ import { Game } from "../pages/Game";
 import { GuestEntrance } from "../pages/GuestEntrance";
 import { HostEntrance } from "../pages/HostEntrance";
 import { Top } from "../pages/Top";
+import { InformationProvider } from "../provider/InformationProvider";
 
 export const Router = () => {
   return (
     <Switch>
-      <Route exact path="/">
-        <Top />
-      </Route>
-      <Route path="/create-room">
-        <CreateRoom />
-      </Route>
-      <Route exact path="/enter-room">
-        <EnterRoom />
-      </Route>
-      <Route path="/enter-room/:id">
-        <EnterRoom />
-      </Route>
-      <Route path="/host-entrance">
-        <HostEntrance />
-      </Route>
-      <Route path="/guest-entrance">
-        <GuestEntrance />
-      </Route>
-      <Route path="/game">
-        <Game />
-      </Route>
+      <InformationProvider>
+        <Route exact path="/">
+          <Top />
+        </Route>
+        <Route path="/create-room">
+          <CreateRoom />
+        </Route>
+        <Route exact path="/enter-room">
+          <EnterRoom />
+        </Route>
+        <Route path="/enter-room/:id">
+          <EnterRoom />
+        </Route>
+        <Route path="/host-entrance">
+          <HostEntrance />
+        </Route>
+        <Route path="/guest-entrance">
+          <GuestEntrance />
+        </Route>
+        <Route path="/game">
+          <Game />
+        </Route>
+      </InformationProvider>
     </Switch>
   );
 };

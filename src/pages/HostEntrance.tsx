@@ -1,4 +1,4 @@
-import { useEffect, useState, VFC } from "react";
+import { useContext, useEffect, useState, VFC } from "react";
 import { message, Upload } from "antd";
 import { useHistory, useLocation } from "react-router";
 import {
@@ -11,18 +11,13 @@ import { useModals } from "../hooks/useModals";
 import { doc, onSnapshot } from "@firebase/firestore";
 import { db } from "../service/firebase";
 import { createNewGame } from "../utils/firestore/createNewGame";
+import { InformationContext } from "../provider/InformationProvider";
 
-// 前ページでuseHistoryでstateを渡している。stateがundefinedのときは404ページに遷移するようにすれば、url直入力で入れなくさせられるはず。
-
-type State = {
-  userName: string;
-  roomId: string;
-};
+// roomIdとuserNameがnullのときは404ページに遷移するようにすれば、url直入力で入れなくさせられるはず。
 
 export const HostEntrance: VFC = () => {
-  const location = useLocation<State>();
-  const { userName, roomId } = location.state;
-  const [usersName, setUsersName] = useState([userName]);
+  const { roomId } = useContext(InformationContext);
+  const [usersName, setUsersName] = useState<Array<string>>([]);
 
   useEffect(() => {
     return onSnapshot(doc(db, `hgs/v1/rooms/${roomId}`), (doc) => {

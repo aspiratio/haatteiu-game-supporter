@@ -1,11 +1,12 @@
-import { ChangeEvent, useState, VFC } from "react";
+import { ChangeEvent, useContext, useState, VFC } from "react";
 import { useHistory } from "react-router";
 import { PrimaryButton } from "../components/Buttons";
 import { InputBox } from "../components/InputBox";
+import { InformationContext } from "../provider/InformationProvider";
 import { createNewRoom } from "../utils/firestore/createNewRoom";
 
 export const CreateRoom: VFC = () => {
-  const [userName, setUserName] = useState<string>();
+  const { setRoomId, userName, setUserName } = useContext(InformationContext);
   const onChangeUserName = (event: ChangeEvent<HTMLInputElement>) => {
     setUserName(event.target.value);
   };
@@ -17,8 +18,9 @@ export const CreateRoom: VFC = () => {
       return;
     }
     try {
-      const roomId = await createNewRoom(userName);
-      history.push("/host-entrance", { userName, roomId });
+      const newRoomId = await createNewRoom(userName);
+      setRoomId(newRoomId);
+      history.push("/host-entrance");
     } catch (e) {
       console.log(e);
       alert("通信エラーです。もう一度お試しください");
