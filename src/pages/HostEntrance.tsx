@@ -18,6 +18,12 @@ import { UploadFile } from "antd/lib/upload/interface";
 export const HostEntrance: VFC = () => {
   const { userName, roomId } = getObjFromLocalStorage("userInfo");
   const [usersName, setUsersName] = useState([userName]);
+  const [fileList, setFileList] = useState<UploadFile<any>[]>([]);
+  const [preview, setPreview] = useState(false);
+  const [uploadImg, setUploadImg] = useState("");
+
+  const history = useHistory();
+  const { isOpen, openModal, closeModal } = useModals();
 
   useEffect(() => {
     browserBackProtection();
@@ -30,12 +36,10 @@ export const HostEntrance: VFC = () => {
     });
   }, [roomId]);
 
-  const history = useHistory();
-  const { isOpen, openModal, closeModal } = useModals();
-
   const startGame = async () => {
+    if (fileList.length !== 1) return;
     try {
-      await createNewGame(roomId);
+      await createNewGame(roomId, uploadImg);
       console.log("Start the game");
       history.push("/game");
     } catch (e) {
@@ -57,27 +61,27 @@ export const HostEntrance: VFC = () => {
     message.success("コピーしました");
   };
 
-  const [fileList, setFileList] = useState<UploadFile<any>[]>([]);
-  const [preview, setPreview] = useState({
-    visible: false,
-    src: "",
-  });
-
-  const checkFormat = (file: UploadFile<File>) => {
+  const checkFormat = async (file: UploadFile<File>) => {
     if (file.type === "image/heic") {
       message.error("HEIC形式の画像には対応していません");
     }
   };
 
-  const onFileChange = useCallback(({ fileList: newFileList }) => {
+  const onFileChange = useCallback(async ({ fileList: newFileList }) => {
     setFileList(newFileList);
+    if (newFileList[0]) {
+      const src = await new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(newFileList[0].originFileObj!);
+        reader.onload = () => resolve(reader.result as string);
+        reader.onerror = (error) => reject(error);
+      });
+      setUploadImg(src as string);
+    }
   }, []);
 
   const cancelPreviewImg = () => {
-    setPreview({
-      ...preview,
-      visible: false,
-    });
+    setPreview(false);
   };
 
   // @ts-ignore
@@ -89,26 +93,9 @@ export const HostEntrance: VFC = () => {
   };
 
   const previewImg = async (file: UploadFile<File>) => {
-    let src = file.url;
-
-    if (!src) {
-      src = await new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.readAsDataURL(file.originFileObj!);
-        reader.onload = () => resolve(reader.result as string);
-        reader.onerror = (error) => reject(error);
-      });
-    }
-    if (src) {
-      const image = new Image();
-      image.src = src;
-      console.log(src);
-
-      setPreview({
-        visible: true,
-        src,
-      });
-    }
+    const image = new Image();
+    image.src = uploadImg;
+    setPreview(true);
   };
 
   return (
@@ -166,12 +153,8 @@ export const HostEntrance: VFC = () => {
         >
           {fileList.length < 1 && "アップロード"}
         </Upload>
-        <Modal
-          visible={preview.visible}
-          footer={null}
-          onCancel={cancelPreviewImg}
-        >
-          <img alt="example" style={{ width: "100%" }} src={preview.src} />
+        <Modal visible={preview} footer={null} onCancel={cancelPreviewImg}>
+          <img alt="example" style={{ width: "100%" }} src={uploadImg} />
         </Modal>
       </div>
       <div>
