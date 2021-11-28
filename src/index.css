@@ -1,3 +1,7 @@
+.ant-upload-list-item-info,
+.ant-upload-list-item-actions {
+  z-index: 0;
+}
 @import "antd/dist/antd.css";
 @tailwind base;
 @tailwind components;

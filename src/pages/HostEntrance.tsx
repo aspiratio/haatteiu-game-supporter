@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState, VFC } from "react";
 import { message, Modal, Upload } from "antd";
+import { UploadFile } from "antd/lib/upload/interface";
 import { useHistory } from "react-router";
 import {
   PrimaryButton,
@@ -13,7 +14,6 @@ import { db } from "../service/firebase";
 import { createNewGame } from "../utils/firestore/createNewGame";
 import { getObjFromLocalStorage } from "../utils/getObjFromLocalStorage";
 import { browserBackProtection } from "../utils/browserBackProtection";
-import { UploadFile } from "antd/lib/upload/interface";
 
 export const HostEntrance: VFC = () => {
   const { userName, roomId } = getObjFromLocalStorage("userInfo");
@@ -80,6 +80,12 @@ export const HostEntrance: VFC = () => {
     }
   }, []);
 
+  const previewImg = async () => {
+    const image = new Image();
+    image.src = uploadImg;
+    setPreview(true);
+  };
+
   const cancelPreviewImg = () => {
     setPreview(false);
   };
@@ -90,12 +96,6 @@ export const HostEntrance: VFC = () => {
     setTimeout(() => {
       onSuccess("ok");
     }, 0);
-  };
-
-  const previewImg = async (file: UploadFile<File>) => {
-    const image = new Image();
-    image.src = uploadImg;
-    setPreview(true);
   };
 
   return (
@@ -144,7 +144,7 @@ export const HostEntrance: VFC = () => {
           customRequest={dummyRequest}
           name="theme"
           listType="picture-card"
-          className="flex justify-center"
+          className="flex justify-center z-0"
           showUploadList={true}
           maxCount={1}
           fileList={fileList}

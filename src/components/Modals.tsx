@@ -24,7 +24,7 @@ const ConfirmModal: VFC<Modal> = ({ isOpen, onClose, text, onClick }) => {
       isOpen={isOpen}
       onRequestClose={onClose}
       style={overlay}
-      className="w-3/4 max-w-sm h-1/5 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 flex flex-col justify-center text-center text-lg sm:text-2xl rounded-xl shadow-xl bg-yellow-50"
+      className="w-3/4 max-w-sm h-1/5 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 flex flex-col justify-center text-center text-lg sm:text-2xl rounded-xl shadow-xl bg-yellow-50 z-50"
     >
       <p>{text}</p>
       <div className="flex justify-center space-x-4 mt-2 text-white">
