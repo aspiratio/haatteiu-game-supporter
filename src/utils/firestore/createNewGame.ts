@@ -3,7 +3,7 @@ import { db } from "../../service/firebase";
 import { createAlphabetArray } from "../createAlphabetArray";
 import { shuffleArray } from "../shuffleArray";
 
-export const createNewGame = async (roomId: string) => {
+export const createNewGame = async (roomId: string, uploadImg: string) => {
   const roomRef = doc(db, `hgs/v1/rooms/${roomId}`);
   const usersRef = collection(db, `hgs/v1/rooms/${roomId}/users`);
   const usersDoc = await getDocs(usersRef);
@@ -21,6 +21,7 @@ export const createNewGame = async (roomId: string) => {
       transaction.update(roomRef, {
         gameCount: newGameCount,
         isDuringGame: true,
+        themeImg: uploadImg,
       });
       const gameId = `game${newGameCount}`;
       usersDoc.forEach((userDoc) => {

@@ -9,6 +9,7 @@ export const createNewRoom = async (name: string) => {
     usersName: [name],
     gameCount: 0,
     isDuringGame: false,
+    themeImg: "",
   });
   await setDoc(usersRef, { displayName: name, isHost: true });
   return {

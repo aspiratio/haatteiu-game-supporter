@@ -1,5 +1,6 @@
-import { useEffect, useState, VFC } from "react";
-import { message, Upload } from "antd";
+import { useCallback, useEffect, useState, VFC } from "react";
+import { message, Modal, Upload } from "antd";
+import { UploadFile } from "antd/lib/upload/interface";
 import { useHistory } from "react-router";
 import {
   PrimaryButton,
@@ -17,6 +18,12 @@ import { browserBackProtection } from "../utils/browserBackProtection";
 export const HostEntrance: VFC = () => {
   const { userName, roomId } = getObjFromLocalStorage("userInfo");
   const [usersName, setUsersName] = useState([userName]);
+  const [fileList, setFileList] = useState<UploadFile<any>[]>([]);
+  const [preview, setPreview] = useState(false);
+  const [uploadImg, setUploadImg] = useState("");
+
+  const history = useHistory();
+  const { isOpen, openModal, closeModal } = useModals();
 
   useEffect(() => {
     browserBackProtection();
@@ -29,12 +36,10 @@ export const HostEntrance: VFC = () => {
     });
   }, [roomId]);
 
-  const history = useHistory();
-  const { isOpen, openModal, closeModal } = useModals();
-
   const startGame = async () => {
+    if (fileList.length !== 1) return;
     try {
-      await createNewGame(roomId);
+      await createNewGame(roomId, uploadImg);
       console.log("Start the game");
       history.push("/game");
     } catch (e) {
@@ -54,6 +59,43 @@ export const HostEntrance: VFC = () => {
   const copy = (data: string) => {
     navigator.clipboard.writeText(data);
     message.success("コピーしました");
+  };
+
+  const checkFormat = async (file: UploadFile<File>) => {
+    if (file.type === "image/heic") {
+      message.error("HEIC形式の画像には対応していません");
+    }
+  };
+
+  const onFileChange = useCallback(async ({ fileList: newFileList }) => {
+    setFileList(newFileList);
+    if (newFileList[0]) {
+      const src = await new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(newFileList[0].originFileObj!);
+        reader.onload = () => resolve(reader.result as string);
+        reader.onerror = (error) => reject(error);
+      });
+      setUploadImg(src as string);
+    }
+  }, []);
+
+  const previewImg = async () => {
+    const image = new Image();
+    image.src = uploadImg;
+    setPreview(true);
+  };
+
+  const cancelPreviewImg = () => {
+    setPreview(false);
+  };
+
+  // @ts-ignore
+  const dummyRequest = (options) => {
+    const { onSuccess } = options;
+    setTimeout(() => {
+      onSuccess("ok");
+    }, 0);
   };
 
   return (
@@ -97,16 +139,23 @@ export const HostEntrance: VFC = () => {
           <p className="whitespace-nowrap mr-1">STEP2 : </p>
           <p>お題カードを一枚選び写真をアップロード</p>
         </div>
-        {/* TODO:firestoreと連携してから正式に実装 */}
         <Upload
-          name="avatar"
+          beforeUpload={checkFormat}
+          customRequest={dummyRequest}
+          name="theme"
           listType="picture-card"
-          className="text-center"
+          className="flex justify-center z-0"
           showUploadList={true}
           maxCount={1}
+          fileList={fileList}
+          onPreview={previewImg}
+          onChange={onFileChange}
         >
-          アップロード
+          {fileList.length < 1 && "アップロード"}
         </Upload>
+        <Modal visible={preview} footer={null} onCancel={cancelPreviewImg}>
+          <img alt="example" style={{ width: "100%" }} src={uploadImg} />
+        </Modal>
       </div>
       <div>
         <p className="mb-1">STEP3 : 参加者が揃ったらゲーム開始</p>
