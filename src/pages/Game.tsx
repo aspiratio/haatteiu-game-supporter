@@ -4,11 +4,10 @@ import { Information } from "../components/Information";
 import { ThemeContent } from "../components/contents/ThemeContent";
 import { AnswersContent } from "../components/contents/AnswersContent";
 import { PointsContent } from "../components/contents/PointsContent";
+import { getObjFromLocalStorage } from "../utils/getObjFromLocalStorage";
 
 export const Game = () => {
-  // useHistoryで渡すか、firestoreから取得する
-  const roomId = "abcdef";
-  const userName = "麻歩";
+  const { userName, roomId, userId } = getObjFromLocalStorage("userInfo");
   const userAlphabet = "A";
 
   const [actorNumber, setActorNumber] = useState(8);
@@ -62,7 +61,7 @@ export const Game = () => {
         onClickAnswers={onClickAnswers}
         onClickPoints={onClickPoints}
       />
-      {activeTab === "theme" && <ThemeContent />}
+      {activeTab === "theme" && <ThemeContent roomId={roomId} />}
       {activeTab === "answers" && (
         <AnswersContent
           usersName={usersName}
