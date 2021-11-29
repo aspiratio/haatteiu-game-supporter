@@ -1,6 +1,6 @@
 import { collection, doc, getDocs, runTransaction } from "@firebase/firestore";
 import { db } from "../../service/firebase";
-import { createAlphabetArray } from "../createAlphabetArray";
+import { createAlphabetArray, createNumberArray } from "../createArray";
 import { shuffleArray } from "../shuffleArray";
 
 export const createNewGame = async (roomId: string, uploadImg: string) => {
@@ -10,6 +10,9 @@ export const createNewGame = async (roomId: string, uploadImg: string) => {
   const alphabetArray: Array<string> = shuffleArray(
     createAlphabetArray(usersDoc.size)
   );
+  const numberArray: Array<string> = shuffleArray(
+    createNumberArray(usersDoc.size)
+  );
 
   try {
     await runTransaction(db, async (transaction) => {
@@ -17,6 +20,7 @@ export const createNewGame = async (roomId: string, uploadImg: string) => {
       if (!roomDoc.exists()) {
         throw new Error("Document does not exist!");
       }
+
       const newGameCount: number = roomDoc.data().gameCount + 1;
       transaction.update(roomRef, {
         gameCount: newGameCount,
@@ -30,7 +34,12 @@ export const createNewGame = async (roomId: string, uploadImg: string) => {
           `hgs/v1/rooms/${roomId}/users/${userDoc.id}/games/${gameId}`
         );
         const alphabet = alphabetArray.shift();
-        transaction.set(gameRef, { userTheme: alphabet, answers: [] });
+        const number = numberArray.shift();
+        transaction.set(gameRef, {
+          userTheme: alphabet,
+          actNumber: number,
+          answers: [],
+        });
       });
     });
     console.log("Transaction successfully committed!");

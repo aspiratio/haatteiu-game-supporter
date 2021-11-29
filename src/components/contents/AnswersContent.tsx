@@ -1,6 +1,6 @@
 import { useState, VFC } from "react";
 import { Select } from "antd";
-import { createAlphabetArray } from "../../utils/createAlphabetArray";
+import { createAlphabetArray } from "../../utils/createArray";
 import { PrimaryButton } from "../Buttons";
 
 const { Option } = Select;
