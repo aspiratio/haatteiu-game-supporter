@@ -27,18 +27,14 @@ export const createNewGame = async (roomId: string, uploadImg: string) => {
         isDuringGame: true,
         themeImg: uploadImg,
       });
-      const gameId = `game${newGameCount}`;
+
       usersDoc.forEach((userDoc) => {
-        const gameRef = doc(
-          db,
-          `hgs/v1/rooms/${roomId}/users/${userDoc.id}/games/${gameId}`
-        );
+        const userRef = doc(db, `hgs/v1/rooms/${roomId}/users/${userDoc.id}`);
         const alphabet = alphabetArray.shift();
         const number = numberArray.shift();
-        transaction.set(gameRef, {
+        transaction.update(userRef, {
           userTheme: alphabet,
-          actNumber: number,
-          answers: [],
+          actOrder: number,
         });
       });
     });
