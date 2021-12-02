@@ -12,11 +12,11 @@ import { useModals } from "../hooks/useModals";
 import { doc, onSnapshot } from "@firebase/firestore";
 import { db } from "../service/firebase";
 import { createNewGame } from "../utils/firestore/createNewGame";
-import { getObjFromLocalStorage } from "../utils/getObjFromLocalStorage";
+import { getObjFromSessionStorage } from "../utils/getObjFromSessionStorage";
 import { browserBackProtection } from "../utils/browserBackProtection";
 
 export const HostEntrance: VFC = () => {
-  const { userName, roomId } = getObjFromLocalStorage("userInfo");
+  const { userName, roomId } = getObjFromSessionStorage("userInfo");
   const [usersName, setUsersName] = useState([userName]);
   const [fileList, setFileList] = useState<UploadFile<any>[]>([]);
   const [preview, setPreview] = useState(false);
@@ -50,7 +50,7 @@ export const HostEntrance: VFC = () => {
 
   const cancelGame = () => {
     console.log("Cancel the game");
-    localStorage.clear();
+    sessionStorage.clear();
     history.push("/");
   };
 

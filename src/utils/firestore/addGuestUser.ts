@@ -15,7 +15,6 @@ export const addGuestUser = async (roomId: string, userName: string) => {
   await setDoc(usersRef, {
     displayName: userName,
     isHost: false,
-    userTheme: "",
     actOrder: null,
     actScore: null,
     answerScore: null,

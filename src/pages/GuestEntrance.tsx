@@ -6,11 +6,11 @@ import { Information } from "../components/Information";
 import { removeUser } from "../utils/firestore/removeUser";
 import { doc, onSnapshot } from "@firebase/firestore";
 import { db } from "../service/firebase";
-import { getObjFromLocalStorage } from "../utils/getObjFromLocalStorage";
+import { getObjFromSessionStorage } from "../utils/getObjFromSessionStorage";
 import { browserBackProtection } from "../utils/browserBackProtection";
 
 export const GuestEntrance: VFC = () => {
-  const { userName, roomId, userId } = getObjFromLocalStorage("userInfo");
+  const { userName, roomId, userId } = getObjFromSessionStorage("userInfo");
   const [isOpen, setIsOpen] = useState(false);
   const history = useHistory();
 
@@ -23,7 +23,7 @@ export const GuestEntrance: VFC = () => {
 
   const returnToTopPage = () => {
     removeUser(roomId, userName, userId);
-    localStorage.clear();
+    sessionStorage.clear();
     history.push("/");
   };
 

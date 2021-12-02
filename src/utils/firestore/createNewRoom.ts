@@ -14,7 +14,6 @@ export const createNewRoom = async (name: string) => {
   await setDoc(usersRef, {
     displayName: name,
     isHost: true,
-    userTheme: "",
     actOrder: null,
     actScore: null,
     answerScore: null,

@@ -26,14 +26,13 @@ export const createNewGame = async (roomId: string, uploadImg: string) => {
         gameCount: newGameCount,
         isDuringGame: true,
         themeImg: uploadImg,
+        correctAnswer: alphabetArray,
       });
 
       usersDoc.forEach((userDoc) => {
         const userRef = doc(db, `hgs/v1/rooms/${roomId}/users/${userDoc.id}`);
-        const alphabet = alphabetArray.shift();
         const number = numberArray.shift();
         transaction.update(userRef, {
-          userTheme: alphabet,
           actOrder: number,
         });
       });
