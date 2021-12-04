@@ -44,6 +44,7 @@ export const AnswersContent: VFC<Props> = ({
       const userData = await fetchUser();
       setSentAnswers(userData!.answers);
     })();
+    return () => {};
   }, [roomId, userId]);
 
   const handleChange = (value: string) => {
@@ -53,6 +54,7 @@ export const AnswersContent: VFC<Props> = ({
   const onClickSendButton = () => {
     if (answer) {
       sendAnswer(roomId, userId, answer);
+      setSentAnswers([...sentAnswers, answer]);
     }
     setAnswer(null);
   };
