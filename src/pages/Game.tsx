@@ -64,9 +64,9 @@ export const Game = () => {
       setUsersName(allUsersName);
     })();
   }, []);
-  const [actorNumber, setActorNumber] = useState(0);
+  const [currentActorNumber, setCurrentActorNumber] = useState(0);
 
-  const isFinished = actorNumber === usersName.length;
+  const isFinished = currentActorNumber === usersName.length;
 
   type Tab = "theme" | "answers" | "points";
   const [activeTab, setActiveTab] = useState<Tab>("theme");
@@ -95,7 +95,8 @@ export const Game = () => {
         </p>
       ) : (
         <p className="h-10v flex text-xl justify-center items-center text-vivid-red">
-          {actorNumber + 1}人目の演者は{usersName[actorNumber]}さん
+          {currentActorNumber + 1}人目の演者は{usersName[currentActorNumber]}
+          さん
         </p>
       )}
       <GameTabs
@@ -108,7 +109,7 @@ export const Game = () => {
       {activeTab === "answers" && (
         <AnswersContent
           usersName={usersName}
-          actorNumber={actorNumber}
+          currentActorNumber={currentActorNumber}
           isFinished={isFinished}
         />
       )}

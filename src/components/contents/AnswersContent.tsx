@@ -7,13 +7,13 @@ const { Option } = Select;
 
 type Props = {
   usersName: Array<string>;
-  actorNumber: number;
+  currentActorNumber: number;
   isFinished: boolean;
 };
 
 export const AnswersContent: VFC<Props> = ({
   usersName,
-  actorNumber,
+  currentActorNumber,
   isFinished,
 }) => {
   const [answer, setAnswer] = useState<string | null>(null);
@@ -127,7 +127,7 @@ export const AnswersContent: VFC<Props> = ({
               <ul>
                 {usersName.map((name, i) => {
                   let fontColor;
-                  if (i === actorNumber) fontColor = "text-vivid-red";
+                  if (i === currentActorNumber) fontColor = "text-vivid-red";
                   return (
                     <li key={name} className={`text-left ${fontColor}`}>
                       {name}
