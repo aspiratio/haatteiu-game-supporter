@@ -10,10 +10,12 @@ import {
   doc,
   getDoc,
   getDocs,
+  onSnapshot,
   orderBy,
   query,
 } from "@firebase/firestore";
 import { db } from "../service/firebase";
+import { browserBackProtection } from "../utils/browserBackProtection";
 
 type Type = {
   userName: string;
@@ -26,25 +28,25 @@ export const Game = () => {
     getObjFromSessionStorage("userInfo");
   const [usersName, setUsersName] = useState<Array<string>>([]);
   const [userAlphabet, setUserAlphabet] = useState("");
+  const [currentActorNumber, setCurrentActorNumber] = useState(0);
 
   useEffect(() => {
+    browserBackProtection();
     // TODO:firestoreとのやりとりを隠蔽する
+    const roomRef = doc(db, `hgs/v1/rooms/${roomId}`);
+    const userRef = doc(db, `hgs/v1/rooms/${roomId}/users/${userId}`);
+    const usersRef = collection(db, `hgs/v1/rooms/${roomId}/users`);
     (async () => {
       const fetchRoom = async () => {
-        const roomRef = doc(db, `hgs/v1/rooms/${roomId}`);
         const roomSnapshot = await getDoc(roomRef);
         return roomSnapshot.data();
       };
       const fetchUser = async () => {
-        const userRef = doc(db, `hgs/v1/rooms/${roomId}/users/${userId}`);
         const userSnapshot = await getDoc(userRef);
         return userSnapshot.data();
       };
       const orderByAllUsers = async () => {
-        const usersQuery = query(
-          collection(db, `hgs/v1/rooms/${roomId}/users`),
-          orderBy("actOrder")
-        );
+        const usersQuery = query(usersRef, orderBy("actOrder"));
         const usersSnapshot = await getDocs(usersQuery);
         return usersSnapshot.docs.map((doc) => {
           return doc.data();
@@ -63,8 +65,18 @@ export const Game = () => {
       });
       setUsersName(allUsersName);
     })();
-  }, []);
-  const [currentActorNumber, setCurrentActorNumber] = useState(0);
+
+    return onSnapshot(usersRef, (snapshot) => {
+      const answersLength: Array<number> = [];
+      snapshot.forEach((doc) => {
+        answersLength.push(doc.data().answers.length);
+      });
+      const min = answersLength.reduce((a, b) => {
+        return Math.min(a, b);
+      });
+      setCurrentActorNumber(min);
+    });
+  }, [roomId, userId]);
 
   const isFinished = currentActorNumber === usersName.length;
 
@@ -108,6 +120,8 @@ export const Game = () => {
       {activeTab === "theme" && <ThemeContent roomId={roomId} />}
       {activeTab === "answers" && (
         <AnswersContent
+          roomId={roomId}
+          userId={userId}
           usersName={usersName}
           currentActorNumber={currentActorNumber}
           isFinished={isFinished}

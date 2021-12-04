@@ -15,6 +15,7 @@ export const createNewRoom = async (name: string) => {
     displayName: name,
     isHost: true,
     actOrder: null,
+    answers: [],
     actScore: null,
     answerScore: null,
   });

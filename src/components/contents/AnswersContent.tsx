@@ -2,16 +2,21 @@ import { useState, VFC } from "react";
 import { Select } from "antd";
 import { createAlphabetArray } from "../../utils/createArray";
 import { PrimaryButton } from "../Buttons";
+import { sendAnswer } from "../../utils/firestore/sendAnswer";
 
 const { Option } = Select;
 
 type Props = {
+  roomId: string;
+  userId: string;
   usersName: Array<string>;
   currentActorNumber: number;
   isFinished: boolean;
 };
 
 export const AnswersContent: VFC<Props> = ({
+  roomId,
+  userId,
   usersName,
   currentActorNumber,
   isFinished,
@@ -30,7 +35,10 @@ export const AnswersContent: VFC<Props> = ({
   };
 
   const onClickSendButton = () => {
-    console.log(`send ${answer}`);
+    if (answer) {
+      sendAnswer(roomId, userId, answer);
+    }
+    setAnswer(null);
   };
 
   return (

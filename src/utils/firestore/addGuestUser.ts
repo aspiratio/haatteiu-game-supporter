@@ -16,6 +16,7 @@ export const addGuestUser = async (roomId: string, userName: string) => {
     displayName: userName,
     isHost: false,
     actOrder: null,
+    answers: [],
     actScore: null,
     answerScore: null,
   });
