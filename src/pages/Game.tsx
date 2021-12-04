@@ -28,6 +28,7 @@ export const Game = () => {
   const [userAlphabet, setUserAlphabet] = useState("");
 
   useEffect(() => {
+    // TODO:firestoreとのやりとりを隠蔽する
     (async () => {
       const fetchRoom = async () => {
         const roomRef = doc(db, `hgs/v1/rooms/${roomId}`);
@@ -63,14 +64,7 @@ export const Game = () => {
       setUsersName(allUsersName);
     })();
   }, []);
-  // TODO:firestoreとのやりとりを隠匿する
-
-  // const userRef = doc(db, `hgs/v1/rooms/${roomId}/users/${userId}`);
-  // const userSnapshot = await getDoc(userRef);
-  // const userData = userSnapshot.data();
-
   const [actorNumber, setActorNumber] = useState(0);
-  // firestoreから取得（演技順をfirestoreに登録する必要あり？）
 
   const isFinished = actorNumber === usersName.length;
 
