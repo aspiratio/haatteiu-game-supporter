@@ -123,6 +123,7 @@ export const Game = () => {
           roomId={roomId}
           userId={userId}
           usersName={usersName}
+          userAlphabet={userAlphabet}
           currentActorNumber={currentActorNumber}
           isFinished={isFinished}
         />

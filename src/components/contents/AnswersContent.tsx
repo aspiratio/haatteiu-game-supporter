@@ -1,8 +1,10 @@
-import { useState, VFC } from "react";
+import { useEffect, useState, VFC } from "react";
 import { Select } from "antd";
 import { createAlphabetArray } from "../../utils/createArray";
 import { PrimaryButton } from "../Buttons";
 import { sendAnswer } from "../../utils/firestore/sendAnswer";
+import { doc, getDoc } from "@firebase/firestore";
+import { db } from "../../service/firebase";
 
 const { Option } = Select;
 
@@ -10,6 +12,7 @@ type Props = {
   roomId: string;
   userId: string;
   usersName: Array<string>;
+  userAlphabet: string;
   currentActorNumber: number;
   isFinished: boolean;
 };
@@ -18,17 +21,30 @@ export const AnswersContent: VFC<Props> = ({
   roomId,
   userId,
   usersName,
+  userAlphabet,
   currentActorNumber,
   isFinished,
 }) => {
   const [answer, setAnswer] = useState<string | null>(null);
   // firestoreに保存した回答から取得
-  const sentAnswers = ["D", "C", "F"];
+  const [sentAnswers, setSentAnswers] = useState<Array<string>>([]);
 
   const allOptions = createAlphabetArray(usersName.length);
   const selectableOptions = allOptions.filter(
-    (i) => sentAnswers.indexOf(i) === -1
+    (i) => sentAnswers.indexOf(i) === -1 && i !== userAlphabet
   );
+
+  useEffect(() => {
+    const userRef = doc(db, `hgs/v1/rooms/${roomId}/users/${userId}`);
+    (async () => {
+      const fetchUser = async () => {
+        const userSnapshot = await getDoc(userRef);
+        return userSnapshot.data();
+      };
+      const userData = await fetchUser();
+      setSentAnswers(userData!.answers);
+    })();
+  }, [roomId, userId]);
 
   const handleChange = (value: string) => {
     setAnswer(value);
