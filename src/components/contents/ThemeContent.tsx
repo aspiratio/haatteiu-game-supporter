@@ -1,21 +1,10 @@
-import { doc, getDoc } from "@firebase/firestore";
-import { useEffect, useState, VFC } from "react";
-import { db } from "../../service/firebase";
+import { VFC } from "react";
 
 type Props = {
-  roomId: string;
+  themeImg: string;
 };
 
-export const ThemeContent: VFC<Props> = ({ roomId }) => {
-  const [themeImg, setThemeImg] = useState("");
-  useEffect(() => {
-    const getImg = async () => {
-      const roomDoc = await getDoc(doc(db, `hgs/v1/rooms/${roomId}`));
-      const getImage = roomDoc.data()!.themeImg;
-      setThemeImg(getImage);
-    };
-    getImg();
-  }, [roomId]);
+export const ThemeContent: VFC<Props> = ({ themeImg }) => {
   return (
     <img
       className="max-h-60v max-w-full mx-auto mt-3"

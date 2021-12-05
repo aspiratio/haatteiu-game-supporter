@@ -29,6 +29,7 @@ export const Game = () => {
   const [usersName, setUsersName] = useState<Array<string>>([]);
   const [userAlphabet, setUserAlphabet] = useState("");
   const [currentActorNumber, setCurrentActorNumber] = useState(0);
+  const [themeImg, setThemeImg] = useState("");
 
   useEffect(() => {
     browserBackProtection();
@@ -54,10 +55,13 @@ export const Game = () => {
       };
 
       const roomData = await fetchRoom();
-      const correctAnswer = roomData!.correctAnswer as string[];
+      const correctAnswer: string[] = roomData!.correctAnswer;
       const userData = await fetchUser();
       const actOrder = userData!.actOrder;
       setUserAlphabet(correctAnswer[actOrder]);
+
+      const getImage: string = roomData!.themeImg;
+      setThemeImg(getImage);
 
       const allUsersData = await orderByAllUsers();
       const allUsersName = allUsersData.map((data) => {
@@ -117,7 +121,7 @@ export const Game = () => {
         onClickAnswers={onClickAnswers}
         onClickPoints={onClickPoints}
       />
-      {activeTab === "theme" && <ThemeContent roomId={roomId} />}
+      {activeTab === "theme" && <ThemeContent themeImg={themeImg} />}
       {activeTab === "answers" && (
         <AnswersContent
           roomId={roomId}
