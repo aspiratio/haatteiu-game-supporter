@@ -1,4 +1,4 @@
-import { useEffect, useState, VFC } from "react";
+import { useCallback, useEffect, useState, VFC } from "react";
 import { Select } from "antd";
 import { createAlphabetArray } from "../../utils/createArray";
 import { PrimaryButton } from "../Buttons";
@@ -13,6 +13,7 @@ type Props = {
   userId: string;
   usersName: Array<string>;
   userAlphabet: string;
+  userActorNumber: number | undefined;
   currentActorNumber: number;
   isFinished: boolean;
 };
@@ -22,11 +23,11 @@ export const AnswersContent: VFC<Props> = ({
   userId,
   usersName,
   userAlphabet,
+  userActorNumber,
   currentActorNumber,
   isFinished,
 }) => {
   const [answer, setAnswer] = useState<string | null>(null);
-  // firestoreに保存した回答から取得
   const [sentAnswers, setSentAnswers] = useState<Array<string>>([]);
 
   const allOptions = createAlphabetArray(usersName.length);
@@ -54,13 +55,22 @@ export const AnswersContent: VFC<Props> = ({
     setAnswer(value);
   };
 
-  const onClickSendButton = () => {
-    if (answer) {
-      sendAnswer(roomId, userId, answer);
-      setSentAnswers([...sentAnswers, answer]);
+  const onClickSendButton = (value: string | null) => {
+    if (value) {
+      sendAnswer(roomId, userId, value);
+      setSentAnswers([...sentAnswers, value]);
+      setAnswer(null);
     }
-    setAnswer(null);
   };
+
+  // if (
+  //   currentActorNumber === userActorNumber &&
+  //   sentAnswers.length < currentActorNumber
+  // ) {
+  //   sendAnswer(roomId, userId, "ー");
+  //   setSentAnswers([...sentAnswers, "ー"]);
+  //   console.log(1);
+  // }
 
   return (
     <>
@@ -130,27 +140,38 @@ export const AnswersContent: VFC<Props> = ({
             各アルファベットは1度しか選べません
           </p>
           {currentActorNumber === sentAnswers.length ? (
-            <div className="space-x-8 my-2">
-              <Select
-                onChange={handleChange}
-                size="large"
-                className="w-24 text-lg border-2"
-              >
-                {selectableOptions.map((option) => {
-                  return (
-                    <Option key={option} value={option}>
-                      {option}
-                    </Option>
-                  );
-                })}
-              </Select>
-              <PrimaryButton
-                text="送信"
-                onClick={onClickSendButton}
-                width={24}
-                height={10}
-              />
-            </div>
+            currentActorNumber === userActorNumber ? (
+              <div className="my-2">
+                <PrimaryButton
+                  text="演技しました"
+                  onClick={() => onClickSendButton("ー")}
+                  width={48}
+                  height={10}
+                ></PrimaryButton>
+              </div>
+            ) : (
+              <div className="space-x-8 my-2">
+                <Select
+                  onChange={handleChange}
+                  size="large"
+                  className="w-24 text-lg border-2"
+                >
+                  {selectableOptions.map((option) => {
+                    return (
+                      <Option key={option} value={option}>
+                        {option}
+                      </Option>
+                    );
+                  })}
+                </Select>
+                <PrimaryButton
+                  text="送信"
+                  onClick={() => onClickSendButton(answer)}
+                  width={24}
+                  height={10}
+                />
+              </div>
+            )
           ) : (
             <p className="text-lg my-4 text-blue-500">
               他の人の回答を待っています...

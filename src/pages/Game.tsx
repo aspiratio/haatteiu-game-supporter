@@ -28,6 +28,7 @@ export const Game = () => {
     getObjFromSessionStorage("userInfo");
   const [usersName, setUsersName] = useState<Array<string>>([]);
   const [userAlphabet, setUserAlphabet] = useState("");
+  const [userActorNumber, setUserActorNumber] = useState<number>();
   const [currentActorNumber, setCurrentActorNumber] = useState(0);
   const [themeImg, setThemeImg] = useState("");
 
@@ -58,6 +59,7 @@ export const Game = () => {
       const correctAnswer: string[] = roomData!.correctAnswer;
       const userData = await fetchUser();
       const actOrder = userData!.actOrder;
+      setUserActorNumber(actOrder);
       setUserAlphabet(correctAnswer[actOrder]);
 
       const getImage: string = roomData!.themeImg;
@@ -128,6 +130,7 @@ export const Game = () => {
           userId={userId}
           usersName={usersName}
           userAlphabet={userAlphabet}
+          userActorNumber={userActorNumber}
           currentActorNumber={currentActorNumber}
           isFinished={isFinished}
         />
