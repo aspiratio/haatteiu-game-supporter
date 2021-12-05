@@ -35,6 +35,7 @@ export const AnswersContent: VFC<Props> = ({
   );
 
   useEffect(() => {
+    let unmount = false;
     const userRef = doc(db, `hgs/v1/rooms/${roomId}/users/${userId}`);
     (async () => {
       const fetchUser = async () => {
@@ -42,9 +43,11 @@ export const AnswersContent: VFC<Props> = ({
         return userSnapshot.data();
       };
       const userData = await fetchUser();
-      setSentAnswers(userData!.answers);
+      if (!unmount) setSentAnswers(userData!.answers);
     })();
-    return () => {};
+    return () => {
+      unmount = true;
+    };
   }, [roomId, userId]);
 
   const handleChange = (value: string) => {
@@ -126,27 +129,33 @@ export const AnswersContent: VFC<Props> = ({
             <br />
             各アルファベットは1度しか選べません
           </p>
-          <div className="space-x-8 my-2">
-            <Select
-              onChange={handleChange}
-              size="large"
-              className="w-24 text-lg border-2"
-            >
-              {selectableOptions.map((option) => {
-                return (
-                  <Option key={option} value={option}>
-                    {option}
-                  </Option>
-                );
-              })}
-            </Select>
-            <PrimaryButton
-              text="送信"
-              onClick={onClickSendButton}
-              width={24}
-              height={10}
-            />
-          </div>
+          {currentActorNumber === sentAnswers.length ? (
+            <div className="space-x-8 my-2">
+              <Select
+                onChange={handleChange}
+                size="large"
+                className="w-24 text-lg border-2"
+              >
+                {selectableOptions.map((option) => {
+                  return (
+                    <Option key={option} value={option}>
+                      {option}
+                    </Option>
+                  );
+                })}
+              </Select>
+              <PrimaryButton
+                text="送信"
+                onClick={onClickSendButton}
+                width={24}
+                height={10}
+              />
+            </div>
+          ) : (
+            <p className="text-lg my-4 text-blue-500">
+              他の人の回答を待っています...
+            </p>
+          )}
           <div className="text-lg flex justify-center space-x-4">
             <div>
               <p>順番</p>
