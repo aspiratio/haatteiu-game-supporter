@@ -32,12 +32,27 @@ export const Game = () => {
   const [currentActorNumber, setCurrentActorNumber] = useState(0);
   const [themeImg, setThemeImg] = useState("");
 
+  const isFinished = currentActorNumber === usersName.length;
+
+  type Tab = "theme" | "answers" | "points";
+  const [activeTab, setActiveTab] = useState<Tab>("theme");
+  const onClickTheme = () => {
+    setActiveTab("theme");
+  };
+  const onClickAnswers = () => {
+    setActiveTab("answers");
+  };
+  const onClickPoints = () => {
+    setActiveTab("points");
+  };
+
+  // TODO:firestoreとのやりとりを隠蔽する
+  const roomRef = doc(db, `hgs/v1/rooms/${roomId}`);
+  const userRef = doc(db, `hgs/v1/rooms/${roomId}/users/${userId}`);
+  const usersRef = collection(db, `hgs/v1/rooms/${roomId}/users`);
+
   useEffect(() => {
     browserBackProtection();
-    // TODO:firestoreとのやりとりを隠蔽する
-    const roomRef = doc(db, `hgs/v1/rooms/${roomId}`);
-    const userRef = doc(db, `hgs/v1/rooms/${roomId}/users/${userId}`);
-    const usersRef = collection(db, `hgs/v1/rooms/${roomId}/users`);
     (async () => {
       const fetchRoom = async () => {
         const roomSnapshot = await getDoc(roomRef);
@@ -82,21 +97,26 @@ export const Game = () => {
       });
       setCurrentActorNumber(min);
     });
-  }, [roomId, userId]);
+  }, [roomId, roomRef, userId, userRef, usersRef]);
 
-  const isFinished = currentActorNumber === usersName.length;
-
-  type Tab = "theme" | "answers" | "points";
-  const [activeTab, setActiveTab] = useState<Tab>("theme");
-  const onClickTheme = () => {
-    setActiveTab("theme");
-  };
-  const onClickAnswers = () => {
-    setActiveTab("answers");
-  };
-  const onClickPoints = () => {
-    setActiveTab("points");
-  };
+  useEffect(() => {
+    isFinished &&
+      (async () => {
+        const orderByAllUsers = async () => {
+          const usersQuery = query(usersRef, orderBy("actOrder"));
+          const usersSnapshot = await getDocs(usersQuery);
+          return usersSnapshot.docs.map((doc) => {
+            return doc.data();
+          });
+        };
+        const allUsersData = await orderByAllUsers();
+        const answersArray = allUsersData.map((data) => {
+          return data.answers;
+        });
+        setAllAnswers(answersArray);
+        console.log("finished");
+      })();
+  }, [isFinished, usersRef]);
 
   return (
     <>
