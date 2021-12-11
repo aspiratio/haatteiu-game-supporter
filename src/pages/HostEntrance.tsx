@@ -14,6 +14,7 @@ import { db } from "../service/firebase";
 import { createNewGame } from "../utils/firestore/createNewGame";
 import { getObjFromSessionStorage } from "../utils/getObjFromSessionStorage";
 import { browserBackProtection } from "../utils/browserBackProtection";
+import imageCompression from "browser-image-compression";
 
 export const HostEntrance: VFC = () => {
   const { userName, roomId } = getObjFromSessionStorage("userInfo");
@@ -68,15 +69,21 @@ export const HostEntrance: VFC = () => {
   };
 
   const onFileChange = useCallback(async ({ fileList: newFileList }) => {
-    setFileList(newFileList);
-    if (newFileList[0]) {
-      const src = await new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.readAsDataURL(newFileList[0].originFileObj!);
-        reader.onload = () => resolve(reader.result as string);
-        reader.onerror = (error) => reject(error);
-      });
+    const options = {
+      maxSizeMB: 1,
+      maxWidthOrHeight: 1920,
+    };
+    try {
+      setFileList(newFileList);
+      const compressedImage = await imageCompression(
+        newFileList[0].originFileObj,
+        options
+      );
+      const src = await imageCompression.getDataUrlFromFile(compressedImage);
       setUploadImg(src as string);
+    } catch (error) {
+      console.error(error);
+      throw error;
     }
   }, []);
 
