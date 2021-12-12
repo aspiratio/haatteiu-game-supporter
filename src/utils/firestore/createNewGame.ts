@@ -1,4 +1,5 @@
 import { collection, doc, getDocs, runTransaction } from "@firebase/firestore";
+import { error } from "console";
 import { db } from "../../service/firebase";
 import { createAlphabetArray, createNumberArray } from "../createArray";
 import { shuffleArray } from "../shuffleArray";
@@ -38,7 +39,8 @@ export const createNewGame = async (roomId: string, uploadImg: string) => {
       });
     });
     console.log("Transaction successfully committed!");
-  } catch (e) {
-    console.log("Transaction failed: ", e);
+  } catch (error) {
+    console.log("Transaction failed: ", error);
+    throw new Error("ゲーム作成失敗");
   }
 };
