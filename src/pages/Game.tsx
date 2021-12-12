@@ -16,6 +16,8 @@ import {
 } from "@firebase/firestore";
 import { db } from "../service/firebase";
 import { browserBackProtection } from "../utils/browserBackProtection";
+import { sendAnswer } from "../utils/firestore/sendAnswer";
+import { createAlphabetArray } from "../utils/createArray";
 
 type Type = {
   userName: string;
@@ -33,6 +35,13 @@ export const Game = () => {
   const [themeImg, setThemeImg] = useState("");
   const [allAnswers, setAllAnswers] = useState<Array<Array<string>>>([]);
   const [isFinished, setIsFinished] = useState(false);
+  const [answer, setAnswer] = useState<string | null>(null);
+  const [sentAnswers, setSentAnswers] = useState<Array<string>>([]);
+
+  const allOptions = createAlphabetArray(usersName.length);
+  const selectableOptions = allOptions.filter(
+    (i) => sentAnswers.indexOf(i) === -1 && i !== userAlphabet
+  );
 
   type Tab = "theme" | "answers" | "points";
   const [activeTab, setActiveTab] = useState<Tab>("theme");
@@ -44,6 +53,18 @@ export const Game = () => {
   };
   const onClickPoints = () => {
     setActiveTab("points");
+  };
+
+  const selectAlphabet = (value: string) => {
+    setAnswer(value);
+  };
+
+  const onClickSendButton = (value: string | null) => {
+    if (value) {
+      sendAnswer(roomId, userId, value);
+      setSentAnswers([...sentAnswers, value]);
+      setAnswer(null);
+    }
   };
 
   // TODO:firestoreとのやりとりを隠蔽する
@@ -74,6 +95,7 @@ export const Game = () => {
       const correctAnswer: string[] = roomData!.correctAnswer;
       const userData = await fetchUser();
       const actOrder = userData!.actOrder;
+      const sentAnswers = userData!.answers;
       const getImage: string = roomData!.themeImg;
       const allUsersData = await orderByAllUsers();
       const allUsersName = allUsersData.map((data) => {
@@ -83,6 +105,7 @@ export const Game = () => {
       if (!unmount) {
         setUserActorNumber(actOrder);
         setUserAlphabet(correctAnswer[actOrder]);
+        setSentAnswers(sentAnswers);
         setThemeImg(getImage);
         setUsersName(allUsersName);
       }
@@ -161,14 +184,16 @@ export const Game = () => {
       {activeTab === "theme" && <ThemeContent themeImg={themeImg} />}
       {activeTab === "answers" && (
         <AnswersContent
-          roomId={roomId}
-          userId={userId}
           usersName={usersName}
-          userAlphabet={userAlphabet}
           userActorNumber={userActorNumber}
           currentActorNumber={currentActorNumber}
           isFinished={isFinished}
+          answer={answer}
+          sentAnswers={sentAnswers}
           allAnswers={allAnswers}
+          selectableOptions={selectableOptions}
+          onClickSendButton={onClickSendButton}
+          selectAlphabet={selectAlphabet}
         />
       )}
       {activeTab === "points" && <PointsContent usersName={usersName} />}

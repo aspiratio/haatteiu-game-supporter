@@ -1,77 +1,34 @@
-import { useCallback, useEffect, useState, VFC } from "react";
+import { VFC } from "react";
 import { Select } from "antd";
-import { createAlphabetArray } from "../../utils/createArray";
 import { PrimaryButton } from "../Buttons";
-import { sendAnswer } from "../../utils/firestore/sendAnswer";
-import { doc, getDoc } from "@firebase/firestore";
-import { db } from "../../service/firebase";
 
 const { Option } = Select;
 
 type Props = {
-  roomId: string;
-  userId: string;
   usersName: Array<string>;
-  userAlphabet: string;
   userActorNumber: number | undefined;
   currentActorNumber: number;
   isFinished: boolean;
+  answer: string | null;
+  sentAnswers: Array<string>;
+  allAnswers: Array<Array<string>>;
+  selectableOptions: Array<string>;
+  onClickSendButton: (value: string | null) => void;
+  selectAlphabet: (value: string) => void;
 };
 
 export const AnswersContent: VFC<Props> = ({
-  roomId,
-  userId,
   usersName,
-  userAlphabet,
   userActorNumber,
   currentActorNumber,
   isFinished,
+  answer,
+  sentAnswers,
+  allAnswers,
+  selectableOptions,
+  onClickSendButton,
+  selectAlphabet,
 }) => {
-  const [answer, setAnswer] = useState<string | null>(null);
-  const [sentAnswers, setSentAnswers] = useState<Array<string>>([]);
-
-  const allOptions = createAlphabetArray(usersName.length);
-  const selectableOptions = allOptions.filter(
-    (i) => sentAnswers.indexOf(i) === -1 && i !== userAlphabet
-  );
-
-  useEffect(() => {
-    let unmount = false;
-    const userRef = doc(db, `hgs/v1/rooms/${roomId}/users/${userId}`);
-    (async () => {
-      const fetchUser = async () => {
-        const userSnapshot = await getDoc(userRef);
-        return userSnapshot.data();
-      };
-      const userData = await fetchUser();
-      if (!unmount) setSentAnswers(userData!.answers);
-    })();
-    return () => {
-      unmount = true;
-    };
-  }, [roomId, userId]);
-
-  const handleChange = (value: string) => {
-    setAnswer(value);
-  };
-
-  const onClickSendButton = (value: string | null) => {
-    if (value) {
-      sendAnswer(roomId, userId, value);
-      setSentAnswers([...sentAnswers, value]);
-      setAnswer(null);
-    }
-  };
-
-  // if (
-  //   currentActorNumber === userActorNumber &&
-  //   sentAnswers.length < currentActorNumber
-  // ) {
-  //   sendAnswer(roomId, userId, "ー");
-  //   setSentAnswers([...sentAnswers, "ー"]);
-  //   console.log(1);
-  // }
-
   return (
     <>
       {isFinished ? (
@@ -112,20 +69,17 @@ export const AnswersContent: VFC<Props> = ({
                     >
                       {name}
                     </th>
-                    {["A", "B", "C", "D", "E", "F", "G", "H"].map(
-                      (alphabet, i) => {
-                        const bgColor =
-                          i % 2 === 1 ? "bg-white" : "bg-gray-100";
-                        return (
-                          <td
-                            key={alphabet}
-                            className={`text-center border-2 h-6v writing-mode-horizontal ${bgColor}`}
-                          >
-                            {alphabet}
-                          </td>
-                        );
-                      }
-                    )}
+                    {sentAnswers.map((alphabet, i) => {
+                      const bgColor = i % 2 === 1 ? "bg-white" : "bg-gray-100";
+                      return (
+                        <td
+                          key={alphabet}
+                          className={`text-center border-2 h-6v writing-mode-horizontal ${bgColor}`}
+                        >
+                          {alphabet}
+                        </td>
+                      );
+                    })}
                   </tr>
                 );
               })}
@@ -152,7 +106,7 @@ export const AnswersContent: VFC<Props> = ({
             ) : (
               <div className="space-x-8 my-2">
                 <Select
-                  onChange={handleChange}
+                  onChange={selectAlphabet}
                   size="large"
                   className="w-24 text-lg border-2"
                 >
