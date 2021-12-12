@@ -60,7 +60,7 @@ export const AnswersContent: VFC<Props> = ({
               </tr>
             </thead>
             <tbody>
-              {usersName.map((name) => {
+              {usersName.map((name, i) => {
                 const fontSize = name.length <= 5 ? "text-sm" : "text-xs";
                 return (
                   <tr key={name}>
@@ -69,7 +69,7 @@ export const AnswersContent: VFC<Props> = ({
                     >
                       {name}
                     </th>
-                    {sentAnswers.map((alphabet, i) => {
+                    {allAnswers[i].map((alphabet, i) => {
                       const bgColor = i % 2 === 1 ? "bg-white" : "bg-gray-100";
                       return (
                         <td
