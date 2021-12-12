@@ -70,7 +70,7 @@ export const HostEntrance: VFC = () => {
 
   const onFileChange = useCallback(async ({ fileList: newFileList }) => {
     const options = {
-      maxSizeMB: 1,
+      maxSizeMB: 0.7,
       maxWidthOrHeight: 1920,
     };
     try {
