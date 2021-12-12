@@ -31,8 +31,8 @@ export const Game = () => {
   const [userActorNumber, setUserActorNumber] = useState<number>();
   const [currentActorNumber, setCurrentActorNumber] = useState(0);
   const [themeImg, setThemeImg] = useState("");
-
-  const isFinished = currentActorNumber === usersName.length;
+  const [allAnswers, setAllAnswers] = useState<Array<Array<string>>>([]);
+  const [isFinished, setIsFinished] = useState(false);
 
   type Tab = "theme" | "answers" | "points";
   const [activeTab, setActiveTab] = useState<Tab>("theme");
@@ -47,11 +47,11 @@ export const Game = () => {
   };
 
   // TODO:firestoreとのやりとりを隠蔽する
-  const roomRef = doc(db, `hgs/v1/rooms/${roomId}`);
-  const userRef = doc(db, `hgs/v1/rooms/${roomId}/users/${userId}`);
-  const usersRef = collection(db, `hgs/v1/rooms/${roomId}/users`);
-
   useEffect(() => {
+    const roomRef = doc(db, `hgs/v1/rooms/${roomId}`);
+    const userRef = doc(db, `hgs/v1/rooms/${roomId}/users/${userId}`);
+    const usersRef = collection(db, `hgs/v1/rooms/${roomId}/users`);
+    let unmount = false;
     browserBackProtection();
     (async () => {
       const fetchRoom = async () => {
@@ -74,33 +74,41 @@ export const Game = () => {
       const correctAnswer: string[] = roomData!.correctAnswer;
       const userData = await fetchUser();
       const actOrder = userData!.actOrder;
-      setUserActorNumber(actOrder);
-      setUserAlphabet(correctAnswer[actOrder]);
-
       const getImage: string = roomData!.themeImg;
-      setThemeImg(getImage);
-
       const allUsersData = await orderByAllUsers();
       const allUsersName = allUsersData.map((data) => {
         return data.displayName as string;
       });
-      setUsersName(allUsersName);
+
+      if (!unmount) {
+        setUserActorNumber(actOrder);
+        setUserAlphabet(correctAnswer[actOrder]);
+        setThemeImg(getImage);
+        setUsersName(allUsersName);
+      }
     })();
 
-    return onSnapshot(usersRef, (snapshot) => {
-      const answersLength: Array<number> = [];
-      snapshot.forEach((doc) => {
-        answersLength.push(doc.data().answers.length);
+    return () => {
+      unmount = true;
+      onSnapshot(usersRef, (snapshot) => {
+        const answersLength: Array<number> = [];
+        snapshot.forEach((doc) => {
+          answersLength.push(doc.data().answers.length);
+        });
+        const min = answersLength.reduce((a, b) => {
+          return Math.min(a, b);
+        });
+        setCurrentActorNumber(min);
+        console.log("snapshot");
       });
-      const min = answersLength.reduce((a, b) => {
-        return Math.min(a, b);
-      });
-      setCurrentActorNumber(min);
-    });
-  }, [roomId, roomRef, userId, userRef, usersRef]);
+    };
+  }, [roomId, userId]);
 
   useEffect(() => {
-    isFinished &&
+    const usersRef = collection(db, `hgs/v1/rooms/${roomId}/users`);
+    let unmount = false;
+    currentActorNumber !== 0 &&
+      currentActorNumber === usersName.length &&
       (async () => {
         const orderByAllUsers = async () => {
           const usersQuery = query(usersRef, orderBy("actOrder"));
@@ -113,10 +121,16 @@ export const Game = () => {
         const answersArray = allUsersData.map((data) => {
           return data.answers;
         });
-        setAllAnswers(answersArray);
+        if (!unmount) {
+          setAllAnswers(answersArray);
+          setIsFinished(true);
+        }
         console.log("finished");
       })();
-  }, [isFinished, usersRef]);
+    return () => {
+      unmount = true;
+    };
+  }, [currentActorNumber, roomId, usersName]);
 
   return (
     <>
@@ -153,6 +167,7 @@ export const Game = () => {
           userActorNumber={userActorNumber}
           currentActorNumber={currentActorNumber}
           isFinished={isFinished}
+          allAnswers={allAnswers}
         />
       )}
       {activeTab === "points" && <PointsContent usersName={usersName} />}
