@@ -88,19 +88,20 @@ export const Game = () => {
       }
     })();
 
+    const snapshot = onSnapshot(usersRef, (snapshot) => {
+      const answersLength: Array<number> = [];
+      snapshot.forEach((doc) => {
+        answersLength.push(doc.data().answers.length);
+      });
+      const min = answersLength.reduce((a, b) => {
+        return Math.min(a, b);
+      });
+      setCurrentActorNumber(min);
+      console.log("snapshot");
+    });
     return () => {
       unmount = true;
-      onSnapshot(usersRef, (snapshot) => {
-        const answersLength: Array<number> = [];
-        snapshot.forEach((doc) => {
-          answersLength.push(doc.data().answers.length);
-        });
-        const min = answersLength.reduce((a, b) => {
-          return Math.min(a, b);
-        });
-        setCurrentActorNumber(min);
-        console.log("snapshot");
-      });
+      snapshot();
     };
   }, [roomId, userId]);
 
