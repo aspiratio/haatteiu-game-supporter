@@ -1,5 +1,4 @@
 import { collection, doc, getDocs, runTransaction } from "@firebase/firestore";
-import { error } from "console";
 import { db } from "../../service/firebase";
 import { createAlphabetArray, createNumberArray } from "../createArray";
 import { shuffleArray } from "../shuffleArray";
