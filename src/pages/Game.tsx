@@ -1,29 +1,47 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { GameTabs } from "../components/GameTabs";
 import { Information } from "../components/Information";
 import { ThemeContent } from "../components/contents/ThemeContent";
 import { AnswersContent } from "../components/contents/AnswersContent";
 import { PointsContent } from "../components/contents/PointsContent";
-import { getObjFromLocalStorage } from "../utils/getObjFromLocalStorage";
+import { getObjFromSessionStorage } from "../utils/getObjFromSessionStorage";
+import {
+  collection,
+  doc,
+  getDoc,
+  getDocs,
+  onSnapshot,
+  orderBy,
+  query,
+} from "@firebase/firestore";
+import { db } from "../service/firebase";
+import { browserBackProtection } from "../utils/browserBackProtection";
+import { sendAnswer } from "../utils/firestore/sendAnswer";
+import { createAlphabetArray } from "../utils/createArray";
+
+type Type = {
+  userName: string;
+  roomId: string;
+  userId: string;
+};
 
 export const Game = () => {
-  const { userName, roomId, userId } = getObjFromLocalStorage("userInfo");
-  const userAlphabet = "A";
+  const { userName, roomId, userId }: Type =
+    getObjFromSessionStorage("userInfo");
+  const [usersName, setUsersName] = useState<Array<string>>([]);
+  const [userAlphabet, setUserAlphabet] = useState("");
+  const [userActorNumber, setUserActorNumber] = useState<number>();
+  const [currentActorNumber, setCurrentActorNumber] = useState(0);
+  const [themeImg, setThemeImg] = useState("");
+  const [allAnswers, setAllAnswers] = useState<Array<Array<string>>>([]);
+  const [isFinished, setIsFinished] = useState(false);
+  const [answer, setAnswer] = useState<string | null>(null);
+  const [sentAnswers, setSentAnswers] = useState<Array<string>>([]);
 
-  const [actorNumber, setActorNumber] = useState(8);
-  // firestoreから取得（演技順をfirestoreに登録する必要あり？）
-  const usersName = [
-    "ドナルド",
-    "スティーブ",
-    "太郎",
-    "炭治郎",
-    "優柔ふだ子",
-    "マイケル",
-    "ジョブズ",
-    "ミーナミーナ",
-  ];
-
-  const isFinished = actorNumber === usersName.length;
+  const allOptions = createAlphabetArray(usersName.length);
+  const selectableOptions = allOptions.filter(
+    (i) => sentAnswers.indexOf(i) === -1 && i !== userAlphabet
+  );
 
   type Tab = "theme" | "answers" | "points";
   const [activeTab, setActiveTab] = useState<Tab>("theme");
@@ -36,6 +54,107 @@ export const Game = () => {
   const onClickPoints = () => {
     setActiveTab("points");
   };
+
+  const selectAlphabet = (value: string) => {
+    setAnswer(value);
+  };
+
+  const onClickSendButton = (value: string | null) => {
+    if (value) {
+      sendAnswer(roomId, userId, value);
+      setSentAnswers([...sentAnswers, value]);
+      setAnswer(null);
+    }
+  };
+
+  // TODO:firestoreとのやりとりを隠蔽する
+  useEffect(() => {
+    const roomRef = doc(db, `hgs/v1/rooms/${roomId}`);
+    const userRef = doc(db, `hgs/v1/rooms/${roomId}/users/${userId}`);
+    const usersRef = collection(db, `hgs/v1/rooms/${roomId}/users`);
+    let unmount = false;
+    browserBackProtection();
+    (async () => {
+      const fetchRoom = async () => {
+        const roomSnapshot = await getDoc(roomRef);
+        return roomSnapshot.data();
+      };
+      const fetchUser = async () => {
+        const userSnapshot = await getDoc(userRef);
+        return userSnapshot.data();
+      };
+      const orderByAllUsers = async () => {
+        const usersQuery = query(usersRef, orderBy("actOrder"));
+        const usersSnapshot = await getDocs(usersQuery);
+        return usersSnapshot.docs.map((doc) => {
+          return doc.data();
+        });
+      };
+
+      const roomData = await fetchRoom();
+      const correctAnswer: string[] = roomData!.correctAnswer;
+      const userData = await fetchUser();
+      const actOrder = userData!.actOrder;
+      const sentAnswers = userData!.answers;
+      const getImage: string = roomData!.themeImg;
+      const allUsersData = await orderByAllUsers();
+      const allUsersName = allUsersData.map((data) => {
+        return data.displayName as string;
+      });
+
+      if (!unmount) {
+        setUserActorNumber(actOrder);
+        setUserAlphabet(correctAnswer[actOrder]);
+        setSentAnswers(sentAnswers);
+        setThemeImg(getImage);
+        setUsersName(allUsersName);
+      }
+    })();
+
+    const snapshot = onSnapshot(usersRef, (snapshot) => {
+      const answersLength: Array<number> = [];
+      snapshot.forEach((doc) => {
+        answersLength.push(doc.data().answers.length);
+      });
+      const min = answersLength.reduce((a, b) => {
+        return Math.min(a, b);
+      });
+      setCurrentActorNumber(min);
+      console.log("snapshot");
+    });
+    return () => {
+      unmount = true;
+      snapshot();
+    };
+  }, [roomId, userId]);
+
+  useEffect(() => {
+    const usersRef = collection(db, `hgs/v1/rooms/${roomId}/users`);
+    let unmount = false;
+    currentActorNumber !== 0 &&
+      currentActorNumber === usersName.length &&
+      (async () => {
+        const orderByAllUsers = async () => {
+          const usersQuery = query(usersRef, orderBy("actOrder"));
+          const usersSnapshot = await getDocs(usersQuery);
+          return usersSnapshot.docs.map((doc) => {
+            return doc.data();
+          });
+        };
+        const allUsersData = await orderByAllUsers();
+        const answersArray = allUsersData.map((data) => {
+          return data.answers;
+        });
+        if (!unmount) {
+          setAllAnswers(answersArray);
+          setIsFinished(true);
+        }
+        console.log("finished");
+      })();
+    return () => {
+      unmount = true;
+    };
+  }, [currentActorNumber, roomId, usersName]);
 
   return (
     <>
@@ -52,7 +171,8 @@ export const Game = () => {
         </p>
       ) : (
         <p className="h-10v flex text-xl justify-center items-center text-vivid-red">
-          {actorNumber + 1}人目の演者は{usersName[actorNumber]}さん
+          {currentActorNumber + 1}人目の演者は{usersName[currentActorNumber]}
+          さん
         </p>
       )}
       <GameTabs
@@ -61,12 +181,19 @@ export const Game = () => {
         onClickAnswers={onClickAnswers}
         onClickPoints={onClickPoints}
       />
-      {activeTab === "theme" && <ThemeContent roomId={roomId} />}
+      {activeTab === "theme" && <ThemeContent themeImg={themeImg} />}
       {activeTab === "answers" && (
         <AnswersContent
           usersName={usersName}
-          actorNumber={actorNumber}
+          userActorNumber={userActorNumber}
+          currentActorNumber={currentActorNumber}
           isFinished={isFinished}
+          answer={answer}
+          sentAnswers={sentAnswers}
+          allAnswers={allAnswers}
+          selectableOptions={selectableOptions}
+          onClickSendButton={onClickSendButton}
+          selectAlphabet={selectAlphabet}
         />
       )}
       {activeTab === "points" && <PointsContent usersName={usersName} />}

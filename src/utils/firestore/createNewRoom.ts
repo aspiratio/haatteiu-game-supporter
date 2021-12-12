@@ -10,8 +10,16 @@ export const createNewRoom = async (name: string) => {
     gameCount: 0,
     isDuringGame: false,
     themeImg: "",
+    correctAnswer: [],
   });
-  await setDoc(usersRef, { displayName: name, isHost: true });
+  await setDoc(usersRef, {
+    displayName: name,
+    isHost: true,
+    actOrder: null,
+    answers: [],
+    actScore: null,
+    answerScore: null,
+  });
   return {
     roomId: roomsRef.id,
     userId: usersRef.id,

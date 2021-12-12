@@ -12,6 +12,13 @@ export const addGuestUser = async (roomId: string, userName: string) => {
   const roomRef = doc(db, `hgs/v1/rooms/${roomId}`);
   await updateDoc(roomRef, { usersName: arrayUnion(userName) });
   const usersRef = doc(collection(db, `hgs/v1/rooms/${roomId}/users`));
-  await setDoc(usersRef, { displayName: userName, isHost: false });
+  await setDoc(usersRef, {
+    displayName: userName,
+    isHost: false,
+    actOrder: null,
+    answers: [],
+    actScore: null,
+    answerScore: null,
+  });
   return usersRef.id;
 };

@@ -1,38 +1,34 @@
-import { useState, VFC } from "react";
+import { VFC } from "react";
 import { Select } from "antd";
-import { createAlphabetArray } from "../../utils/createAlphabetArray";
 import { PrimaryButton } from "../Buttons";
 
 const { Option } = Select;
 
 type Props = {
   usersName: Array<string>;
-  actorNumber: number;
+  userActorNumber: number | undefined;
+  currentActorNumber: number;
   isFinished: boolean;
+  answer: string | null;
+  sentAnswers: Array<string>;
+  allAnswers: Array<Array<string>>;
+  selectableOptions: Array<string>;
+  onClickSendButton: (value: string | null) => void;
+  selectAlphabet: (value: string) => void;
 };
 
 export const AnswersContent: VFC<Props> = ({
   usersName,
-  actorNumber,
+  userActorNumber,
+  currentActorNumber,
   isFinished,
+  answer,
+  sentAnswers,
+  allAnswers,
+  selectableOptions,
+  onClickSendButton,
+  selectAlphabet,
 }) => {
-  const [answer, setAnswer] = useState<string | null>(null);
-  // firestoreに保存した回答から取得
-  const sentAnswers = ["D", "C", "F"];
-
-  const allOptions = createAlphabetArray(usersName.length);
-  const selectableOptions = allOptions.filter(
-    (i) => sentAnswers.indexOf(i) === -1
-  );
-
-  const handleChange = (value: string) => {
-    setAnswer(value);
-  };
-
-  const onClickSendButton = () => {
-    console.log(`send ${answer}`);
-  };
-
   return (
     <>
       {isFinished ? (
@@ -64,7 +60,7 @@ export const AnswersContent: VFC<Props> = ({
               </tr>
             </thead>
             <tbody>
-              {usersName.map((name) => {
+              {usersName.map((name, i) => {
                 const fontSize = name.length <= 5 ? "text-sm" : "text-xs";
                 return (
                   <tr key={name}>
@@ -73,20 +69,17 @@ export const AnswersContent: VFC<Props> = ({
                     >
                       {name}
                     </th>
-                    {["A", "B", "C", "D", "E", "F", "G", "H"].map(
-                      (alphabet, i) => {
-                        const bgColor =
-                          i % 2 === 1 ? "bg-white" : "bg-gray-100";
-                        return (
-                          <td
-                            key={alphabet}
-                            className={`text-center border-2 h-6v writing-mode-horizontal ${bgColor}`}
-                          >
-                            {alphabet}
-                          </td>
-                        );
-                      }
-                    )}
+                    {allAnswers[i].map((alphabet, i) => {
+                      const bgColor = i % 2 === 1 ? "bg-white" : "bg-gray-100";
+                      return (
+                        <td
+                          key={alphabet}
+                          className={`text-center border-2 h-6v writing-mode-horizontal ${bgColor}`}
+                        >
+                          {alphabet}
+                        </td>
+                      );
+                    })}
                   </tr>
                 );
               })}
@@ -100,34 +93,51 @@ export const AnswersContent: VFC<Props> = ({
             <br />
             各アルファベットは1度しか選べません
           </p>
-          <div className="space-x-8 my-2">
-            <Select
-              onChange={handleChange}
-              size="large"
-              className="w-24 text-lg border-2"
-            >
-              {selectableOptions.map((option) => {
-                return (
-                  <Option key={option} value={option}>
-                    {option}
-                  </Option>
-                );
-              })}
-            </Select>
-            <PrimaryButton
-              text="送信"
-              onClick={onClickSendButton}
-              width={24}
-              height={10}
-            />
-          </div>
+          {currentActorNumber === sentAnswers.length ? (
+            currentActorNumber === userActorNumber ? (
+              <div className="my-2">
+                <PrimaryButton
+                  text="演技しました"
+                  onClick={() => onClickSendButton("ー")}
+                  width={48}
+                  height={10}
+                ></PrimaryButton>
+              </div>
+            ) : (
+              <div className="space-x-8 my-2">
+                <Select
+                  onChange={selectAlphabet}
+                  size="large"
+                  className="w-24 text-lg border-2"
+                >
+                  {selectableOptions.map((option) => {
+                    return (
+                      <Option key={option} value={option}>
+                        {option}
+                      </Option>
+                    );
+                  })}
+                </Select>
+                <PrimaryButton
+                  text="送信"
+                  onClick={() => onClickSendButton(answer)}
+                  width={24}
+                  height={10}
+                />
+              </div>
+            )
+          ) : (
+            <p className="text-lg my-4 text-blue-500">
+              他の人の回答を待っています...
+            </p>
+          )}
           <div className="text-lg flex justify-center space-x-4">
             <div>
               <p>順番</p>
               <ul>
                 {usersName.map((name, i) => {
                   let fontColor;
-                  if (i === actorNumber) fontColor = "text-vivid-red";
+                  if (i === currentActorNumber) fontColor = "text-vivid-red";
                   return (
                     <li key={name} className={`text-left ${fontColor}`}>
                       {name}

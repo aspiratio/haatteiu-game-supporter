@@ -6,3 +6,11 @@ export const createAlphabetArray = (number: number) => {
   }
   return alphabets;
 };
+
+export const createNumberArray = (number: number) => {
+  let numbers = [];
+  for (let i = 0; i < number; i++) {
+    numbers.push(i);
+  }
+  return numbers;
+};

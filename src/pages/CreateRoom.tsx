@@ -19,7 +19,7 @@ export const CreateRoom: VFC = () => {
     try {
       const ids = await createNewRoom(userName);
       const userInfo = { ...ids, userName };
-      localStorage.setItem("userInfo", JSON.stringify(userInfo));
+      sessionStorage.setItem("userInfo", JSON.stringify(userInfo));
       history.push("/host-entrance");
     } catch (e) {
       console.log(e);
