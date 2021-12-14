@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { GameTabs } from "../components/GameTabs";
 import { Information } from "../components/Information";
 import { ThemeContent } from "../components/contents/ThemeContent";
@@ -28,6 +28,7 @@ type Type = {
 export const Game = () => {
   const { userName, roomId, userId }: Type =
     getObjFromSessionStorage("userInfo");
+
   const [usersName, setUsersName] = useState<Array<string>>([]);
   const [userAlphabet, setUserAlphabet] = useState("");
   const [userActorNumber, setUserActorNumber] = useState<number>();
@@ -67,30 +68,33 @@ export const Game = () => {
     }
   };
 
+  // firestoreからのデータ取得
+  const fetchRoom = useCallback(async () => {
+    const roomRef = doc(db, `hgs/v1/rooms/${roomId}`);
+    const roomSnapshot = await getDoc(roomRef);
+    return roomSnapshot.data();
+  }, [roomId]);
+  const fetchUser = useCallback(async () => {
+    const userRef = doc(db, `hgs/v1/rooms/${roomId}/users/${userId}`);
+    const userSnapshot = await getDoc(userRef);
+    return userSnapshot.data();
+  }, [roomId, userId]);
+  const orderByAllUsers = useCallback(async () => {
+    const usersRef = collection(db, `hgs/v1/rooms/${roomId}/users`);
+    const usersQuery = query(usersRef, orderBy("actOrder"));
+    const usersSnapshot = await getDocs(usersQuery);
+    return usersSnapshot.docs.map((doc) => {
+      return doc.data();
+    });
+  }, [roomId]);
+
   // TODO:firestoreとのやりとりを隠蔽する
   useEffect(() => {
-    const roomRef = doc(db, `hgs/v1/rooms/${roomId}`);
-    const userRef = doc(db, `hgs/v1/rooms/${roomId}/users/${userId}`);
     const usersRef = collection(db, `hgs/v1/rooms/${roomId}/users`);
+
     let unmount = false;
     browserBackProtection();
     (async () => {
-      const fetchRoom = async () => {
-        const roomSnapshot = await getDoc(roomRef);
-        return roomSnapshot.data();
-      };
-      const fetchUser = async () => {
-        const userSnapshot = await getDoc(userRef);
-        return userSnapshot.data();
-      };
-      const orderByAllUsers = async () => {
-        const usersQuery = query(usersRef, orderBy("actOrder"));
-        const usersSnapshot = await getDocs(usersQuery);
-        return usersSnapshot.docs.map((doc) => {
-          return doc.data();
-        });
-      };
-
       const roomData = await fetchRoom();
       const correctAnswer: string[] = roomData!.correctAnswer;
       const userData = await fetchUser();
@@ -120,13 +124,13 @@ export const Game = () => {
         return Math.min(a, b);
       });
       setCurrentActorNumber(min);
-      console.log("snapshot");
+      console.log("update");
     });
     return () => {
       unmount = true;
       snapshot();
     };
-  }, [roomId, userId]);
+  }, [fetchRoom, fetchUser, orderByAllUsers, roomId]);
 
   useEffect(() => {
     const usersRef = collection(db, `hgs/v1/rooms/${roomId}/users`);
@@ -141,10 +145,14 @@ export const Game = () => {
             return doc.data();
           });
         };
+        const roomData = await fetchRoom();
         const allUsersData = await orderByAllUsers();
         const answersArray = allUsersData.map((data) => {
           return data.answers;
         });
+        // 計算
+        // correctAnswerとanswersArrayをひとつずつ比べて、文字が一致する数とインデックス番号を取り出す
+        // actScore = 文字が一致した数, answerScoreインデックス番号を取り出した回数
         if (!unmount) {
           setAllAnswers(answersArray);
           setIsFinished(true);
