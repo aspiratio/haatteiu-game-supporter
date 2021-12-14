@@ -133,26 +133,15 @@ export const Game = () => {
   }, [fetchRoom, fetchUser, orderByAllUsers, roomId]);
 
   useEffect(() => {
-    const usersRef = collection(db, `hgs/v1/rooms/${roomId}/users`);
     let unmount = false;
     currentActorNumber !== 0 &&
       currentActorNumber === usersName.length &&
       (async () => {
-        const orderByAllUsers = async () => {
-          const usersQuery = query(usersRef, orderBy("actOrder"));
-          const usersSnapshot = await getDocs(usersQuery);
-          return usersSnapshot.docs.map((doc) => {
-            return doc.data();
-          });
-        };
-        const roomData = await fetchRoom();
         const allUsersData = await orderByAllUsers();
         const answersArray = allUsersData.map((data) => {
           return data.answers;
         });
-        // 計算
-        // correctAnswerとanswersArrayをひとつずつ比べて、文字が一致する数とインデックス番号を取り出す
-        // actScore = 文字が一致した数, answerScoreインデックス番号を取り出した回数
+
         if (!unmount) {
           setAllAnswers(answersArray);
           setIsFinished(true);
@@ -162,7 +151,7 @@ export const Game = () => {
     return () => {
       unmount = true;
     };
-  }, [currentActorNumber, roomId, usersName]);
+  }, [currentActorNumber, fetchRoom, orderByAllUsers, roomId, usersName]);
 
   return (
     <>
