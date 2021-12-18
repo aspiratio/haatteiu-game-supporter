@@ -19,33 +19,35 @@ import { browserBackProtection } from "../utils/browserBackProtection";
 import { sendAnswer } from "../utils/firestore/sendAnswer";
 import { createAlphabetArray } from "../utils/createArray";
 
-type Type = {
+type Info = {
   userName: string;
   roomId: string;
   userId: string;
 };
+type Tab = "theme" | "answers" | "points";
 
 export const Game = () => {
-  const { userName, roomId, userId }: Type =
+  const { userName, roomId, userId }: Info =
     getObjFromSessionStorage("userInfo");
 
+  const [currentGameCount, setCurrentGameCount] = useState<number>(0);
   const [usersName, setUsersName] = useState<Array<string>>([]);
   const [userAlphabet, setUserAlphabet] = useState("");
   const [userActorNumber, setUserActorNumber] = useState<number>();
   const [currentActorNumber, setCurrentActorNumber] = useState(0);
+  const [activeTab, setActiveTab] = useState<Tab>("theme");
   const [themeImg, setThemeImg] = useState("");
-  const [allAnswers, setAllAnswers] = useState<Array<Array<string>>>([]);
   const [isFinished, setIsFinished] = useState(false);
   const [answer, setAnswer] = useState<string | null>(null);
   const [sentAnswers, setSentAnswers] = useState<Array<string>>([]);
+  const [allAnswers, setAllAnswers] = useState<Array<Array<string>>>([]);
+  const [allScore, setAllScore] = useState<Array<any>>([]);
 
   const allOptions = createAlphabetArray(usersName.length);
   const selectableOptions = allOptions.filter(
     (i) => sentAnswers.indexOf(i) === -1 && i !== userAlphabet
   );
 
-  type Tab = "theme" | "answers" | "points";
-  const [activeTab, setActiveTab] = useState<Tab>("theme");
   const onClickTheme = () => {
     setActiveTab("theme");
   };
@@ -96,10 +98,11 @@ export const Game = () => {
     browserBackProtection();
     (async () => {
       const roomData = await fetchRoom();
-      const correctAnswer: string[] = roomData!.correctAnswer;
+      const correctAnswer: Array<string> = roomData!.correctAnswer;
       const userData = await fetchUser();
       const actOrder = userData!.actOrder;
       const sentAnswers = userData!.answers;
+      const gameCount = roomData!.gameCount;
       const getImage: string = roomData!.themeImg;
       const allUsersData = await orderByAllUsers();
       const allUsersName = allUsersData.map((data) => {
@@ -107,6 +110,7 @@ export const Game = () => {
       });
 
       if (!unmount) {
+        setCurrentGameCount(gameCount);
         setUserActorNumber(actOrder);
         setUserAlphabet(correctAnswer[actOrder]);
         setSentAnswers(sentAnswers);
@@ -137,21 +141,52 @@ export const Game = () => {
     currentActorNumber !== 0 &&
       currentActorNumber === usersName.length &&
       (async () => {
+        const roomData = await fetchRoom();
         const allUsersData = await orderByAllUsers();
         const answersArray = allUsersData.map((data) => {
-          return data.answers;
+          return data.answers as Array<string>;
+        });
+        const scoreArray = allUsersData.map((data) => {
+          return data.score;
+        });
+        const correctAnswer = roomData!.correctAnswer;
+        const gameNum = `game${currentGameCount}`;
+        // 計算
+        // correctAnswerとanswersArrayをひとつずつ比べて、文字が一致する数とインデックス番号を取り出す
+        // actScore = 文字が一致した数, answerScoreインデックス番号を取り出した回数
+        let matchedNumbers: Array<number> = [];
+        answersArray.forEach((answers, i) => {
+          const point = { act: 0, answer: 0 };
+          answers.forEach((value, i) => {
+            if (value === correctAnswer[i]) {
+              point.answer++;
+              matchedNumbers.push(i);
+            }
+          });
+          scoreArray[i][gameNum] = { ...point };
+        });
+        matchedNumbers.forEach((number) => {
+          scoreArray[number][gameNum].act = scoreArray[number][gameNum].act + 1;
         });
 
         if (!unmount) {
           setAllAnswers(answersArray);
           setIsFinished(true);
+          setAllScore(scoreArray);
         }
         console.log("finished");
       })();
     return () => {
       unmount = true;
     };
-  }, [currentActorNumber, fetchRoom, orderByAllUsers, roomId, usersName]);
+  }, [
+    currentActorNumber,
+    currentGameCount,
+    fetchRoom,
+    orderByAllUsers,
+    roomId,
+    usersName,
+  ]);
 
   return (
     <>
