@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { GameTabs } from "../components/GameTabs";
 import { Information } from "../components/Information";
 import { ThemeContent } from "../components/contents/ThemeContent";
@@ -19,6 +19,7 @@ import { browserBackProtection } from "../utils/browserBackProtection";
 import { sendAnswer } from "../utils/firestore/sendAnswer";
 import { createAlphabetArray } from "../utils/createArray";
 import { calculateScore } from "../utils/calculateScore";
+import { updateScore } from "../utils/firestore/updateScore";
 
 type Info = {
   userName: string;
@@ -28,8 +29,9 @@ type Info = {
 type Tab = "theme" | "answers" | "points";
 
 export const Game = () => {
-  const { userName, roomId, userId }: Info =
-    getObjFromSessionStorage("userInfo");
+  const { userName, roomId, userId }: Info = useMemo(() => {
+    return getObjFromSessionStorage("userInfo");
+  }, []);
 
   const [currentGameCount, setCurrentGameCount] = useState<number>(0);
   const [usersName, setUsersName] = useState<Array<string>>([]);
@@ -157,6 +159,7 @@ export const Game = () => {
           correctAnswer,
           scoreArray
         );
+        updateScore(roomId, userId, scoreArray[userActorNumber!]);
 
         if (!unmount) {
           setAllAnswers(answersArray);
@@ -174,6 +177,8 @@ export const Game = () => {
     fetchRoom,
     orderByAllUsers,
     roomId,
+    userActorNumber,
+    userId,
     usersName,
   ]);
 
