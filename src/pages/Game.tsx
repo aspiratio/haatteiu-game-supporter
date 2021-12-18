@@ -189,7 +189,7 @@ export const Game = () => {
         userName={userName}
         userAlphabet={userAlphabet}
       />
-      {isFinished ? (
+      {currentActorNumber !== 0 && currentActorNumber === usersName.length ? (
         <p className="h-10v flex justify-center items-center text-vivid-red">
           全員の演技が終わりました
           <br />
