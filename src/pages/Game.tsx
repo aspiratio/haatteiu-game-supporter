@@ -18,6 +18,7 @@ import { db } from "../service/firebase";
 import { browserBackProtection } from "../utils/browserBackProtection";
 import { sendAnswer } from "../utils/firestore/sendAnswer";
 import { createAlphabetArray } from "../utils/createArray";
+import { calculateScore } from "../utils/calculateScore";
 
 type Info = {
   userName: string;
@@ -150,24 +151,12 @@ export const Game = () => {
           return data.score;
         });
         const correctAnswer = roomData!.correctAnswer;
-        const gameNum = `game${currentGameCount}`;
-        // 計算
-        // correctAnswerとanswersArrayをひとつずつ比べて、文字が一致する数とインデックス番号を取り出す
-        // actScore = 文字が一致した数, answerScoreインデックス番号を取り出した回数
-        let matchedNumbers: Array<number> = [];
-        answersArray.forEach((answers, i) => {
-          const point = { act: 0, answer: 0 };
-          answers.forEach((value, i) => {
-            if (value === correctAnswer[i]) {
-              point.answer++;
-              matchedNumbers.push(i);
-            }
-          });
-          scoreArray[i][gameNum] = { ...point };
-        });
-        matchedNumbers.forEach((number) => {
-          scoreArray[number][gameNum].act = scoreArray[number][gameNum].act + 1;
-        });
+        calculateScore(
+          currentGameCount,
+          answersArray,
+          correctAnswer,
+          scoreArray
+        );
 
         if (!unmount) {
           setAllAnswers(answersArray);
