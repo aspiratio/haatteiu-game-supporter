@@ -73,7 +73,7 @@ export const Game = () => {
     }
   };
 
-  // firestoreからのデータ取得
+  // firestoreからのデータ取得 TODO: フロントから隠蔽する
   const fetchRoom = useCallback(async () => {
     const roomRef = doc(db, `hgs/v1/rooms/${roomId}`);
     const roomSnapshot = await getDoc(roomRef);
@@ -222,7 +222,13 @@ export const Game = () => {
           selectAlphabet={selectAlphabet}
         />
       )}
-      {activeTab === "points" && <PointsContent usersName={usersName} />}
+      {activeTab === "points" && (
+        <PointsContent
+          usersName={usersName}
+          allScore={allScore}
+          gameCount={currentGameCount}
+        />
+      )}
     </>
   );
 };
