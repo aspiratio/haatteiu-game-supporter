@@ -17,8 +17,7 @@ export const createNewRoom = async (name: string) => {
     isHost: true,
     actOrder: null,
     answers: [],
-    actScore: null,
-    answerScore: null,
+    score: {},
   });
   return {
     roomId: roomsRef.id,

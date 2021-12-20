@@ -33,6 +33,8 @@ module.exports = {
         "80v": "80vh",
         "90v": "90vh",
         "100v": "100vh",
+        // prettier-ignore
+        "84": "21rem",
       },
       maxHeight: {
         0: "0",

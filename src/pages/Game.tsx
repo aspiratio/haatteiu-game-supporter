@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { GameTabs } from "../components/GameTabs";
 import { Information } from "../components/Information";
 import { ThemeContent } from "../components/contents/ThemeContent";
@@ -18,33 +18,39 @@ import { db } from "../service/firebase";
 import { browserBackProtection } from "../utils/browserBackProtection";
 import { sendAnswer } from "../utils/firestore/sendAnswer";
 import { createAlphabetArray } from "../utils/createArray";
+import { calculateScore } from "../utils/calculateScore";
+import { updateScore } from "../utils/firestore/updateScore";
 
-type Type = {
+type Info = {
   userName: string;
   roomId: string;
   userId: string;
 };
+type Tab = "theme" | "answers" | "points";
 
 export const Game = () => {
-  const { userName, roomId, userId }: Type =
-    getObjFromSessionStorage("userInfo");
+  const { userName, roomId, userId }: Info = useMemo(() => {
+    return getObjFromSessionStorage("userInfo");
+  }, []);
+
+  const [currentGameCount, setCurrentGameCount] = useState<number>(0);
   const [usersName, setUsersName] = useState<Array<string>>([]);
   const [userAlphabet, setUserAlphabet] = useState("");
   const [userActorNumber, setUserActorNumber] = useState<number>();
   const [currentActorNumber, setCurrentActorNumber] = useState(0);
+  const [activeTab, setActiveTab] = useState<Tab>("theme");
   const [themeImg, setThemeImg] = useState("");
-  const [allAnswers, setAllAnswers] = useState<Array<Array<string>>>([]);
   const [isFinished, setIsFinished] = useState(false);
   const [answer, setAnswer] = useState<string | null>(null);
   const [sentAnswers, setSentAnswers] = useState<Array<string>>([]);
+  const [allAnswers, setAllAnswers] = useState<Array<Array<string>>>([]);
+  const [allScore, setAllScore] = useState<Array<any>>([]);
 
   const allOptions = createAlphabetArray(usersName.length);
   const selectableOptions = allOptions.filter(
     (i) => sentAnswers.indexOf(i) === -1 && i !== userAlphabet
   );
 
-  type Tab = "theme" | "answers" | "points";
-  const [activeTab, setActiveTab] = useState<Tab>("theme");
   const onClickTheme = () => {
     setActiveTab("theme");
   };
@@ -67,35 +73,39 @@ export const Game = () => {
     }
   };
 
+  // firestoreからのデータ取得 TODO: フロントから隠蔽する
+  const fetchRoom = useCallback(async () => {
+    const roomRef = doc(db, `hgs/v1/rooms/${roomId}`);
+    const roomSnapshot = await getDoc(roomRef);
+    return roomSnapshot.data();
+  }, [roomId]);
+  const fetchUser = useCallback(async () => {
+    const userRef = doc(db, `hgs/v1/rooms/${roomId}/users/${userId}`);
+    const userSnapshot = await getDoc(userRef);
+    return userSnapshot.data();
+  }, [roomId, userId]);
+  const orderByAllUsers = useCallback(async () => {
+    const usersRef = collection(db, `hgs/v1/rooms/${roomId}/users`);
+    const usersQuery = query(usersRef, orderBy("actOrder"));
+    const usersSnapshot = await getDocs(usersQuery);
+    return usersSnapshot.docs.map((doc) => {
+      return doc.data();
+    });
+  }, [roomId]);
+
   // TODO:firestoreとのやりとりを隠蔽する
   useEffect(() => {
-    const roomRef = doc(db, `hgs/v1/rooms/${roomId}`);
-    const userRef = doc(db, `hgs/v1/rooms/${roomId}/users/${userId}`);
     const usersRef = collection(db, `hgs/v1/rooms/${roomId}/users`);
+
     let unmount = false;
     browserBackProtection();
     (async () => {
-      const fetchRoom = async () => {
-        const roomSnapshot = await getDoc(roomRef);
-        return roomSnapshot.data();
-      };
-      const fetchUser = async () => {
-        const userSnapshot = await getDoc(userRef);
-        return userSnapshot.data();
-      };
-      const orderByAllUsers = async () => {
-        const usersQuery = query(usersRef, orderBy("actOrder"));
-        const usersSnapshot = await getDocs(usersQuery);
-        return usersSnapshot.docs.map((doc) => {
-          return doc.data();
-        });
-      };
-
       const roomData = await fetchRoom();
-      const correctAnswer: string[] = roomData!.correctAnswer;
+      const correctAnswer: Array<string> = roomData!.correctAnswer;
       const userData = await fetchUser();
       const actOrder = userData!.actOrder;
       const sentAnswers = userData!.answers;
+      const gameCount = roomData!.gameCount;
       const getImage: string = roomData!.themeImg;
       const allUsersData = await orderByAllUsers();
       const allUsersName = allUsersData.map((data) => {
@@ -103,6 +113,7 @@ export const Game = () => {
       });
 
       if (!unmount) {
+        setCurrentGameCount(gameCount);
         setUserActorNumber(actOrder);
         setUserAlphabet(correctAnswer[actOrder]);
         setSentAnswers(sentAnswers);
@@ -120,41 +131,56 @@ export const Game = () => {
         return Math.min(a, b);
       });
       setCurrentActorNumber(min);
-      console.log("snapshot");
+      console.log("update");
     });
     return () => {
       unmount = true;
       snapshot();
     };
-  }, [roomId, userId]);
+  }, [fetchRoom, fetchUser, orderByAllUsers, roomId]);
 
   useEffect(() => {
-    const usersRef = collection(db, `hgs/v1/rooms/${roomId}/users`);
     let unmount = false;
     currentActorNumber !== 0 &&
       currentActorNumber === usersName.length &&
       (async () => {
-        const orderByAllUsers = async () => {
-          const usersQuery = query(usersRef, orderBy("actOrder"));
-          const usersSnapshot = await getDocs(usersQuery);
-          return usersSnapshot.docs.map((doc) => {
-            return doc.data();
-          });
-        };
+        const roomData = await fetchRoom();
         const allUsersData = await orderByAllUsers();
         const answersArray = allUsersData.map((data) => {
-          return data.answers;
+          return data.answers as Array<string>;
         });
+        const scoreArray = allUsersData.map((data) => {
+          return data.score;
+        });
+        const correctAnswer = roomData!.correctAnswer;
+        calculateScore(
+          currentGameCount,
+          answersArray,
+          correctAnswer,
+          scoreArray
+        );
+        updateScore(roomId, userId, scoreArray[userActorNumber!]);
+
         if (!unmount) {
           setAllAnswers(answersArray);
           setIsFinished(true);
+          setAllScore(scoreArray);
         }
         console.log("finished");
       })();
     return () => {
       unmount = true;
     };
-  }, [currentActorNumber, roomId, usersName]);
+  }, [
+    currentActorNumber,
+    currentGameCount,
+    fetchRoom,
+    orderByAllUsers,
+    roomId,
+    userActorNumber,
+    userId,
+    usersName,
+  ]);
 
   return (
     <>
@@ -163,7 +189,7 @@ export const Game = () => {
         userName={userName}
         userAlphabet={userAlphabet}
       />
-      {isFinished ? (
+      {currentActorNumber !== 0 && currentActorNumber === usersName.length ? (
         <p className="h-10v flex justify-center items-center text-vivid-red">
           全員の演技が終わりました
           <br />
@@ -196,7 +222,13 @@ export const Game = () => {
           selectAlphabet={selectAlphabet}
         />
       )}
-      {activeTab === "points" && <PointsContent usersName={usersName} />}
+      {activeTab === "points" && (
+        <PointsContent
+          usersName={usersName}
+          allScore={allScore}
+          gameCount={currentGameCount}
+        />
+      )}
     </>
   );
 };
