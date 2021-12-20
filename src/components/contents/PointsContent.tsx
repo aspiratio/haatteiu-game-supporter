@@ -46,7 +46,7 @@ export const PointsContent: VFC<Props> = ({
         <div className="w-9/10 max-w-screen-sm overflow-x-auto mx-auto mt-2 ">
           <table className="h-60v table-fixed whitespace-nowrap text-center mx-auto">
             <thead>
-              <tr className="bg-gray-400 text-white font-thin h-6v border-2">
+              <tr className="bg-gray-400 text-white h-6v border-2">
                 <th className="w-24 max-w-sm">ゲーム数</th>
                 {Array(gameCount)
                   .fill(0)
@@ -60,10 +60,12 @@ export const PointsContent: VFC<Props> = ({
             </thead>
             <tbody>
               {organizedScore.map((score, i) => {
+                const fontSize =
+                  usersName[i].length <= 5 ? "text-sm" : "text-xs";
                 const bgColor = i % 2 === 1 ? "bg-white" : "bg-gray-100";
                 return (
                   <tr key={i} className={` border-2 ${bgColor}`}>
-                    <th>{usersName[i]}</th>
+                    <th className={`${fontSize}`}>{usersName[i]}</th>
                     {score.map((value, j) => (
                       <td key={j} className="border-2">
                         {value}
@@ -104,20 +106,22 @@ export const PointsContent: VFC<Props> = ({
             </thead>
             <tbody>
               {allScore.map((score, i) => {
+                const fontSize =
+                  usersName[i].length <= 5 ? "text-sm" : "text-xs";
                 const bgColor = i % 2 === 1 ? "bg-white" : "bg-gray-100";
                 return (
                   <tr key={i} className={`border-2 ${bgColor}`}>
-                    <th>{usersName[i]}</th>
-                    <th className="border-2">
+                    <th className={`${fontSize}`}>{usersName[i]}</th>
+                    <td className="border-2">
                       {score[`game${openedDetail}`].act}
-                    </th>
-                    <th className="border-2">
+                    </td>
+                    <td className="border-2">
                       {score[`game${openedDetail}`].answer}
-                    </th>
-                    <th>
+                    </td>
+                    <td>
                       {score[`game${openedDetail}`].act +
                         score[`game${openedDetail}`].answer}
-                    </th>
+                    </td>
                   </tr>
                 );
               })}
