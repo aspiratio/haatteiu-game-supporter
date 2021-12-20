@@ -32,25 +32,27 @@ export const AnswersContent: VFC<Props> = ({
   return (
     <>
       {isFinished ? (
-        <div className="w-9/10 overflow-x-scroll mx-auto mt-2">
-          <table className="table-fixed bg-white border-2 whitespace-nowrap writing-mode-vertical-lr">
+        <div className="w-9/10 max-w-screen-sm overflow-x-auto mx-auto mt-2 ">
+          <table
+            className={`w-${
+              usersName.length * 12
+            } h-60v table-fixed text-center mx-auto`}
+          >
             <thead>
-              <tr>
-                <th className="w-20 h-6v text-lg font-thin sticky left-0 z-10 bg-gray-400 text-white">
-                  <span className="text-xs absolute top-0 right-0 writing-mode-horizontal">
-                    回答者
-                  </span>
-                  /
-                  <span className="pl-1 text-xs absolute bottom-0 left-0 writing-mode-horizontal">
+              <tr className="h-6v">
+                <th className="w-24 font-thin sticky left-0 z-10 bg-gray-400 text-white">
+                  <span className="text-xs absolute top-0 right-0">回答者</span>
+                  \
+                  <span className="pl-1 text-xs absolute bottom-0 left-0">
                     演技
                   </span>
                 </th>
                 {usersName.map((name, i) => {
                   const fontSize = name.length <= 5 ? "text-sm" : "text-xs";
-                  const bgColor = i % 2 === 1 ? "bg-white" : "bg-gray-100";
+                  const bgColor = i % 2 === 1 ? "bg-gray-100" : "bg-white";
                   return (
                     <th
-                      className={`border-2 h-6v writing-mode-horizontal sticky left-0 z-10 ${fontSize} ${bgColor}`}
+                      className={`border-2 w-20 ${fontSize} ${bgColor}`}
                       key={name}
                     >
                       {name}
@@ -65,16 +67,16 @@ export const AnswersContent: VFC<Props> = ({
                 return (
                   <tr key={name}>
                     <th
-                      className={`w-20 border-2 h-6v writing-mode-horizontal ${fontSize}`}
+                      className={`w-20 border-2 sticky left-0 ${fontSize} bg-gray-100`}
                     >
                       {name}
                     </th>
                     {allAnswers[i].map((alphabet, i) => {
-                      const bgColor = i % 2 === 1 ? "bg-white" : "bg-gray-100";
+                      const bgColor = i % 2 === 1 ? "bg-gray-100" : "bg-white";
                       return (
                         <td
                           key={alphabet}
-                          className={`text-center border-2 h-6v writing-mode-horizontal ${bgColor}`}
+                          className={`text-center border-2 h-6v ${bgColor}`}
                         >
                           {alphabet}
                         </td>
