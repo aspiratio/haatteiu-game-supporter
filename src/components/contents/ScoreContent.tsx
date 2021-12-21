@@ -7,7 +7,7 @@ type Props = {
   gameCount: number;
 };
 
-export const PointsContent: VFC<Props> = ({
+export const ScoreContent: VFC<Props> = ({
   usersName,
   allScore,
   gameCount,

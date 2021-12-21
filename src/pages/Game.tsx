@@ -3,7 +3,7 @@ import { GameTabs } from "../components/GameTabs";
 import { Information } from "../components/Information";
 import { ThemeContent } from "../components/contents/ThemeContent";
 import { AnswersContent } from "../components/contents/AnswersContent";
-import { PointsContent } from "../components/contents/PointsContent";
+import { ScoreContent } from "../components/contents/ScoreContent";
 import { getObjFromSessionStorage } from "../utils/getObjFromSessionStorage";
 import {
   collection,
@@ -223,7 +223,7 @@ export const Game = () => {
         />
       )}
       {activeTab === "points" && (
-        <PointsContent
+        <ScoreContent
           usersName={usersName}
           allScore={allScore}
           gameCount={currentGameCount}
