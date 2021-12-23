@@ -20,7 +20,7 @@ export const createNewGame = async (roomId: string, uploadImg: string) => {
       if (!roomDoc.exists()) {
         throw new Error("Document does not exist!");
       }
-
+      // TODO:Increment()に書き換え
       const newGameCount: number = roomDoc.data().gameCount + 1;
       transaction.update(roomRef, {
         gameCount: newGameCount,
