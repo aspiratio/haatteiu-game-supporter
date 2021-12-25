@@ -1,3 +1,4 @@
+import { message } from "antd";
 import { ChangeEvent, useState, VFC } from "react";
 import { useHistory } from "react-router";
 import { PrimaryButton } from "../components/Buttons";
@@ -23,7 +24,7 @@ export const CreateRoom: VFC = () => {
       history.push("/host-entrance");
     } catch (e) {
       console.log(e);
-      alert("通信エラーです。もう一度お試しください");
+      message.error("通信エラーです。もう一度お試しください");
     }
   };
 
