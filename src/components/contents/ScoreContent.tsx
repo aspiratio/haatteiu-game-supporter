@@ -27,7 +27,7 @@ export const ScoreContent: VFC<Props> = ({
 
   const [openedDetail, setOpenedDetail] = useState<false | number>(false);
   const onClickDetailButton = (num: number) => {
-    setOpenedDetail(num);
+    if (num < gameCount) setOpenedDetail(num);
   };
   const onClickListButton = () => {
     setOpenedDetail(false);
@@ -49,7 +49,7 @@ export const ScoreContent: VFC<Props> = ({
                 {Array(gameCount)
                   .fill(0)
                   .map((_, i) => (
-                    <th key={i} className="w-12 border-2">
+                    <th key={i} className="border-2">
                       {i + 1}
                     </th>
                   ))}
@@ -62,10 +62,10 @@ export const ScoreContent: VFC<Props> = ({
                   usersName[i].length <= 5 ? "text-sm" : "text-xs";
                 const bgColor = i % 2 === 1 ? "bg-white" : "bg-gray-100";
                 return (
-                  <tr key={i} className={` border-2 ${bgColor}`}>
+                  <tr key={i} className={`border-2 ${bgColor}`}>
                     <th className={`${fontSize}`}>{usersName[i]}</th>
                     {score.map((value, j) => (
-                      <td key={j} className="border-2">
+                      <td key={j} className="w-12 border-2">
                         {value}
                       </td>
                     ))}
