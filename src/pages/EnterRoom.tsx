@@ -1,3 +1,4 @@
+import { message } from "antd";
 import { ChangeEvent, useEffect, useState, VFC } from "react";
 import { useHistory, useParams } from "react-router";
 import { PrimaryButton } from "../components/Buttons";
@@ -41,9 +42,8 @@ export const EnterRoom: VFC = () => {
       const userInfo = { roomId, userId, userName, isHost: false };
       sessionStorage.setItem("userInfo", JSON.stringify(userInfo));
       history.push(`/guest-entrance`);
-    } catch (e) {
-      console.log(e);
-      alert("通信エラーです。もう一度お試しください");
+    } catch {
+      message.error("ルームIDが正しいか確認のうえ、もう一度お試しください");
     }
     // TODO:途中入室を可能にする必要あり
   };
