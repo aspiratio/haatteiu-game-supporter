@@ -1,4 +1,4 @@
-import { useEffect, useState, VFC } from "react";
+import { useCallback, useEffect, useState, VFC } from "react";
 import { useHistory } from "react-router";
 import { SecondButton } from "../components/Buttons";
 import { ConfirmModal } from "../components/Modals";
@@ -8,6 +8,7 @@ import { doc, onSnapshot } from "@firebase/firestore";
 import { db } from "../service/firebase";
 import { getObjFromSessionStorage } from "../utils/getObjFromSessionStorage";
 import { browserBackProtection } from "../utils/browserBackProtection";
+import { message } from "antd";
 
 export const GuestEntrance: VFC = () => {
   const { userName, roomId, userId } = getObjFromSessionStorage("userInfo");
@@ -21,11 +22,15 @@ export const GuestEntrance: VFC = () => {
     setIsOpen(false);
   };
 
-  const returnToTopPage = () => {
-    removeUser(roomId, userName, userId);
-    sessionStorage.clear();
-    history.push("/");
-  };
+  const returnToTopPage = useCallback(() => {
+    try {
+      removeUser(roomId, userName, userId);
+      sessionStorage.clear();
+      history.push("/");
+    } catch {
+      message.error("通信エラーです。もう一度お試しください");
+    }
+  }, [history, roomId, userId, userName]);
 
   useEffect(() => {
     browserBackProtection();
@@ -36,7 +41,7 @@ export const GuestEntrance: VFC = () => {
         if (data.isDuringGame === true) history.push("/game");
       }
     });
-  }, [roomId]);
+  }, [history, returnToTopPage, roomId]);
 
   return (
     <>
