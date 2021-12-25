@@ -1,4 +1,5 @@
 import { useState, VFC } from "react";
+import { organizeScore } from "../../utils/organizeScore";
 import { PrimaryButton, SecondButton, ThirdButton } from "../Buttons";
 
 type Props = {
@@ -19,18 +20,10 @@ export const ScoreContent: VFC<Props> = ({
   closeRoom,
 }) => {
   // 得点一覧表の配列
-  const organizedScore: Array<Array<number>> = allScore.map((value, i) => {
-    const scoreList: Array<number> = [];
-    let sum = 0;
-    for (let j = 1; j <= Object.keys(value).length; j++) {
-      const score = value[`game${j}`];
-      const total = score.act + score.answer;
-      sum = sum + total;
-      scoreList.push(score.act + score.answer);
-    }
-    scoreList.push(sum);
-    return scoreList;
-  });
+  const organizedScore: Array<Array<number>> = organizeScore(
+    allScore,
+    gameCount
+  );
 
   const [openedDetail, setOpenedDetail] = useState<false | number>(false);
   const onClickDetailButton = (num: number) => {
