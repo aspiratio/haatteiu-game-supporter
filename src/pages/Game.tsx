@@ -20,16 +20,22 @@ import { sendAnswer } from "../utils/firestore/sendAnswer";
 import { createAlphabetArray } from "../utils/createArray";
 import { calculateScore } from "../utils/calculateScore";
 import { updateScore } from "../utils/firestore/updateScore";
+import { useHistory } from "react-router-dom";
+import { stopGame } from "../utils/firestore/stopGame";
+import { message } from "antd";
+import { deleteRoom } from "../utils/firestore/deleteRoom";
 
 type Info = {
   userName: string;
   roomId: string;
   userId: string;
+  isHost: boolean;
 };
 type Tab = "theme" | "answers" | "points";
 
 export const Game = () => {
-  const { userName, roomId, userId }: Info = useMemo(() => {
+  const history = useHistory();
+  const { userName, roomId, userId, isHost }: Info = useMemo(() => {
     return getObjFromSessionStorage("userInfo");
   }, []);
 
@@ -73,6 +79,21 @@ export const Game = () => {
     }
   };
 
+  const goToNextGame = () => {
+    try {
+      stopGame(roomId);
+      history.push("/host-entrance");
+    } catch (error) {
+      console.log(error);
+      message.error("通信失敗 もう一度お試しください");
+    }
+  };
+
+  const closeRoom = () => {
+    deleteRoom(roomId);
+    history.push("/");
+  };
+
   // firestoreからのデータ取得 TODO: フロントから隠蔽する
   const fetchRoom = useCallback(async () => {
     const roomRef = doc(db, `hgs/v1/rooms/${roomId}`);
@@ -111,6 +132,9 @@ export const Game = () => {
       const allUsersName = allUsersData.map((data) => {
         return data.displayName as string;
       });
+      const scoreArray = allUsersData.map((data) => {
+        return data.score;
+      });
 
       if (!unmount) {
         setCurrentGameCount(gameCount);
@@ -119,6 +143,7 @@ export const Game = () => {
         setSentAnswers(sentAnswers);
         setThemeImg(getImage);
         setUsersName(allUsersName);
+        setAllScore(scoreArray);
       }
     })();
 
@@ -182,6 +207,20 @@ export const Game = () => {
     usersName,
   ]);
 
+  useEffect(() => {
+    if (isFinished === false) {
+      return;
+    }
+    const roomRef = doc(db, `hgs/v1/rooms/${roomId}`);
+    return onSnapshot(roomRef, (doc) => {
+      if (doc.exists()) {
+        doc.data().isDuringGame === false && history.push("/guest-entrance");
+      } else {
+        history.push("/");
+      }
+    });
+  }, [history, isFinished, roomId]);
+
   return (
     <>
       <Information
@@ -227,6 +266,9 @@ export const Game = () => {
           usersName={usersName}
           allScore={allScore}
           gameCount={currentGameCount}
+          isHost={isHost}
+          goToNextGame={goToNextGame}
+          closeRoom={closeRoom}
         />
       )}
     </>

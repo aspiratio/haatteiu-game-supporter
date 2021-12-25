@@ -38,7 +38,7 @@ export const EnterRoom: VFC = () => {
     }
     try {
       const userId = await addGuestUser(roomId, userName);
-      const userInfo = { roomId, userId, userName };
+      const userInfo = { roomId, userId, userName, isHost: false };
       sessionStorage.setItem("userInfo", JSON.stringify(userInfo));
       history.push(`/guest-entrance`);
     } catch (e) {
