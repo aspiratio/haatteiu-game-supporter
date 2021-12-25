@@ -132,6 +132,9 @@ export const Game = () => {
       const allUsersName = allUsersData.map((data) => {
         return data.displayName as string;
       });
+      const scoreArray = allUsersData.map((data) => {
+        return data.score;
+      });
 
       if (!unmount) {
         setCurrentGameCount(gameCount);
@@ -140,6 +143,7 @@ export const Game = () => {
         setSentAnswers(sentAnswers);
         setThemeImg(getImage);
         setUsersName(allUsersName);
+        setAllScore(scoreArray);
       }
     })();
 
