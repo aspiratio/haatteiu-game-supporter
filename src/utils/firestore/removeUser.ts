@@ -1,4 +1,4 @@
-import { arrayRemove, deleteDoc, doc, updateDoc } from "@firebase/firestore";
+import { arrayRemove, doc, writeBatch } from "@firebase/firestore";
 import { db } from "../../service/firebase";
 
 export const removeUser = async (
@@ -6,9 +6,10 @@ export const removeUser = async (
   userName: string,
   userId: string
 ) => {
-  // TODO:トランザクション
+  const batch = writeBatch(db);
   const roomRef = doc(db, `hgs/v1/rooms/${roomId}`);
-  await updateDoc(roomRef, { usersName: arrayRemove(userName) });
   const userRef = doc(db, `hgs/v1/rooms/${roomId}/users/${userId}`);
-  await deleteDoc(userRef);
+  batch.delete(userRef);
+  batch.update(roomRef, { usersName: arrayRemove(userName) });
+  await batch.commit();
 };
