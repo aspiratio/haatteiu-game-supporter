@@ -35,10 +35,11 @@ export const GuestEntrance: VFC = () => {
   useEffect(() => {
     browserBackProtection();
     return onSnapshot(doc(db, `hgs/v1/rooms/${roomId}`), (doc) => {
-      if (!doc) returnToTopPage();
-      const data = doc.data();
-      if (data) {
+      if (doc.exists()) {
+        const data = doc.data();
         if (data.isDuringGame === true) history.push("/game");
+      } else {
+        returnToTopPage();
       }
     });
   }, [history, returnToTopPage, roomId]);
