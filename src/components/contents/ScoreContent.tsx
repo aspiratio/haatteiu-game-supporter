@@ -1,16 +1,22 @@
 import { useState, VFC } from "react";
-import { ThirdButton } from "../Buttons";
+import { PrimaryButton, SecondButton, ThirdButton } from "../Buttons";
 
 type Props = {
   usersName: Array<string>;
   allScore: Array<any>;
   gameCount: number;
+  isHost: boolean;
+  goToNextGame: () => void;
+  closeRoom: () => void;
 };
 
 export const ScoreContent: VFC<Props> = ({
   usersName,
   allScore,
   gameCount,
+  isHost,
+  goToNextGame,
+  closeRoom,
 }) => {
   // 得点一覧表の配列
   const organizedScore: Array<Array<number>> = allScore.map((value, i) => {
@@ -29,12 +35,11 @@ export const ScoreContent: VFC<Props> = ({
   const [openedDetail, setOpenedDetail] = useState<false | number>(false);
   const onClickDetailButton = (num: number) => {
     setOpenedDetail(num);
-    console.log(num);
   };
   const onClickListButton = () => {
     setOpenedDetail(false);
   };
-  console.log(allScore);
+
   // 詳細画面内でゲーム数を切り替えるボタンを実装した時用の関数
   // const onClickPreviousButton = () => {
   //   setOpenedDetail((openedDetail as number) - 1);
@@ -44,7 +49,7 @@ export const ScoreContent: VFC<Props> = ({
     <>
       {openedDetail === false && (
         <div className="w-9/10 max-w-screen-sm overflow-x-auto mx-auto mt-2 ">
-          <table className="h-60v table-fixed whitespace-nowrap text-center mx-auto">
+          <table className="h-55v table-fixed whitespace-nowrap text-center mx-auto">
             <thead>
               <tr className="bg-gray-400 text-white h-6v border-2">
                 <th className="w-24 max-w-sm">ゲーム数</th>
@@ -95,7 +100,7 @@ export const ScoreContent: VFC<Props> = ({
       )}
       {openedDetail !== false && (
         <div className="w-9/10 max-w-screen-sm overflow-x-auto mx-auto mt-2 ">
-          <table className="w-full h-60v table-fixed whitespace-nowrap text-center mx-auto">
+          <table className="w-full h-47v table-fixed whitespace-nowrap text-center mx-auto">
             <thead>
               <tr className="bg-gray-400 text-white font-thin h-6v border-2">
                 <th className="w-1/3">第{openedDetail}ゲーム</th>
@@ -126,15 +131,16 @@ export const ScoreContent: VFC<Props> = ({
                 );
               })}
             </tbody>
-            <tfoot>
-              <tr>
-                <td />
-                <td className="h-8v">
-                  <ThirdButton text="一覧へ戻る" onClick={onClickListButton} />
-                </td>
-              </tr>
-            </tfoot>
           </table>
+          <div className="h-8v flex justify-center items-center">
+            <ThirdButton text="一覧へ戻る" onClick={onClickListButton} />
+          </div>
+        </div>
+      )}
+      {isHost && (
+        <div className="text-center space-x-2">
+          <PrimaryButton text="次のゲームへ" onClick={goToNextGame} />
+          <SecondButton text="ゲーム終了" onClick={closeRoom} />
         </div>
       )}
     </>

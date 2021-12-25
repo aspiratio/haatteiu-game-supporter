@@ -34,6 +34,7 @@ export const createNewGame = async (roomId: string, uploadImg: string) => {
         const number = numberArray.shift();
         transaction.update(userRef, {
           actOrder: number,
+          answers: [],
         });
       });
     });

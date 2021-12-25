@@ -29,3 +29,5 @@ yarn-error.log*
 
 .emulator-data/
 firebase-export-*
+
+.vscode
