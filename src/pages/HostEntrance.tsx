@@ -15,6 +15,7 @@ import { createNewGame } from "../utils/firestore/createNewGame";
 import { getObjFromSessionStorage } from "../utils/getObjFromSessionStorage";
 import { browserBackProtection } from "../utils/browserBackProtection";
 import imageCompression from "browser-image-compression";
+import { deleteRoom } from "../utils/firestore/deleteRoom";
 
 export const HostEntrance: VFC = () => {
   const { userName, roomId } = getObjFromSessionStorage("userInfo");
@@ -29,8 +30,8 @@ export const HostEntrance: VFC = () => {
   useEffect(() => {
     browserBackProtection();
     return onSnapshot(doc(db, `hgs/v1/rooms/${roomId}`), (doc) => {
-      const data = doc.data();
-      if (data) {
+      if (doc.exists()) {
+        const data = doc.data();
         setUsersName(data.usersName);
         console.log("changed");
       }
@@ -50,6 +51,7 @@ export const HostEntrance: VFC = () => {
   };
 
   const cancelGame = () => {
+    deleteRoom(roomId);
     console.log("Cancel the game");
     sessionStorage.clear();
     history.push("/");
