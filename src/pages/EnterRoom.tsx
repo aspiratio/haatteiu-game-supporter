@@ -31,10 +31,10 @@ export const EnterRoom: VFC = () => {
 
   const onClickCreateRoom = async () => {
     if (!roomId) {
-      alert("ルームIDを入力してください");
+      message.error("ルームIDを入力してください");
       return;
     } else if (!userName) {
-      alert("名前を入力してください");
+      message.error("名前を入力してください");
       return;
     }
     try {
