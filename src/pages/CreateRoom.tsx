@@ -7,6 +7,7 @@ import { createNewRoom } from "../utils/firestore/createNewRoom";
 
 export const CreateRoom: VFC = () => {
   const [userName, setUserName] = useState<string>("");
+  const [isProcessing, setIsProcessing] = useState(false);
   const onChangeUserName = (event: ChangeEvent<HTMLInputElement>) => {
     setUserName(event.target.value);
   };
@@ -14,17 +15,19 @@ export const CreateRoom: VFC = () => {
 
   const onClickCreateRoom = async () => {
     if (!userName) {
-      alert("名前を入力してください");
-      return;
-    }
-    try {
-      const ids = await createNewRoom(userName);
-      const userInfo = { ...ids, userName, isHost: true };
-      sessionStorage.setItem("userInfo", JSON.stringify(userInfo));
-      history.push("/host-entrance");
-    } catch (e) {
-      console.log(e);
-      message.error("通信エラーです。もう一度お試しください");
+      message.error("名前を入力してください");
+    } else {
+      try {
+        setIsProcessing(true);
+        const ids = await createNewRoom(userName);
+        const userInfo = { ...ids, userName, isHost: true };
+        sessionStorage.setItem("userInfo", JSON.stringify(userInfo));
+        history.push("/host-entrance");
+      } catch (e) {
+        console.log(e);
+        setIsProcessing(false);
+        message.error("通信エラーです。もう一度お試しください");
+      }
     }
   };
 
@@ -36,7 +39,11 @@ export const CreateRoom: VFC = () => {
         </p>
         <div className="flex flex-col space-y-8 items-center mt-7 ">
           <InputBox onChange={onChangeUserName} />
-          <PrimaryButton text={"ルーム作成"} onClick={onClickCreateRoom} />
+          <PrimaryButton
+            text={"ルーム作成"}
+            onClick={onClickCreateRoom}
+            disable={isProcessing}
+          />
         </div>
       </div>
     </>

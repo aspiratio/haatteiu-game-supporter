@@ -23,6 +23,7 @@ export const HostEntrance: VFC = () => {
   const [fileList, setFileList] = useState<UploadFile<any>[]>([]);
   const [preview, setPreview] = useState(false);
   const [uploadImg, setUploadImg] = useState("");
+  const [isProcessing, setIsProcessing] = useState(false);
 
   const history = useHistory();
   const { isOpen, openModal, closeModal } = useModals();
@@ -39,14 +40,19 @@ export const HostEntrance: VFC = () => {
   }, [roomId]);
 
   const startGame = async () => {
-    if (fileList.length !== 1) return;
-    try {
-      await createNewGame(roomId, uploadImg);
-      console.log("Start the game");
-      history.push("/game");
-    } catch (e) {
-      console.log(e);
-      alert("通信エラーです。もう一度お試しください");
+    if (fileList.length !== 1) {
+      message.error("画像をアップロードしてください");
+    } else {
+      try {
+        setIsProcessing(true);
+        await createNewGame(roomId, uploadImg);
+        console.log("Start the game");
+        history.push("/game");
+      } catch (e) {
+        setIsProcessing(false);
+        console.log(e);
+        alert("通信エラーです。もう一度お試しください");
+      }
     }
   };
 
@@ -179,23 +185,31 @@ export const HostEntrance: VFC = () => {
         </ul>
         <p className="text-center">参加人数 {usersName.length}人</p>
         <div className="text-center space-x-2 mt-4">
-          <PrimaryButton
-            text={"ゲーム開始"}
-            onClick={() => openModal("start")}
-          />
-          <SecondButton text={"中止"} onClick={() => openModal("cancel")} />
-          <ConfirmModal
-            isOpen={isOpen === "start"}
-            onClose={closeModal}
-            text={"開始してよろしいですか？"}
-            onClick={startGame}
-          />
-          <ConfirmModal
-            isOpen={isOpen === "cancel"}
-            onClose={closeModal}
-            text={"ルーム作成を中止しますか？"}
-            onClick={cancelGame}
-          />
+          {isProcessing ? (
+            <p className="text-lg sm:text-2xl text-blue-500">
+              しばらくお待ち下さい...
+            </p>
+          ) : (
+            <>
+              <PrimaryButton
+                text={"ゲーム開始"}
+                onClick={() => openModal("start")}
+              />
+              <SecondButton text={"中止"} onClick={() => openModal("cancel")} />
+              <ConfirmModal
+                isOpen={isOpen === "start"}
+                onClose={closeModal}
+                text={"開始してよろしいですか？"}
+                onClick={startGame}
+              />
+              <ConfirmModal
+                isOpen={isOpen === "cancel"}
+                onClose={closeModal}
+                text={"ルーム作成を中止しますか？"}
+                onClick={cancelGame}
+              />
+            </>
+          )}
         </div>
       </div>
     </div>

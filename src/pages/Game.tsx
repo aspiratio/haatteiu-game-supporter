@@ -51,6 +51,7 @@ export const Game = () => {
   const [sentAnswers, setSentAnswers] = useState<Array<string>>([]);
   const [allAnswers, setAllAnswers] = useState<Array<Array<string>>>([]);
   const [allScore, setAllScore] = useState<Array<any>>([]);
+  const [isProcessing, setIsProcessing] = useState(false);
 
   const allOptions = createAlphabetArray(usersName.length);
   const selectableOptions = allOptions.filter(
@@ -81,9 +82,11 @@ export const Game = () => {
 
   const goToNextGame = () => {
     try {
+      setIsProcessing(true);
       stopGame(roomId);
       history.push("/host-entrance");
     } catch (error) {
+      setIsProcessing(false);
       console.log(error);
       message.error("通信失敗 もう一度お試しください");
     }
@@ -269,6 +272,7 @@ export const Game = () => {
           isHost={isHost}
           goToNextGame={goToNextGame}
           closeRoom={closeRoom}
+          isProcessing={isProcessing}
         />
       )}
     </>

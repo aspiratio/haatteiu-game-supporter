@@ -7,6 +7,7 @@ import { FaTwitter, FaQuestionCircle } from "react-icons/fa";
 type Props = {
   text: string;
   onClick: () => void;
+  disable?: boolean;
   fontSize?: number;
   width?: number;
   height?: number;
@@ -16,12 +17,14 @@ type Props = {
 const PrimaryButton: VFC<Props> = ({
   text,
   onClick,
+  disable,
   width = 32,
   height = 8,
 }) => {
   return (
     <button
       onClick={onClick}
+      disabled={disable}
       className={`text-xl sm:text-2xl w-${width} sm:w-${
         width * 2
       } h-${height} sm:h-${

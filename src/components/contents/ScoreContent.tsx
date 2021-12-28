@@ -9,6 +9,7 @@ type Props = {
   isHost: boolean;
   goToNextGame: () => void;
   closeRoom: () => void;
+  isProcessing: boolean;
 };
 
 export const ScoreContent: VFC<Props> = ({
@@ -18,6 +19,7 @@ export const ScoreContent: VFC<Props> = ({
   isHost,
   goToNextGame,
   closeRoom,
+  isProcessing,
 }) => {
   // 得点一覧表の配列
   const organizedScore: Array<Array<number>> = organizeScore(
@@ -130,7 +132,7 @@ export const ScoreContent: VFC<Props> = ({
           </div>
         </div>
       )}
-      {isHost && (
+      {isHost && !isProcessing && (
         <div className="text-center space-x-2">
           <PrimaryButton text="次のゲームへ" onClick={goToNextGame} />
           <SecondButton text="ゲーム終了" onClick={closeRoom} />

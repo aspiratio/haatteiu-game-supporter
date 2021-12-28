@@ -13,6 +13,7 @@ export const EnterRoom: VFC = () => {
   const { id } = useParams<Params>();
   const [roomId, setRoomId] = useState<string>("");
   const [userName, setUserName] = useState<string>("");
+  const [isProcessing, setIsProcessing] = useState(false);
 
   useEffect(() => {
     if (id) {
@@ -31,18 +32,20 @@ export const EnterRoom: VFC = () => {
 
   const onClickCreateRoom = async () => {
     if (!roomId) {
-      alert("ルームIDを入力してください");
+      message.error("ルームIDを入力してください");
       return;
     } else if (!userName) {
-      alert("名前を入力してください");
+      message.error("名前を入力してください");
       return;
     }
     try {
+      setIsProcessing(true);
       const userId = await addGuestUser(roomId, userName);
       const userInfo = { roomId, userId, userName, isHost: false };
       sessionStorage.setItem("userInfo", JSON.stringify(userInfo));
       history.push(`/guest-entrance`);
     } catch {
+      setIsProcessing(false);
       message.error("ルームIDが正しいか確認のうえ、もう一度お試しください");
     }
     // TODO:途中入室を可能にする必要あり
@@ -65,7 +68,11 @@ export const EnterRoom: VFC = () => {
             <InputBox onChange={onChangeUserName} />
           </div>
         </div>
-        <PrimaryButton text={"ルーム入室"} onClick={onClickCreateRoom} />
+        <PrimaryButton
+          text={"ルーム入室"}
+          onClick={onClickCreateRoom}
+          disable={isProcessing}
+        />
       </div>
     </>
   );
