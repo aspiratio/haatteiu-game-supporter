@@ -24,7 +24,7 @@ export const Top: VFC = () => {
         <img
           src={`${process.env.PUBLIC_URL}/TitleImage.svg`}
           alt="オンライン通話+ボードゲーム"
-          className=""
+          className="sm:h-96"
         />
       </div>
       <div className="flex flex-col max-w-xs mx-auto sm:max-w-md">

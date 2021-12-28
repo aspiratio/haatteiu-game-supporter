@@ -102,7 +102,6 @@ export const AnswersContent: VFC<Props> = ({
                   text="演技しました"
                   onClick={() => onClickSendButton("ー")}
                   width={48}
-                  height={10}
                 ></PrimaryButton>
               </div>
             ) : (
@@ -124,7 +123,6 @@ export const AnswersContent: VFC<Props> = ({
                   text="送信"
                   onClick={() => onClickSendButton(answer)}
                   width={24}
-                  height={10}
                 />
               </div>
             )
