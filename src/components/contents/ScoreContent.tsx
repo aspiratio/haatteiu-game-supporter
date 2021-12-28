@@ -1,6 +1,8 @@
 import { useState, VFC } from "react";
+import { useModals } from "../../hooks/useModals";
 import { organizeScore } from "../../utils/organizeScore";
 import { PrimaryButton, SecondButton, ThirdButton } from "../Buttons";
+import { ConfirmModal } from "../Modals";
 
 type Props = {
   usersName: Array<string>;
@@ -28,6 +30,8 @@ export const ScoreContent: VFC<Props> = ({
   );
 
   const [openedDetail, setOpenedDetail] = useState<false | number>(false);
+  const { isOpen, openModal, closeModal } = useModals();
+
   const onClickDetailButton = (num: number) => {
     if (num < gameCount) setOpenedDetail(num);
   };
@@ -134,8 +138,23 @@ export const ScoreContent: VFC<Props> = ({
       )}
       {isHost && !isProcessing && (
         <div className="text-center space-x-2">
-          <PrimaryButton text="次のゲームへ" onClick={goToNextGame} />
-          <SecondButton text="ゲーム終了" onClick={closeRoom} />
+          <PrimaryButton
+            text="次のゲームへ"
+            onClick={() => openModal("next")}
+          />
+          <SecondButton text="ゲーム終了" onClick={() => openModal("finish")} />
+          <ConfirmModal
+            isOpen={isOpen === "next"}
+            onClose={closeModal}
+            text={"もう1ゲーム遊びますか？"}
+            onClick={goToNextGame}
+          />
+          <ConfirmModal
+            isOpen={isOpen === "finish"}
+            onClose={closeModal}
+            text={"ゲームを終了しますか？"}
+            onClick={closeRoom}
+          />
         </div>
       )}
     </>

@@ -10,46 +10,30 @@ type Props = {
   disable?: boolean;
   fontSize?: number;
   width?: number;
-  height?: number;
 };
 
 // 汎用
-const PrimaryButton: VFC<Props> = ({
-  text,
-  onClick,
-  disable,
-  width = 32,
-  height = 8,
-}) => {
+const PrimaryButton: VFC<Props> = ({ text, onClick, disable, width = 32 }) => {
   return (
     <button
       onClick={onClick}
       disabled={disable}
       className={`text-xl sm:text-2xl w-${width} sm:w-${
-        width * 2
-      } h-${height} sm:h-${
-        height * 2
-      } rounded-lg border-2 border-blue-600 bg-blue-500 text-white hover:bg-blue-300`}
+        width * 1.5
+      } py-1 rounded-lg border-2 border-blue-600 bg-blue-500 text-white hover:bg-blue-300`}
     >
       {text}
     </button>
   );
 };
 
-const SecondButton: VFC<Props> = ({
-  text,
-  onClick,
-  width = 32,
-  height = 8,
-}) => {
+const SecondButton: VFC<Props> = ({ text, onClick, width = 32 }) => {
   return (
     <button
       onClick={onClick}
       className={`text-xl sm:text-2xl w-${width} sm:w-${
-        width * 2
-      } h-${height} sm:h-${
-        height * 2
-      } rounded-lg border-2 bg-blue-100 border-blue-500 text-blue-500 hover:text-white hover:bg-blue-400`}
+        width * 1.5
+      } py-1 rounded-lg border-2 bg-blue-100 border-blue-500 text-blue-500 hover:text-white hover:bg-blue-400`}
     >
       {text}
     </button>
