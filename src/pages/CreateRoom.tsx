@@ -16,18 +16,22 @@ export const CreateRoom: VFC = () => {
   const onClickCreateRoom = async () => {
     if (!userName) {
       message.error("名前を入力してください");
-    } else {
-      try {
-        setIsProcessing(true);
-        const ids = await createNewRoom(userName);
-        const userInfo = { ...ids, userName, isHost: true };
-        sessionStorage.setItem("userInfo", JSON.stringify(userInfo));
-        history.push("/host-entrance");
-      } catch (e) {
-        console.log(e);
-        setIsProcessing(false);
-        message.error("通信エラーです。もう一度お試しください");
-      }
+      return;
+    } else if (userName.length > 6) {
+      message.error("名前は6文字以内にしてください");
+      return;
+    }
+
+    try {
+      setIsProcessing(true);
+      const ids = await createNewRoom(userName);
+      const userInfo = { ...ids, userName, isHost: true };
+      sessionStorage.setItem("userInfo", JSON.stringify(userInfo));
+      history.push("/host-entrance");
+    } catch (e) {
+      console.log(e);
+      setIsProcessing(false);
+      message.error("通信エラーです。もう一度お試しください");
     }
   };
 
