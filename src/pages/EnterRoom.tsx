@@ -37,6 +37,9 @@ export const EnterRoom: VFC = () => {
     } else if (!userName) {
       message.error("名前を入力してください");
       return;
+    } else if (userName.length > 6) {
+      message.error("名前は6文字以内にしてください");
+      return;
     }
     try {
       setIsProcessing(true);
@@ -46,7 +49,6 @@ export const EnterRoom: VFC = () => {
       history.push(`/guest-entrance`);
     } catch {
       setIsProcessing(false);
-      message.error("ルームIDが正しいか確認のうえ、もう一度お試しください");
     }
     // TODO:途中入室を可能にする必要あり
   };

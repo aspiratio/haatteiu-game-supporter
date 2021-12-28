@@ -4,6 +4,7 @@ import {
   doc,
   runTransaction,
 } from "@firebase/firestore";
+import { message } from "antd";
 import { db } from "../../service/firebase";
 
 export const addGuestUser = async (roomId: string, userName: string) => {
@@ -13,9 +14,16 @@ export const addGuestUser = async (roomId: string, userName: string) => {
     await runTransaction(db, async (transaction) => {
       const roomDoc = await transaction.get(roomRef);
       if (!roomDoc.exists()) {
-        console.log("error");
-        throw Error();
+        throw Error("ルームが存在しないか、IDが間違っています");
       }
+
+      const usersName = roomDoc.data().usersName as Array<string>;
+      usersName.forEach((name) => {
+        if (name === userName) {
+          throw Error("他のユーザーと名前が重複しています");
+        }
+      });
+
       const gameCount = roomDoc.data().gameCount;
       let defaultScore: { [prop: string]: any } = {};
       // 2ゲーム目以降に入室するユーザーに空のスコアを登録する処理
@@ -34,8 +42,8 @@ export const addGuestUser = async (roomId: string, userName: string) => {
       transaction.update(roomRef, { usersName: arrayUnion(userName) });
     });
     return usersRef.id;
-  } catch (error) {
-    console.log("Transaction failed: ", error);
+  } catch (e: any) {
+    message.error(e.message);
     throw Error();
   }
 };
