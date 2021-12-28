@@ -269,6 +269,7 @@ export const Game = () => {
           usersName={usersName}
           allScore={allScore}
           gameCount={currentGameCount}
+          isFinished={isFinished}
           isHost={isHost}
           goToNextGame={goToNextGame}
           closeRoom={closeRoom}

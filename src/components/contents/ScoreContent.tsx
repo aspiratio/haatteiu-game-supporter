@@ -8,6 +8,7 @@ type Props = {
   usersName: Array<string>;
   allScore: Array<any>;
   gameCount: number;
+  isFinished: boolean;
   isHost: boolean;
   goToNextGame: () => void;
   closeRoom: () => void;
@@ -18,6 +19,7 @@ export const ScoreContent: VFC<Props> = ({
   usersName,
   allScore,
   gameCount,
+  isFinished,
   isHost,
   goToNextGame,
   closeRoom,
@@ -136,7 +138,7 @@ export const ScoreContent: VFC<Props> = ({
           </div>
         </div>
       )}
-      {isHost && !isProcessing && (
+      {isFinished && isHost && !isProcessing && (
         <div className="text-center space-x-2">
           <PrimaryButton
             text="次のゲームへ"
