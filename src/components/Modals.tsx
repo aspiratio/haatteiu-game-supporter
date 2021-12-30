@@ -58,13 +58,13 @@ const GameStartModal: VFC<SimpleModal> = ({ isOpen, onClose }) => {
     >
       <Link to="create-room">
         <img
-          src={`${process.env.PUBLIC_URL}/CreateRoom.svg`}
+          src={`${process.env.PUBLIC_URL}/image/CreateRoom.svg`}
           alt="ルームを作成"
         />
       </Link>
       <Link to="enter-room">
         <img
-          src={`${process.env.PUBLIC_URL}/EnterRoom.svg`}
+          src={`${process.env.PUBLIC_URL}/image/EnterRoom.svg`}
           alt="ルームに参加"
         />
       </Link>

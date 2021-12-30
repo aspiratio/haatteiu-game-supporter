@@ -22,7 +22,7 @@ export const Top: VFC = () => {
           オンライン投票！自動で集計！
         </h2>
         <img
-          src={`${process.env.PUBLIC_URL}/TitleImage.svg`}
+          src={`${process.env.PUBLIC_URL}/image/TitleImage.svg`}
           alt="オンライン通話+ボードゲーム"
           className="sm:h-96"
         />
