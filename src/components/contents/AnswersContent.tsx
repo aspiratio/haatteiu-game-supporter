@@ -29,6 +29,16 @@ export const AnswersContent: VFC<Props> = ({
   onClickSendButton,
   selectAlphabet,
 }) => {
+  const cellBgColor = (i: number, j: number) => {
+    let color = "bg-white";
+    if (j === i) {
+      color = "bg-gray-400";
+    } else if (j % 2 === 1) {
+      color = "bg-gray-100";
+    }
+    return color;
+  };
+
   return (
     <>
       {isFinished ? (
@@ -70,14 +80,16 @@ export const AnswersContent: VFC<Props> = ({
                     >
                       {name}
                     </th>
-                    {allAnswers[i].map((alphabet, i) => {
-                      const bgColor = i % 2 === 1 ? "bg-gray-100" : "bg-white";
+                    {allAnswers[i].map((alphabet, j) => {
                       return (
                         <td
                           key={alphabet}
-                          className={`text-center border-2 h-6v ${bgColor}`}
+                          className={`text-center border-2 h-6v ${cellBgColor(
+                            i,
+                            j
+                          )}`}
                         >
-                          {alphabet}
+                          {j !== i && alphabet}
                         </td>
                       );
                     })}
