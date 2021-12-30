@@ -41,10 +41,9 @@ export const AnswersContent: VFC<Props> = ({
             <thead>
               <tr className="h-6v">
                 <th className="w-24 font-thin sticky left-0 z-10 bg-gray-400 text-white">
-                  <span className="text-xs absolute top-0 right-0">回答者</span>
-                  \
-                  <span className="pl-1 text-xs absolute bottom-0 left-0">
-                    演技
+                  <span className="text-xs absolute top-1 right-1">演技</span>\
+                  <span className="pl-1 text-xs absolute bottom-1 left-0">
+                    回答者
                   </span>
                 </th>
                 {usersName.map((name, i) => {
