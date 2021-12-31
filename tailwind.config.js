@@ -54,6 +54,14 @@ module.exports = {
           "sans-serif",
         ],
       },
+      fontSize: {
+        "1v": "1vh",
+        "2v": "2vh",
+        "2.5v": "2.5vh",
+        "3v": "3vh",
+        "4v": "4vh",
+        "5v": "5vh",
+      },
     },
   },
   variants: {
