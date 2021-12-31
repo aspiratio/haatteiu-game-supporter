@@ -30,7 +30,7 @@ export const EnterRoom: VFC = () => {
 
   const history = useHistory();
 
-  const onClickCreateRoom = async () => {
+  const onClickEnterRoom = async () => {
     if (!roomId) {
       message.error("ルームIDを入力してください");
       return;
@@ -72,7 +72,7 @@ export const EnterRoom: VFC = () => {
         </div>
         <PrimaryButton
           text={"ルーム入室"}
-          onClick={onClickCreateRoom}
+          onClick={onClickEnterRoom}
           disable={isProcessing}
         />
       </div>
