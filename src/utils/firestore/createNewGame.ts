@@ -1,4 +1,5 @@
 import { collection, doc, getDocs, runTransaction } from "@firebase/firestore";
+import { message } from "antd";
 import { db } from "../../service/firebase";
 import { createAlphabetArray, createNumberArray } from "../createArray";
 import { shuffleArray } from "../shuffleArray";
@@ -18,8 +19,11 @@ export const createNewGame = async (roomId: string, uploadImg: string) => {
     await runTransaction(db, async (transaction) => {
       const roomDoc = await transaction.get(roomRef);
       if (!roomDoc.exists()) {
-        throw new Error("Document does not exist!");
+        throw new Error(
+          "ルームが見つかりません。もう一度最初からお試しください"
+        );
       }
+
       // TODO:Increment()に書き換え
       const newGameCount: number = roomDoc.data().gameCount + 1;
       transaction.update(roomRef, {
@@ -39,8 +43,8 @@ export const createNewGame = async (roomId: string, uploadImg: string) => {
       });
     });
     console.log("Transaction successfully committed!");
-  } catch (error) {
-    console.log("Transaction failed: ", error);
-    throw new Error("ゲーム作成失敗");
+  } catch (e: any) {
+    message.error(e);
+    throw new Error();
   }
 };

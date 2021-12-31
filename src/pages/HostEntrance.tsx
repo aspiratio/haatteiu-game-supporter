@@ -27,6 +27,10 @@ export const HostEntrance: VFC = () => {
 
   const history = useHistory();
   const { isOpen, openModal, closeModal } = useModals();
+  const confirmText =
+    usersName.length <= 2
+      ? "本来は3〜8人用のゲームです。開始してよろしいですか？"
+      : "開始してよろしいですか？";
 
   useEffect(() => {
     browserBackProtection();
@@ -42,6 +46,8 @@ export const HostEntrance: VFC = () => {
   const startGame = async () => {
     if (fileList.length !== 1) {
       message.error("画像をアップロードしてください");
+    } else if (usersName.length >= 9) {
+      message.error("ゲームに参加できるのは8人までです");
     } else {
       try {
         setIsProcessing(true);
@@ -50,8 +56,6 @@ export const HostEntrance: VFC = () => {
         history.push("/game");
       } catch (e) {
         setIsProcessing(false);
-        console.log(e);
-        alert("通信エラーです。もう一度お試しください");
       }
     }
   };
@@ -199,7 +203,7 @@ export const HostEntrance: VFC = () => {
               <ConfirmModal
                 isOpen={isOpen === "start"}
                 onClose={closeModal}
-                text={"開始してよろしいですか？"}
+                text={confirmText}
                 onClick={startGame}
               />
               <ConfirmModal
