@@ -79,12 +79,7 @@ const GameStartModal: VFC<SimpleModal> = ({ isOpen, onClose }) => {
 };
 
 // 使い方表示用モーダル
-const HowToUseModal: VFC<NormalModal> = ({
-  isOpen,
-  onClose,
-  text,
-  onClick,
-}) => {
+const HowToUseModal: VFC<SimpleModal> = ({ isOpen, onClose }) => {
   const [pageNum, setPageNum] = useState<number>(1);
 
   const decrementPageNum = () => {
