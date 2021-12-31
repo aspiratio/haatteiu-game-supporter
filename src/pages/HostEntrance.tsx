@@ -95,7 +95,6 @@ export const HostEntrance: VFC = () => {
       setUploadImg(src as string);
     } catch (error) {
       console.error(error);
-      throw error;
     }
   }, []);
 
