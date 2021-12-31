@@ -3,7 +3,7 @@ import { useHistory, useLocation } from "react-router-dom";
 import { Menu, MenuItem, MenuButton } from "@szhsin/react-menu";
 import "@szhsin/react-menu/dist/index.css";
 import { useModals } from "../hooks/useModals";
-import { ConfirmModal } from "./Modals";
+import { ConfirmModal, HowToUseModal } from "./Modals";
 
 export const Header: VFC = () => {
   const { isOpen, openModal, closeModal } = useModals();
@@ -44,7 +44,15 @@ export const Header: VFC = () => {
           <MenuItem>
             <button onClick={checkLocation}>トップ画面へ</button>
           </MenuItem>
-          <MenuItem>使い方をみる</MenuItem>
+          <MenuItem>
+            <button
+              onClick={() => {
+                openModal("how-to-use");
+              }}
+            >
+              使い方を見る
+            </button>
+          </MenuItem>
         </div>
       </Menu>
       <ConfirmModal
@@ -53,6 +61,7 @@ export const Header: VFC = () => {
         text={"トップページへ戻りますか？"}
         onClick={returnToTopPage}
       />
+      <HowToUseModal isOpen={isOpen === "how-to-use"} onClose={closeModal} />
     </>
   );
 };

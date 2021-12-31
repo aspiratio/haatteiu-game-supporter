@@ -35,7 +35,7 @@ export const ScoreContent: VFC<Props> = ({
   const { isOpen, openModal, closeModal } = useModals();
 
   const onClickDetailButton = (num: number) => {
-    if (num < gameCount) setOpenedDetail(num);
+    if (isFinished || num < gameCount) setOpenedDetail(num);
   };
   const onClickListButton = () => {
     setOpenedDetail(false);
