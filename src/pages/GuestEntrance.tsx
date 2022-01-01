@@ -45,9 +45,11 @@ export const GuestEntrance: VFC = () => {
   }, [history, returnToTopPage, roomId]);
 
   return (
-    <>
-      <Information roomId={roomId} userName={userName} />
-      <div className="flex flex-col h-3/4 justify-center items-center">
+    <div className="h-90v">
+      <div className="absolute">
+        <Information roomId={roomId} userName={userName} />
+      </div>
+      <div className="flex flex-col h-full justify-center items-center">
         <p className="text-lg sm:text-2xl text-blue-500">
           ゲームの開始を待っています...
         </p>
@@ -61,6 +63,6 @@ export const GuestEntrance: VFC = () => {
           onClick={returnToTopPage}
         />
       </div>
-    </>
+    </div>
   );
 };

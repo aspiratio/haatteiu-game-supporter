@@ -1,8 +1,22 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    match /{document=**} {
-      allow read, write: if true;
+    
+    function isRoomCreatingData(data) {
+      return data.keys().hasOnly(["createdAt", "usersName", "gameCount", "isDuringGame", "themeImg", "correctAnswer"])
+    }
+    
+    function isUserCreatingData(data) {
+      return data.keys().hasOnly(["displayName", "isHost", "actOrder", "answers", "score"])
+    }
+    
+    match /hgs/v1/rooms/{roomId} {
+      allow get, update, delete: if true;
+      allow create: if isRoomCreatingData(request.resource.data);
+      match /users/{userId} {
+        allow read, update, delete: if true;
+        allow create: if isUserCreatingData(request.resource.data);
+      }
     }
   }
 }
