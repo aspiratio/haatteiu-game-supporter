@@ -16,20 +16,15 @@ const overlay = {
   },
 };
 
-type NormalModal = {
+type Modal = {
   isOpen: boolean;
   onClose: () => void;
-  text: string;
-  onClick: () => void;
-};
-
-type SimpleModal = {
-  isOpen: boolean;
-  onClose: () => void;
+  text?: string;
+  onClick?: () => void;
 };
 
 // 処理を実行して良いか確認するためのモーダル
-const ConfirmModal: VFC<NormalModal> = ({ isOpen, onClose, text, onClick }) => {
+const ConfirmModal: VFC<Modal> = ({ isOpen, onClose, text, onClick }) => {
   return (
     <ReactModal
       isOpen={isOpen}
@@ -38,23 +33,28 @@ const ConfirmModal: VFC<NormalModal> = ({ isOpen, onClose, text, onClick }) => {
       className="w-3/4 max-w-sm h-1/5 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 flex flex-col justify-center text-center text-lg sm:text-2xl rounded-xl shadow-xl bg-yellow-50 z-50"
     >
       <p>{text}</p>
-      <div className="flex justify-center space-x-4 mt-2 text-white">
-        <button
-          onClick={onClick}
-          className="rounded-md px-5 py-1 shadow-sm bg-yellow-500"
-        >
-          Yes
-        </button>
-        <button onClick={onClose} className="rounded-md px-5 py-1 bg-gray-400">
-          No
-        </button>
-      </div>
+      {onClick && (
+        <div className="flex justify-center space-x-4 mt-2 text-white">
+          <button
+            onClick={onClick}
+            className="rounded-md px-5 py-1 shadow-sm bg-yellow-500"
+          >
+            Yes
+          </button>
+          <button
+            onClick={onClose}
+            className="rounded-md px-5 py-1 bg-gray-400"
+          >
+            No
+          </button>
+        </div>
+      )}
     </ReactModal>
   );
 };
 
 // トップページ用のスタートモーダル
-const GameStartModal: VFC<SimpleModal> = ({ isOpen, onClose }) => {
+const GameStartModal: VFC<Modal> = ({ isOpen, onClose }) => {
   return (
     <ReactModal
       isOpen={isOpen}
@@ -79,7 +79,7 @@ const GameStartModal: VFC<SimpleModal> = ({ isOpen, onClose }) => {
 };
 
 // 使い方表示用モーダル
-const HowToUseModal: VFC<SimpleModal> = ({ isOpen, onClose }) => {
+const HowToUseModal: VFC<Modal> = ({ isOpen, onClose }) => {
   const [pageNum, setPageNum] = useState<number>(1);
 
   const decrementPageNum = () => {
