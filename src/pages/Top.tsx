@@ -14,10 +14,6 @@ import { useModals } from "../hooks/useModals";
 export const Top: VFC = () => {
   const { isOpen, openModal, closeModal } = useModals();
 
-  const test = () => {
-    console.log("test");
-  };
-
   return (
     <>
       <GameStartModal isOpen={isOpen === "start"} onClose={closeModal} />
