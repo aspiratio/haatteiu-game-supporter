@@ -59,7 +59,7 @@ export const DescriptionText: VFC<Props> = ({ pageNum }) => {
             <h3 className="font-bold mx-1 mb-1">ルーム作成画面2-2</h3>
             <p>STEP3:</p>
             <p className="pl-2">ルームに入室した参加者の名前が表示されます。</p>
-            <p className="pl-2">参加者が揃ってからゲーム開始してください。</p>
+            <p className="pl-2">参加者が揃ってからゲームを開始してください。</p>
           </>
         );
       case 6:
@@ -74,7 +74,7 @@ export const DescriptionText: VFC<Props> = ({ pageNum }) => {
         return (
           <>
             <h3 className="font-bold mx-1 mb-1">ルーム参加画面2</h3>
-            <p>ホストがゲームを開始するまで、そのままお待ち下さい。</p>
+            <p>ホストがゲームを開始するまで、そのままお待ちください。</p>
           </>
         );
       case 8:

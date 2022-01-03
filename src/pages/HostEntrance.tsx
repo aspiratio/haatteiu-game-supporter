@@ -29,7 +29,7 @@ export const HostEntrance: VFC = () => {
   const { isOpen, openModal, closeModal } = useModals();
   const confirmText =
     usersName.length <= 2
-      ? "本来は3〜8人用のゲームです。開始してよろしいですか？"
+      ? "参加者が3人未満です。開始してよろしいですか？"
       : "開始してよろしいですか？";
 
   useEffect(() => {
@@ -67,7 +67,7 @@ export const HostEntrance: VFC = () => {
     history.push("/");
   };
 
-  const invitingUrl = `https://haateiu-game-supporter/enter-room/${roomId}`;
+  const invitingUrl = `https://haatteiu-game-supporter.web.app/enter-room/${roomId}`;
 
   const copy = (data: string) => {
     navigator.clipboard.writeText(data);
@@ -117,7 +117,7 @@ export const HostEntrance: VFC = () => {
   };
 
   return (
-    <div className="text-sm w-11/12 sm:w-8/12 mx-auto mt-3 space-y-4">
+    <div className="text-base w-11/12 sm:w-8/12 mx-auto mt-3 space-y-4">
       <h2 className="text-center font-bold underline text-gray-500">
         ゲーム開始の手順
       </h2>
@@ -125,30 +125,22 @@ export const HostEntrance: VFC = () => {
         <p className="mb-2">STEP1 : 下記のどちらかを他の参加者に共有</p>
         <ul className="list-disc list-inside ml-2">
           <li className="space-x-2">
-            招待URL：
+            招待URL :
             <input
-              className="w-2/5 sm:w-3/5 sm:max-w-sm px-1"
+              className="w-2/5 sm:w-3/5 sm:max-w-sm text-sm px-1"
               readOnly
               value={invitingUrl}
             />
-            <ThirdButton
-              text={"コピー"}
-              onClick={() => copy(invitingUrl)}
-              width={12}
-            />
+            <ThirdButton text={"コピー"} onClick={() => copy(invitingUrl)} />
           </li>
           <li className="space-x-2">
-            ルームID：
+            ルームID :
             <input
-              className="w-2/5 sm:w-3/5 sm:max-w-sm px-1"
+              className="w-2/5 sm:w-3/5 sm:max-w-sm px-1 text-sm"
               readOnly
               value={roomId}
             />
-            <ThirdButton
-              text={"コピー"}
-              onClick={() => copy(roomId)}
-              width={12}
-            />
+            <ThirdButton text={"コピー"} onClick={() => copy(roomId)} />
           </li>
         </ul>
       </div>
@@ -186,19 +178,28 @@ export const HostEntrance: VFC = () => {
             );
           })}
         </ul>
-        <p className="text-center">参加人数 {usersName.length}人</p>
-        <div className="text-center space-x-2 mt-4">
+        <p className="text-center font-bold my-2">
+          参加人数 {usersName.length}人
+        </p>
+        <div className="text-center space-x-2">
           {isProcessing ? (
             <p className="text-lg sm:text-2xl text-blue-500">
               しばらくお待ち下さい...
             </p>
           ) : (
-            <>
-              <PrimaryButton
-                text={"ゲーム開始"}
-                onClick={() => openModal("start")}
-              />
-              <SecondButton text={"中止"} onClick={() => openModal("cancel")} />
+            <div className="space-x-3">
+              <div className="w-32 sm:w-48 inline-block">
+                <PrimaryButton
+                  text={"ゲーム開始"}
+                  onClick={() => openModal("start")}
+                />
+              </div>
+              <div className="w-32 sm:w-48 inline-block">
+                <SecondButton
+                  text={"中止"}
+                  onClick={() => openModal("cancel")}
+                />
+              </div>
               <ConfirmModal
                 isOpen={isOpen === "start"}
                 onClose={closeModal}
@@ -211,7 +212,7 @@ export const HostEntrance: VFC = () => {
                 text={"ルーム作成を中止しますか？"}
                 onClick={cancelGame}
               />
-            </>
+            </div>
           )}
         </div>
       </div>

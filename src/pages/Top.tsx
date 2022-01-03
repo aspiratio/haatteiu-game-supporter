@@ -24,7 +24,7 @@ export const Top: VFC = () => {
         text={"申し訳ございません。ツイート機能は近日実装予定です。"}
       />
       <div className="flex flex-col mx-auto max-w-sm sm:max-w-xl">
-        <h2 className="mx-auto mt-10 text-lg sm:text-xl text-gray-500">
+        <h2 className="mx-auto mt-10 mb-2 text-lg sm:text-xl text-gray-500">
           オンライン投票！自動で集計！
         </h2>
         <img

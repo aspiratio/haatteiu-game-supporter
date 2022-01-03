@@ -8,43 +8,38 @@ type Props = {
   text: string;
   onClick: () => void;
   disable?: boolean;
-  fontSize?: number;
-  width?: number;
 };
 
 // 汎用
-const PrimaryButton: VFC<Props> = ({ text, onClick, disable, width = 32 }) => {
+const PrimaryButton: VFC<Props> = ({ text, onClick, disable }) => {
   return (
     <button
       onClick={onClick}
       disabled={disable}
-      className={`text-xl sm:text-2xl w-${width} sm:w-${
-        width * 1.5
-      } py-1 rounded-lg border-2 border-blue-600 bg-blue-500 text-white hover:bg-blue-300`}
+      className={`text-xl sm:text-2xl w-full py-1 sm:py-2 rounded-lg border-2 border-blue-600 bg-blue-500 text-white hover:bg-blue-300`}
     >
       {text}
     </button>
   );
 };
 
-const SecondButton: VFC<Props> = ({ text, onClick, width = 32 }) => {
+const SecondButton: VFC<Props> = ({ text, onClick, disable }) => {
   return (
     <button
       onClick={onClick}
-      className={`text-xl sm:text-2xl w-${width} sm:w-${
-        width * 1.5
-      } py-1 rounded-lg border-2 bg-blue-100 border-blue-500 text-blue-500 hover:text-white hover:bg-blue-400`}
+      disabled={disable}
+      className={`text-xl sm:text-2xl w-full py-1 sm:py-2 rounded-lg border-2 bg-blue-100 border-blue-500 text-blue-500 hover:text-white hover:bg-blue-400`}
     >
       {text}
     </button>
   );
 };
 
-const ThirdButton: VFC<Props> = ({ text, onClick, width }) => {
+const ThirdButton: VFC<Props> = ({ text, onClick }) => {
   return (
     <button
       onClick={onClick}
-      className={`px-1 py-1 text-xs w-${width} rounded-lg border-2 bg-gray-200 border-gray-500 text-gray-600 hover:text-white hover:bg-gray-500`}
+      className={`px-1 py-1 text-xs rounded-lg border-2 bg-gray-200 border-gray-500 text-gray-600 hover:text-white hover:bg-gray-500`}
     >
       {text}
     </button>
@@ -68,12 +63,10 @@ const TwitterButton: VFC<Props> = ({ text, onClick }) => {
     <>
       <button
         onClick={onClick}
-        className="inline-flex rounded-md shadow-lg bg-blue-400 hover:bg-blue-300"
+        className="text-base flex rounded-md shadow-lg bg-blue-400 hover:bg-blue-300"
       >
-        <FaTwitter className="h-auto w-auto p-2 rounded-md text-white" />
-        <span className="text-sm pr-2 pl-0 my-auto rounded-md text-white">
-          {text}
-        </span>
+        <FaTwitter className="h-auto w-auto pr-2 pl-3 py-3 my-auto rounded-md text-white" />
+        <span className="pr-3 my-auto rounded-md text-white">{text}</span>
       </button>
     </>
   );
@@ -84,10 +77,10 @@ const HowToUseButton: VFC<Props> = ({ text, onClick }) => {
     <>
       <button
         onClick={onClick}
-        className="inline-flex rounded-md shadow-lg bg-gray-300 hover:bg-gray-400"
+        className="text-base flex rounded-md shadow-lg bg-gray-300 hover:bg-gray-400"
       >
-        <FaQuestionCircle className="h-auto w-auto p-2 rounded-md" />
-        <span className="text-sm pr-2 pl-0 my-auto rounded-md">{text}</span>
+        <FaQuestionCircle className="text-xl h-auto w-auto pr-2 pl-4 py-3 my-auto rounded-md" />
+        <span className="pr-4 my-auto rounded-md">{text}</span>
       </button>
     </>
   );

@@ -232,13 +232,13 @@ export const Game = () => {
         userAlphabet={userAlphabet}
       />
       {currentActorNumber !== 0 && currentActorNumber === usersName.length ? (
-        <p className="h-10v flex justify-center items-center text-vivid-red">
+        <p className="h-10v my-2 flex justify-center items-center text-vivid-red">
           全員の演技が終わりました
           <br />
           正解を発表し点数を確認してください
         </p>
       ) : (
-        <p className="h-10v flex text-xl justify-center items-center text-vivid-red">
+        <p className="h-10v mb-2 flex text-xl justify-center items-center text-vivid-red">
           {currentActorNumber + 1}人目の演者は{usersName[currentActorNumber]}
           さん
         </p>

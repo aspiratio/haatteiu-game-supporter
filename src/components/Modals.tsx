@@ -99,9 +99,11 @@ const HowToUseModal: VFC<Modal> = ({ isOpen, onClose }) => {
       isOpen={isOpen}
       onRequestClose={onClose}
       style={overlay}
-      className="w-3/4 max-w-sm h-9/10 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 flex flex-col justify-center text-center text-lg sm:text-2xl shadow-xl bg-yellow-50 z-50 p-1"
+      className="w-3/4 max-w-md lg:max-w-lg h-9/10 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 flex flex-col justify-center text-center text-lg sm:text-2xl shadow-xl bg-yellow-50 z-50 p-1"
     >
-      <span className="text-sm absolute top-1 left-1">p{pageNum}/12</span>
+      <span className="text-sm lg:text-base absolute top-1 left-1">
+        p{pageNum}/12
+      </span>
       <AiFillCloseSquare
         onClick={onClose}
         className="text-2xl absolute top-0 right-0 cursor-pointer text-gray-500"

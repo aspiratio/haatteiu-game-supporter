@@ -9,10 +9,10 @@ type Props = {
 export const Information: VFC<Props> = ({ roomId, userName, userAlphabet }) => {
   return (
     <div>
-      <p>ルームID：{roomId}</p>
-      <p>あなた：{userName}</p>
+      <p>ルームID : {roomId}</p>
+      <p>あなた : {userName}</p>
       {userAlphabet && (
-        <p className="text-blue-400">あなたのアルファベット：{userAlphabet}</p>
+        <p className="text-blue-400">あなたのアルファベット : {userAlphabet}</p>
       )}
     </div>
   );
