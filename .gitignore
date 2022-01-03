@@ -31,3 +31,5 @@ yarn-error.log*
 firebase-export-*
 
 .vscode
+
+.firebase/hosting.YnVpbGQ.cache
