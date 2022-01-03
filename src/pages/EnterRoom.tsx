@@ -55,26 +55,28 @@ export const EnterRoom: VFC = () => {
 
   return (
     <>
-      <div className="text-center w-3/4 sm:w-1/2 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-        <p className="sm:text-xl md:text-2xl">
+      <div className="text-center w-9/10 lg:w-3/5 h-90v flex flex-col justify-center m-auto">
+        <p className="sm:text-xl lg:text-2xl">
           入室するルームIDとゲームで表示する名前を入力してください
         </p>
         <br />
-        <div className="flex flex-col space-y-8 items-center mt-7 mb-14 ">
-          <div className="text-center">
-            <p className="text-xl sm:text-2xl pb-2">ルームID</p>
+        <div className="flex flex-col sm:flex-row space-y-8 sm:space-y-0 sm:space-x-3 items-center mt-4 mb-14 justify-center">
+          <div className="text-center w-4/10">
+            <p className="text-xl lg:text-2xl pb-2">ルームID</p>
             <InputBox value={roomId} onChange={onChangeRoomId} />
           </div>
-          <div className="text-center">
-            <p className="text-xl sm:text-2xl pb-2">名前</p>
+          <div className="text-center w-4/10">
+            <p className="text-xl lg:text-2xl pb-2">名前</p>
             <InputBox onChange={onChangeUserName} />
           </div>
         </div>
-        <PrimaryButton
-          text={"ルーム入室"}
-          onClick={onClickEnterRoom}
-          disable={isProcessing}
-        />
+        <div className="w-4/10 mx-auto">
+          <PrimaryButton
+            text={"ルーム入室"}
+            onClick={onClickEnterRoom}
+            disable={isProcessing}
+          />
+        </div>
       </div>
     </>
   );

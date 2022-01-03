@@ -99,17 +99,19 @@ const HowToUseModal: VFC<Modal> = ({ isOpen, onClose }) => {
       isOpen={isOpen}
       onRequestClose={onClose}
       style={overlay}
-      className="w-3/4 max-w-sm h-9/10 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 flex flex-col justify-center text-center text-lg sm:text-2xl shadow-xl bg-yellow-50 z-50 p-1"
+      className="w-3/4 max-w-md lg:max-w-lg h-9/10 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 flex flex-col justify-center text-center text-lg sm:text-2xl shadow-xl bg-yellow-50 z-50 p-1"
     >
-      <span className="text-sm absolute top-1 left-1">p{pageNum}/12</span>
+      <span className="text-sm lg:text-base absolute top-1 left-1">
+        p{pageNum}/12
+      </span>
       <AiFillCloseSquare
         onClick={onClose}
         className="text-2xl absolute top-0 right-0 cursor-pointer text-gray-500"
       />
-      <div className="h-7/10 flex justify-center items-center">
+      <div className="h-7/10 w-full flex justify-center items-center">
         <AiFillCaretLeft
           onClick={decrementPageNum}
-          className="text-2xl cursor-pointer min-w-min pl-1"
+          className="text-2xl cursor-pointer mr-1"
         />
         <img
           src={`${process.env.PUBLIC_URL}/image/slide/${pageNum}.svg`}
@@ -118,7 +120,7 @@ const HowToUseModal: VFC<Modal> = ({ isOpen, onClose }) => {
         />
         <AiFillCaretRight
           onClick={incrementPageNum}
-          className="text-2xl cursor-pointer min-w-min pr-1"
+          className="text-2xl cursor-pointer ml-1"
         />
       </div>
       <div className="h-20v p-1 text-left text-2.5v leading-none">

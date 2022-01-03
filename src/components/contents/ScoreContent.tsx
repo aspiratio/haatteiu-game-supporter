@@ -87,7 +87,7 @@ export const ScoreContent: VFC<Props> = ({
                 {Array(gameCount)
                   .fill(0)
                   .map((_, i) => (
-                    <td className="h-8v" key={i}>
+                    <td className="h-12" key={i}>
                       <ThirdButton
                         text={"詳細"}
                         onClick={() => onClickDetailButton(i + 1)}
@@ -139,12 +139,19 @@ export const ScoreContent: VFC<Props> = ({
         </div>
       )}
       {isFinished && isHost && !isProcessing && (
-        <div className="text-center space-x-2">
-          <PrimaryButton
-            text="次のゲームへ"
-            onClick={() => openModal("next")}
-          />
-          <SecondButton text="ゲーム終了" onClick={() => openModal("finish")} />
+        <div className="text-center space-x-2 mt-1">
+          <div className="w-36 sm:w-56 inline-block">
+            <PrimaryButton
+              text="次のゲームへ"
+              onClick={() => openModal("next")}
+            />
+          </div>
+          <div className="w-36 sm:w-56 inline-block">
+            <SecondButton
+              text="ゲーム終了"
+              onClick={() => openModal("finish")}
+            />
+          </div>
           <ConfirmModal
             isOpen={isOpen === "next"}
             onClose={closeModal}

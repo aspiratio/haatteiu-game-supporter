@@ -108,11 +108,10 @@ export const AnswersContent: VFC<Props> = ({
           </p>
           {currentActorNumber === sentAnswers.length ? (
             currentActorNumber === userActorNumber ? (
-              <div className="my-2">
+              <div className="my-2 w-48 sm:w-72 mx-auto">
                 <PrimaryButton
                   text="演技しました"
                   onClick={() => onClickSendButton("ー")}
-                  width={48}
                 ></PrimaryButton>
               </div>
             ) : (
@@ -130,11 +129,12 @@ export const AnswersContent: VFC<Props> = ({
                     );
                   })}
                 </Select>
-                <PrimaryButton
-                  text="送信"
-                  onClick={() => onClickSendButton(answer)}
-                  width={24}
-                />
+                <div className="w-24 inline-block">
+                  <PrimaryButton
+                    text="送信"
+                    onClick={() => onClickSendButton(answer)}
+                  />
+                </div>
               </div>
             )
           ) : (

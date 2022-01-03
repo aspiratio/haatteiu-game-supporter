@@ -53,7 +53,7 @@ export const GuestEntrance: VFC = () => {
         <p className="text-lg sm:text-2xl text-blue-500">
           ゲームの開始を待っています...
         </p>
-        <div className="pt-20">
+        <div className="pt-20 w-32 md:w-48">
           <SecondButton text={"退室"} onClick={openModal} />
         </div>
         <ConfirmModal
