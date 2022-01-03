@@ -106,10 +106,10 @@ const HowToUseModal: VFC<Modal> = ({ isOpen, onClose }) => {
         onClick={onClose}
         className="text-2xl absolute top-0 right-0 cursor-pointer text-gray-500"
       />
-      <div className="h-7/10 flex justify-center items-center">
+      <div className="h-7/10 w-full flex justify-center items-center">
         <AiFillCaretLeft
           onClick={decrementPageNum}
-          className="text-2xl cursor-pointer min-w-min pl-1"
+          className="text-2xl cursor-pointer mr-1"
         />
         <img
           src={`${process.env.PUBLIC_URL}/image/slide/${pageNum}.svg`}
@@ -118,7 +118,7 @@ const HowToUseModal: VFC<Modal> = ({ isOpen, onClose }) => {
         />
         <AiFillCaretRight
           onClick={incrementPageNum}
-          className="text-2xl cursor-pointer min-w-min pr-1"
+          className="text-2xl cursor-pointer ml-1"
         />
       </div>
       <div className="h-20v p-1 text-left text-2.5v leading-none">
