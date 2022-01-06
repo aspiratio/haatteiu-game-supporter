@@ -1,17 +1,27 @@
 import { VFC } from "react";
 import "tailwindcss/colors";
 import { FaTwitter, FaQuestionCircle } from "react-icons/fa";
+import {
+  FacebookShareButton,
+  FacebookIcon,
+  TwitterShareButton,
+  TwitterIcon,
+  LineShareButton,
+  LineIcon,
+} from "react-share";
 
-// TODO：型定義から可能な限り？を除く ツイートボタン、使い方ボタンにpropsを持たせる
-
-type Props = {
+type Button = {
   text: string;
   onClick: () => void;
   disable?: boolean;
 };
 
+type Share = {
+  shareTitle: string;
+};
+
 // 汎用
-const PrimaryButton: VFC<Props> = ({ text, onClick, disable }) => {
+const PrimaryButton: VFC<Button> = ({ text, onClick, disable }) => {
   return (
     <button
       onClick={onClick}
@@ -23,7 +33,7 @@ const PrimaryButton: VFC<Props> = ({ text, onClick, disable }) => {
   );
 };
 
-const SecondButton: VFC<Props> = ({ text, onClick, disable }) => {
+const SecondButton: VFC<Button> = ({ text, onClick, disable }) => {
   return (
     <button
       onClick={onClick}
@@ -35,7 +45,7 @@ const SecondButton: VFC<Props> = ({ text, onClick, disable }) => {
   );
 };
 
-const ThirdButton: VFC<Props> = ({ text, onClick }) => {
+const ThirdButton: VFC<Button> = ({ text, onClick }) => {
   return (
     <button
       onClick={onClick}
@@ -47,7 +57,7 @@ const ThirdButton: VFC<Props> = ({ text, onClick }) => {
 };
 
 // 専用
-const StartButton: VFC<Props> = ({ text, onClick }) => {
+const StartButton: VFC<Button> = ({ text, onClick }) => {
   return (
     <button
       onClick={onClick}
@@ -58,21 +68,7 @@ const StartButton: VFC<Props> = ({ text, onClick }) => {
   );
 };
 
-const TwitterButton: VFC<Props> = ({ text, onClick }) => {
-  return (
-    <>
-      <button
-        onClick={onClick}
-        className="text-base flex rounded-md shadow-lg bg-blue-400 hover:bg-blue-300"
-      >
-        <FaTwitter className="h-auto w-auto pr-2 pl-3 py-3 my-auto rounded-md text-white" />
-        <span className="pr-3 my-auto rounded-md text-white">{text}</span>
-      </button>
-    </>
-  );
-};
-
-const HowToUseButton: VFC<Props> = ({ text, onClick }) => {
+const HowToUseButton: VFC<Button> = ({ text, onClick }) => {
   return (
     <>
       <button
@@ -86,11 +82,43 @@ const HowToUseButton: VFC<Props> = ({ text, onClick }) => {
   );
 };
 
+const TwitterButton: VFC<Button> = ({ text, onClick }) => {
+  return (
+    <>
+      <button
+        onClick={onClick}
+        className="text-base flex rounded-md shadow-lg bg-blue-400 hover:bg-blue-300"
+      >
+        <FaTwitter className="h-auto w-auto pr-2 pl-3 py-3 my-auto rounded-md text-white" />
+        <span className="pr-3 my-auto rounded-md text-white">{text}</span>
+      </button>
+    </>
+  );
+};
+
+const ShareButtons: VFC<Share> = ({ shareTitle }) => {
+  const url = "https://haatteiu-game-supporter.web.app/";
+  return (
+    <div className="space-x-4">
+      <FacebookShareButton url={url} hashtag="#ボードゲーム">
+        <FacebookIcon size={40} round />
+      </FacebookShareButton>
+      <TwitterShareButton url={url} hashtags={["ボードゲーム"]}>
+        <TwitterIcon size={40} round />
+      </TwitterShareButton>
+      <LineShareButton url={url} title={shareTitle}>
+        <LineIcon size={40} round />
+      </LineShareButton>
+    </div>
+  );
+};
+
 export {
   StartButton,
   PrimaryButton,
   SecondButton,
   ThirdButton,
-  TwitterButton,
   HowToUseButton,
+  TwitterButton,
+  ShareButtons,
 };
