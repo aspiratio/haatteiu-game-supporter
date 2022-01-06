@@ -1,6 +1,7 @@
 import { VFC } from "react";
 import {
   HowToUseButton,
+  ShareButtons,
   StartButton,
   TwitterButton,
 } from "../components/Buttons";
@@ -38,14 +39,16 @@ export const Top: VFC = () => {
           text={"ゲームを始める"}
           onClick={() => openModal("start")}
         />
-        <div className="flex space-x-12 justify-center mt-5">
-          <TwitterButton text={"ツイート"} onClick={() => openModal("tweet")} />
-          <HowToUseButton
-            text={"使い方"}
-            onClick={() => {
-              openModal("how-to-use");
-            }}
-          />
+        <div className="flex justify-center mt-5">
+          <ShareButtons shareTitle="タイトル" />
+          <div className="ml-8">
+            <HowToUseButton
+              text={"使い方"}
+              onClick={() => {
+                openModal("how-to-use");
+              }}
+            />
+          </div>
         </div>
       </div>
     </>
