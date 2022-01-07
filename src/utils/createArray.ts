@@ -1,10 +1,13 @@
-// Aから順番に指定した数だけアルファベットの文字列が並ぶ配列を返す関数
+const alphabets = ["A", "B", "C", "D", "E", "F", "G", "H"];
+// AからHの中から指定した数だけアルファベットの文字列が並ぶ配列を返す関数
 export const createAlphabetArray = (number: number) => {
-  let alphabets = [];
+  let newAlphabets = [];
   for (let i = 0; i < number; i++) {
-    alphabets.push(String.fromCharCode(65 + i));
+    const randomNum = Math.floor(Math.random() * alphabets.length);
+    newAlphabets.push(alphabets[randomNum]);
+    alphabets.splice(randomNum, 1);
   }
-  return alphabets;
+  return newAlphabets;
 };
 
 export const createNumberArray = (number: number) => {

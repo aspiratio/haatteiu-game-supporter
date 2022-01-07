@@ -17,7 +17,6 @@ import {
 import { db } from "../service/firebase";
 import { browserBackProtection } from "../utils/browserBackProtection";
 import { sendAnswer } from "../utils/firestore/sendAnswer";
-import { createAlphabetArray } from "../utils/createArray";
 import { calculateScore } from "../utils/calculateScore";
 import { updateScore } from "../utils/firestore/updateScore";
 import { useHistory } from "react-router-dom";
@@ -53,7 +52,7 @@ export const Game = () => {
   const [allScore, setAllScore] = useState<Array<any>>([]);
   const [isProcessing, setIsProcessing] = useState(false);
 
-  const allOptions = createAlphabetArray(usersName.length);
+  const allOptions = ["A", "B", "C", "D", "E", "F", "G", "H"];
   const selectableOptions = allOptions.filter(
     (i) => sentAnswers.indexOf(i) === -1 && i !== userAlphabet
   );
