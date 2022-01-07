@@ -3,7 +3,6 @@ import {
   HowToUseButton,
   ShareButtons,
   StartButton,
-  TwitterButton,
 } from "../components/Buttons";
 import {
   ConfirmModal,
