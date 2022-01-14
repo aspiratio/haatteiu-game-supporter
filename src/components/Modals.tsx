@@ -123,7 +123,7 @@ const HowToUseModal: VFC<Modal> = ({ isOpen, onClose }) => {
           className="text-2xl cursor-pointer ml-1"
         />
       </div>
-      <div className="h-20v p-1 text-left text-2.5v leading-none">
+      <div className="h-20v px-2 py-1 md:px-4 text-left text-2.5v leading-none">
         <DescriptionText pageNum={pageNum} />
       </div>
     </ReactModal>
