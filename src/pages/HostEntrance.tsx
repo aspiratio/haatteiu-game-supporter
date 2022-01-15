@@ -117,7 +117,7 @@ export const HostEntrance: VFC = () => {
   };
 
   return (
-    <div className="text-base w-11/12 sm:w-8/12 mx-auto mt-3 space-y-4">
+    <div className="text-base w-11/12 max-w-xl mx-auto mt-3 space-y-4">
       <h2 className="text-center font-bold underline text-gray-500">
         ゲーム開始の手順
       </h2>
