@@ -79,6 +79,17 @@ export const Game = () => {
     }
   };
 
+  const updateCurrentActorNumber = useCallback(
+    (num: number) => {
+      if (num > currentActorNumber) {
+        message.info("全員の回答が出揃いました");
+        setCurrentActorNumber(num);
+        console.log("update");
+      }
+    },
+    [currentActorNumber]
+  );
+
   const goToNextGame = () => {
     try {
       setIsProcessing(true);
@@ -157,14 +168,14 @@ export const Game = () => {
       const min = answersLength.reduce((a, b) => {
         return Math.min(a, b);
       });
-      setCurrentActorNumber(min);
-      console.log("update");
+      updateCurrentActorNumber(min);
+      console.log("snapshot");
     });
     return () => {
       unmount = true;
       snapshot();
     };
-  }, [fetchRoom, fetchUser, orderByAllUsers, roomId]);
+  }, [fetchRoom, fetchUser, orderByAllUsers, roomId, updateCurrentActorNumber]);
 
   useEffect(() => {
     let unmount = false;
@@ -240,16 +251,11 @@ export const Game = () => {
         </p>
       ) : (
         <div className="h-10v mb-2 flex justify-center items-center text-vivid-red">
-          <div>
-            {currentActorNumber >= 1 && (
-              <p className="text-md">全員の回答が出揃いました</p>
-            )}
-            <p className="text-xl">
-              {currentActorNumber + 1}人目の演者は
-              {usersName[currentActorNumber]}
-              さん
-            </p>
-          </div>
+          <p className="text-xl">
+            {currentActorNumber + 1}人目の演者は
+            {usersName[currentActorNumber]}
+            さん
+          </p>
         </div>
       )}
       <GameTabs
