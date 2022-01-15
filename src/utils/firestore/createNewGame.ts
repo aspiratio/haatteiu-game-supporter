@@ -42,7 +42,6 @@ export const createNewGame = async (roomId: string, uploadImg: string) => {
         });
       });
     });
-    console.log("Transaction successfully committed!");
   } catch (e: any) {
     message.error(e);
     throw new Error();

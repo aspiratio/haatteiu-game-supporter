@@ -29,7 +29,6 @@ export const CreateRoom: VFC = () => {
       sessionStorage.setItem("userInfo", JSON.stringify(userInfo));
       history.push("/host-entrance");
     } catch (e) {
-      console.log(e);
       setIsProcessing(false);
       message.error("通信エラーです。もう一度お試しください");
     }

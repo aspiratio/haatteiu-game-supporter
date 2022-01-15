@@ -84,7 +84,6 @@ export const Game = () => {
       if (num > currentActorNumber) {
         message.info("全員の回答が出揃いました");
         setCurrentActorNumber(num);
-        console.log("update");
       }
     },
     [currentActorNumber]
@@ -97,7 +96,6 @@ export const Game = () => {
       history.push("/host-entrance");
     } catch (error) {
       setIsProcessing(false);
-      console.log(error);
       message.error("通信失敗 もう一度お試しください");
     }
   };
@@ -169,7 +167,6 @@ export const Game = () => {
         return Math.min(a, b);
       });
       updateCurrentActorNumber(min);
-      console.log("snapshot");
     });
     return () => {
       unmount = true;
@@ -204,7 +201,6 @@ export const Game = () => {
           setIsFinished(true);
           setAllScore(scoreArray);
         }
-        console.log("finished");
       })();
     return () => {
       unmount = true;

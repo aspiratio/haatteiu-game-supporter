@@ -38,7 +38,6 @@ export const HostEntrance: VFC = () => {
       if (doc.exists()) {
         const data = doc.data();
         setUsersName(data.usersName);
-        console.log("changed");
       }
     });
   }, [roomId]);
@@ -52,7 +51,6 @@ export const HostEntrance: VFC = () => {
       try {
         setIsProcessing(true);
         await createNewGame(roomId, uploadImg);
-        console.log("Start the game");
         history.push("/game");
       } catch (e) {
         setIsProcessing(false);
@@ -62,7 +60,6 @@ export const HostEntrance: VFC = () => {
 
   const cancelGame = () => {
     deleteRoom(roomId);
-    console.log("Cancel the game");
     sessionStorage.clear();
     history.push("/");
   };
