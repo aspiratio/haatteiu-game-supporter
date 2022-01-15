@@ -239,10 +239,18 @@ export const Game = () => {
           正解を発表し点数を確認してください
         </p>
       ) : (
-        <p className="h-10v mb-2 flex text-xl justify-center items-center text-vivid-red">
-          {currentActorNumber + 1}人目の演者は{usersName[currentActorNumber]}
-          さん
-        </p>
+        <div className="h-10v mb-2 flex justify-center items-center text-vivid-red">
+          <div>
+            {currentActorNumber >= 1 && (
+              <p className="text-md">全員の回答が出揃いました</p>
+            )}
+            <p className="text-xl">
+              {currentActorNumber + 1}人目の演者は
+              {usersName[currentActorNumber]}
+              さん
+            </p>
+          </div>
+        </div>
       )}
       <GameTabs
         activeTab={activeTab}
