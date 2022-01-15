@@ -46,7 +46,7 @@ export const GuestEntrance: VFC = () => {
 
   return (
     <div className="h-90v">
-      <div className="absolute">
+      <div className="absolute ml-2 mt-2">
         <Information roomId={roomId} userName={userName} />
       </div>
       <div className="flex flex-col h-full justify-center items-center">

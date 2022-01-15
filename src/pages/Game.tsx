@@ -224,12 +224,14 @@ export const Game = () => {
   }, [history, isFinished, roomId]);
 
   return (
-    <>
-      <Information
-        roomId={roomId}
-        userName={userName}
-        userAlphabet={userAlphabet}
-      />
+    <div className="max-w-5xl mx-auto">
+      <div className="mt-1 ml-1">
+        <Information
+          roomId={roomId}
+          userName={userName}
+          userAlphabet={userAlphabet}
+        />
+      </div>
       {currentActorNumber !== 0 && currentActorNumber === usersName.length ? (
         <p className="h-10v my-2 flex justify-center items-center text-vivid-red">
           全員の演技が終わりました
@@ -275,6 +277,6 @@ export const Game = () => {
           isProcessing={isProcessing}
         />
       )}
-    </>
+    </div>
   );
 };
