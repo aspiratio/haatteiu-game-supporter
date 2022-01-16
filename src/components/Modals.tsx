@@ -7,6 +7,7 @@ import {
   AiFillCloseSquare,
 } from "react-icons/ai";
 import { DescriptionText } from "./slide/DescriptionText";
+import { ScreenView } from "./slide/ScreenView";
 
 ReactModal.setAppElement("body");
 // モーダルを開いたときの背景を暗くするため（その他のスタイルはtailwind cssであてる）
@@ -81,19 +82,25 @@ const GameStartModal: VFC<Modal> = ({ isOpen, onClose }) => {
 // 使い方表示用モーダル
 const HowToUseModal: VFC<Modal> = ({ isOpen, onClose }) => {
   const [pageNum, setPageNum] = useState<number>(1);
+  const maxPage = 12;
 
   const decrementPageNum = () => {
     setPageNum(pageNum - 1);
     if (pageNum <= 1) {
-      setPageNum(12);
+      setPageNum(maxPage);
     }
   };
   const incrementPageNum = () => {
     setPageNum(pageNum + 1);
-    if (pageNum >= 12) {
+    if (pageNum >= maxPage) {
       setPageNum(1);
     }
   };
+  const handleChangeIndex = (index: number) => {
+    setPageNum(index);
+    console.log(1);
+  };
+
   return (
     <ReactModal
       isOpen={isOpen}
@@ -102,7 +109,7 @@ const HowToUseModal: VFC<Modal> = ({ isOpen, onClose }) => {
       className="w-3/4 max-w-md lg:max-w-lg h-9/10 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 flex flex-col justify-center text-center text-lg sm:text-2xl shadow-xl bg-yellow-50 z-50 p-1"
     >
       <span className="text-sm lg:text-base absolute top-1 left-1">
-        p{pageNum}/12
+        p{pageNum}/{maxPage}
       </span>
       <AiFillCloseSquare
         onClick={onClose}
@@ -113,10 +120,10 @@ const HowToUseModal: VFC<Modal> = ({ isOpen, onClose }) => {
           onClick={decrementPageNum}
           className="text-2xl cursor-pointer mr-1"
         />
-        <img
-          src={`${process.env.PUBLIC_URL}/image/slide/${pageNum}.svg`}
-          alt="使い方解説スライド"
-          className="w-8/10 max-w-9/10 max-h-9/10 border-2"
+        <ScreenView
+          index={pageNum}
+          maxPage={maxPage}
+          onChangeIndex={() => handleChangeIndex}
         />
         <AiFillCaretRight
           onClick={incrementPageNum}
