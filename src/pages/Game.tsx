@@ -79,6 +79,16 @@ export const Game = () => {
     }
   };
 
+  const updateCurrentActorNumber = useCallback(
+    (num: number) => {
+      if (num > currentActorNumber) {
+        message.info("全員の回答が出揃いました");
+        setCurrentActorNumber(num);
+      }
+    },
+    [currentActorNumber]
+  );
+
   const goToNextGame = () => {
     try {
       setIsProcessing(true);
@@ -86,7 +96,6 @@ export const Game = () => {
       history.push("/host-entrance");
     } catch (error) {
       setIsProcessing(false);
-      console.log(error);
       message.error("通信失敗 もう一度お試しください");
     }
   };
@@ -157,14 +166,13 @@ export const Game = () => {
       const min = answersLength.reduce((a, b) => {
         return Math.min(a, b);
       });
-      setCurrentActorNumber(min);
-      console.log("update");
+      updateCurrentActorNumber(min);
     });
     return () => {
       unmount = true;
       snapshot();
     };
-  }, [fetchRoom, fetchUser, orderByAllUsers, roomId]);
+  }, [fetchRoom, fetchUser, orderByAllUsers, roomId, updateCurrentActorNumber]);
 
   useEffect(() => {
     let unmount = false;
@@ -193,7 +201,6 @@ export const Game = () => {
           setIsFinished(true);
           setAllScore(scoreArray);
         }
-        console.log("finished");
       })();
     return () => {
       unmount = true;
@@ -224,12 +231,14 @@ export const Game = () => {
   }, [history, isFinished, roomId]);
 
   return (
-    <>
-      <Information
-        roomId={roomId}
-        userName={userName}
-        userAlphabet={userAlphabet}
-      />
+    <div className="max-w-5xl mx-auto">
+      <div className="mt-1 ml-1">
+        <Information
+          roomId={roomId}
+          userName={userName}
+          userAlphabet={userAlphabet}
+        />
+      </div>
       {currentActorNumber !== 0 && currentActorNumber === usersName.length ? (
         <p className="h-10v my-2 flex justify-center items-center text-vivid-red">
           全員の演技が終わりました
@@ -237,10 +246,13 @@ export const Game = () => {
           正解を発表し点数を確認してください
         </p>
       ) : (
-        <p className="h-10v mb-2 flex text-xl justify-center items-center text-vivid-red">
-          {currentActorNumber + 1}人目の演者は{usersName[currentActorNumber]}
-          さん
-        </p>
+        <div className="h-10v mb-2 flex justify-center items-center text-vivid-red">
+          <p className="text-xl">
+            {currentActorNumber + 1}人目の演者は
+            {usersName[currentActorNumber]}
+            さん
+          </p>
+        </div>
       )}
       <GameTabs
         activeTab={activeTab}
@@ -275,6 +287,6 @@ export const Game = () => {
           isProcessing={isProcessing}
         />
       )}
-    </>
+    </div>
   );
 };

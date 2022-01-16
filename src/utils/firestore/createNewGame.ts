@@ -12,7 +12,7 @@ export const createNewGame = async (roomId: string, uploadImg: string) => {
     createAlphabetArray(usersDoc.size)
   );
   const numberArray: Array<string> = shuffleArray(
-    createNumberArray(usersDoc.size)
+    createNumberArray(0, usersDoc.size)
   );
 
   try {
@@ -42,7 +42,6 @@ export const createNewGame = async (roomId: string, uploadImg: string) => {
         });
       });
     });
-    console.log("Transaction successfully committed!");
   } catch (e: any) {
     message.error(e);
     throw new Error();

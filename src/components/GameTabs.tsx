@@ -30,16 +30,25 @@ export const GameTabs: VFC<Props> = ({
   }
 
   return (
-    <div className="text-lg w-4/5 max-w-md flex justify-center mx-auto text-gray-300">
-      <button className={`${themeButtonColor} pr-6`} onClick={onClickTheme}>
+    <div className="text-lg lg:text-xl w-4/5 flex justify-center mx-auto text-gray-300">
+      <button
+        className={`${themeButtonColor} pr-6 lg:pr-12`}
+        onClick={onClickTheme}
+      >
         お題
       </button>
       <span>|</span>
-      <button className={`${answersButtonColor} px-6`} onClick={onClickAnswers}>
+      <button
+        className={`${answersButtonColor} px-6 lg:px-12`}
+        onClick={onClickAnswers}
+      >
         回答
       </button>
       <span>|</span>
-      <button className={`${pointsButtonColor} pl-6`} onClick={onClickPoints}>
+      <button
+        className={`${pointsButtonColor} pl-6 lg:pl-12`}
+        onClick={onClickPoints}
+      >
         点数
       </button>
     </div>

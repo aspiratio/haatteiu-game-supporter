@@ -12,7 +12,6 @@ export const sendAnswer = async (
     await updateDoc(userRef, {
       answers: arrayUnion(answer),
     });
-    console.log("send answer");
   } catch {
     message.error("通信エラーです。もう一度お試しください");
   }
