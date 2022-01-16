@@ -1,12 +1,7 @@
-import { useState, VFC } from "react";
+import { VFC } from "react";
 import ReactModal from "react-modal";
 import { Link } from "react-router-dom";
-import {
-  AiFillCaretLeft,
-  AiFillCaretRight,
-  AiFillCloseSquare,
-} from "react-icons/ai";
-import { DescriptionText } from "./slide/DescriptionText";
+import { AiFillCloseSquare } from "react-icons/ai";
 import { ScreenView } from "./slide/ScreenView";
 
 ReactModal.setAppElement("body");
@@ -81,26 +76,6 @@ const GameStartModal: VFC<Modal> = ({ isOpen, onClose }) => {
 
 // 使い方表示用モーダル
 const HowToUseModal: VFC<Modal> = ({ isOpen, onClose }) => {
-  const [pageNum, setPageNum] = useState<number>(1);
-  const maxPage = 12;
-
-  const decrementPageNum = () => {
-    setPageNum(pageNum - 1);
-    if (pageNum <= 1) {
-      setPageNum(maxPage);
-    }
-  };
-  const incrementPageNum = () => {
-    setPageNum(pageNum + 1);
-    if (pageNum >= maxPage) {
-      setPageNum(1);
-    }
-  };
-  const handleChangeIndex = (index: number) => {
-    setPageNum(index);
-    console.log(1);
-  };
-
   return (
     <ReactModal
       isOpen={isOpen}
@@ -108,30 +83,12 @@ const HowToUseModal: VFC<Modal> = ({ isOpen, onClose }) => {
       style={overlay}
       className="w-3/4 max-w-md lg:max-w-lg h-9/10 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 flex flex-col justify-center text-center text-lg sm:text-2xl shadow-xl bg-yellow-50 z-50 p-1"
     >
-      <span className="text-sm lg:text-base absolute top-1 left-1">
-        p{pageNum}/{maxPage}
-      </span>
       <AiFillCloseSquare
         onClick={onClose}
-        className="text-2xl absolute top-0 right-0 cursor-pointer text-gray-500"
+        className="text-2xl absolute top-0 right-0 cursor-pointer text-gray-500 z-50"
       />
-      <div className="h-7/10 w-full flex justify-center items-center">
-        <AiFillCaretLeft
-          onClick={decrementPageNum}
-          className="text-2xl cursor-pointer mr-1"
-        />
-        <ScreenView
-          index={pageNum}
-          maxPage={maxPage}
-          onChangeIndex={() => handleChangeIndex}
-        />
-        <AiFillCaretRight
-          onClick={incrementPageNum}
-          className="text-2xl cursor-pointer ml-1"
-        />
-      </div>
-      <div className="h-20v px-2 py-1 md:px-4 text-left text-2.5v leading-none">
-        <DescriptionText pageNum={pageNum} />
+      <div className="h-full w-full p-2 flex justify-center">
+        <ScreenView />
       </div>
     </ReactModal>
   );
