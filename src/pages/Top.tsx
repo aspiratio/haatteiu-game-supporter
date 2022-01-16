@@ -4,11 +4,7 @@ import {
   ShareButtons,
   StartButton,
 } from "../components/Buttons";
-import {
-  ConfirmModal,
-  GameStartModal,
-  HowToUseModal,
-} from "../components/Modals";
+import { GameStartModal, HowToUseModal } from "../components/Modals";
 import { useModals } from "../hooks/useModals";
 
 export const Top: VFC = () => {
@@ -18,11 +14,6 @@ export const Top: VFC = () => {
     <>
       <GameStartModal isOpen={isOpen === "start"} onClose={closeModal} />
       <HowToUseModal isOpen={isOpen === "how-to-use"} onClose={closeModal} />
-      <ConfirmModal
-        isOpen={isOpen === "tweet"}
-        onClose={closeModal}
-        text={"申し訳ございません。ツイート機能は近日実装予定です。"}
-      />
       <div className="flex flex-col mx-auto max-w-sm sm:max-w-xl">
         <h2 className="mx-auto mt-10 mb-2 text-lg sm:text-xl text-gray-500">
           オンライン投票！自動で集計！
