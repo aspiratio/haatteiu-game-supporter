@@ -35,7 +35,7 @@ export const ScreenView: VFC = () => {
             key={page}
             className="flex flex-col justify-center items-center "
           >
-            <div className="h-60v">
+            <div className="h-50v">
               <img
                 src={`${process.env.PUBLIC_URL}/image/slide/${page}.svg`}
                 alt="使い方解説スライド"
