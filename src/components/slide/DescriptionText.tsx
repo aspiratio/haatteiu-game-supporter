@@ -12,12 +12,12 @@ export const DescriptionText: VFC<Props> = ({ pageNum }) => {
           <>
             <h3 className="font-bold ml-1 mb-1">このアプリでできること</h3>
             <p>
-              ビデオ通話しながら『はあって言うゲーム』を遊ぶことができます。
+              ビデオ通話しながら『はぁって言うゲーム』を遊ぶことができます。
             </p>
             <br />
             <h3 className="font-bold m-1">必要なもの</h3>
             <ul style={{ listStyleType: "disc ", listStylePosition: "inside" }}>
-              <li>はあって言うゲーム 1個</li>
+              <li>はぁって言うゲーム 1個</li>
               <li>ビデオ通話 全員</li>
             </ul>
           </>
