@@ -18,7 +18,11 @@ import imageCompression from "browser-image-compression";
 import { deleteRoom } from "../utils/firestore/deleteRoom";
 
 export const HostEntrance: VFC = () => {
-  const { userName, roomId } = getObjFromSessionStorage("userInfo");
+  const { userName, roomId, isHost } = getObjFromSessionStorage("userInfo") ?? {
+    userName: "",
+    roomId: "",
+    isHost: false,
+  };
   const [usersName, setUsersName] = useState([userName]);
   const [fileList, setFileList] = useState<UploadFile<any>[]>([]);
   const [preview, setPreview] = useState(false);
@@ -33,6 +37,10 @@ export const HostEntrance: VFC = () => {
       : "開始してよろしいですか？";
 
   useEffect(() => {
+    if (!roomId && !isHost) {
+      history.replace("/create-room");
+      return;
+    }
     browserBackProtection();
     return onSnapshot(doc(db, `hgs/v1/rooms/${roomId}`), (doc) => {
       if (doc.exists()) {
@@ -40,7 +48,7 @@ export const HostEntrance: VFC = () => {
         setUsersName(data.usersName);
       }
     });
-  }, [roomId]);
+  }, [history, isHost, roomId]);
 
   const startGame = async () => {
     if (fileList.length !== 1) {
