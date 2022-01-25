@@ -6,6 +6,7 @@ import { Game } from "../pages/Game";
 import { GuestEntrance } from "../pages/GuestEntrance";
 import { HostEntrance } from "../pages/HostEntrance";
 import { Top } from "../pages/Top";
+import { Page404 } from "../pages/Page404";
 
 export const Router = () => {
   return (
@@ -32,6 +33,9 @@ export const Router = () => {
         </Route>
         <Route path="/game">
           <Game />
+        </Route>
+        <Route path="*">
+          <Page404 />
         </Route>
       </Switch>
     </>
