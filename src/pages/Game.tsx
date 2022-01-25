@@ -102,7 +102,7 @@ export const Game = () => {
 
   const closeRoom = () => {
     deleteRoom(roomId);
-    sessionStorage.clear();
+    sessionStorage.removeItem("userInfo");
     history.push("/");
   };
 
@@ -227,7 +227,7 @@ export const Game = () => {
         doc.data().isDuringGame === false && history.push("/guest-entrance");
       } else {
         history.push("/");
-        sessionStorage.clear();
+        sessionStorage.removeItem("userInfo");
       }
     });
   }, [history, isFinished, roomId]);

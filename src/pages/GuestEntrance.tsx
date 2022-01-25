@@ -29,7 +29,7 @@ export const GuestEntrance: VFC = () => {
   const returnToTopPage = useCallback(() => {
     try {
       removeUser(roomId, userName, userId);
-      sessionStorage.clear();
+      sessionStorage.removeItem("userInfo");
       history.push("/");
     } catch {
       message.error("通信エラーです。もう一度お試しください");

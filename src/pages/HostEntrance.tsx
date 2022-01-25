@@ -68,7 +68,7 @@ export const HostEntrance: VFC = () => {
 
   const cancelGame = () => {
     deleteRoom(roomId);
-    sessionStorage.clear();
+    sessionStorage.removeItem("userInfo");
     history.push("/");
   };
 
