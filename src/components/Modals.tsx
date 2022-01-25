@@ -85,7 +85,7 @@ const HowToUseModal: VFC<Modal> = ({ isOpen, onClose }) => {
     >
       <AiFillCloseSquare
         onClick={onClose}
-        className="text-2xl absolute top-0 right-0 cursor-pointer text-gray-500 z-50"
+        className="text-2xl lg:text-4xl absolute top-0 right-0 cursor-pointer text-gray-500 z-50"
       />
       <div className="h-full w-full p-2 flex justify-center">
         <ScreenView />
