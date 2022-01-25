@@ -37,7 +37,7 @@ export const HostEntrance: VFC = () => {
       : "開始してよろしいですか？";
 
   useEffect(() => {
-    if (!roomId && !isHost) {
+    if (!roomId || !isHost) {
       history.replace("/create-room");
       return;
     }

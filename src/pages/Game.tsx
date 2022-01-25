@@ -183,7 +183,15 @@ export const Game = () => {
       unmount = true;
       snapshot();
     };
-  }, [fetchRoom, fetchUser, orderByAllUsers, roomId, updateCurrentActorNumber]);
+  }, [
+    fetchRoom,
+    fetchUser,
+    history,
+    orderByAllUsers,
+    roomId,
+    updateCurrentActorNumber,
+    userId,
+  ]);
 
   useEffect(() => {
     let unmount = false;
