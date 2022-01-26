@@ -11,7 +11,11 @@ import { browserBackProtection } from "../utils/browserBackProtection";
 import { message } from "antd";
 
 export const GuestEntrance: VFC = () => {
-  const { userName, roomId, userId } = getObjFromSessionStorage("userInfo");
+  const { userName, roomId, userId } = getObjFromSessionStorage("userInfo") ?? {
+    userName: "",
+    roomId: "",
+    userId: "",
+  };
   const [isOpen, setIsOpen] = useState(false);
   const history = useHistory();
 
@@ -25,7 +29,7 @@ export const GuestEntrance: VFC = () => {
   const returnToTopPage = useCallback(() => {
     try {
       removeUser(roomId, userName, userId);
-      sessionStorage.clear();
+      sessionStorage.removeItem("userInfo");
       history.push("/");
     } catch {
       message.error("通信エラーです。もう一度お試しください");
@@ -33,6 +37,10 @@ export const GuestEntrance: VFC = () => {
   }, [history, roomId, userId, userName]);
 
   useEffect(() => {
+    if (!roomId || !userId) {
+      history.replace("/enter-room");
+      return;
+    }
     browserBackProtection();
     return onSnapshot(doc(db, `hgs/v1/rooms/${roomId}`), (doc) => {
       if (doc.exists()) {
@@ -42,7 +50,7 @@ export const GuestEntrance: VFC = () => {
         returnToTopPage();
       }
     });
-  }, [history, returnToTopPage, roomId]);
+  }, [history, returnToTopPage, roomId, userId]);
 
   return (
     <div className="h-90v">

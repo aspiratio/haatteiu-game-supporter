@@ -10,7 +10,7 @@ export const DescriptionText: VFC<Props> = ({ pageNum }) => {
       case 1:
         return (
           <>
-            <h3 className="font-bold ml-1 mb-1">このアプリでできること</h3>
+            <h3 className="font-bold mx-1 mb-1">このアプリでできること</h3>
             <p>
               ビデオ通話しながら『はぁって言うゲーム』を遊ぶことができます。
             </p>

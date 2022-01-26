@@ -16,7 +16,7 @@ export const Top: VFC = () => {
       <HowToUseModal isOpen={isOpen === "how-to-use"} onClose={closeModal} />
       <div className="flex flex-col mx-auto max-w-sm sm:max-w-xl">
         <h2 className="mx-auto mt-10 mb-2 text-lg sm:text-xl text-gray-500">
-          オンライン投票！自動で集計！
+          オンライン投票!自動で集計!
         </h2>
         <img
           src={`${process.env.PUBLIC_URL}/image/TitleImage.svg`}

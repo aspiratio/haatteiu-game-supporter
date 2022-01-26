@@ -35,7 +35,14 @@ type Tab = "theme" | "answers" | "points";
 export const Game = () => {
   const history = useHistory();
   const { userName, roomId, userId, isHost }: Info = useMemo(() => {
-    return getObjFromSessionStorage("userInfo");
+    return (
+      getObjFromSessionStorage("userInfo") ?? {
+        userName: "",
+        roomId: "",
+        userId: "",
+        isHost: false,
+      }
+    );
   }, []);
 
   const [currentGameCount, setCurrentGameCount] = useState<number>(0);
@@ -102,6 +109,7 @@ export const Game = () => {
 
   const closeRoom = () => {
     deleteRoom(roomId);
+    sessionStorage.removeItem("userInfo");
     history.push("/");
   };
 
@@ -127,8 +135,11 @@ export const Game = () => {
 
   // TODO:firestoreとのやりとりを隠蔽する
   useEffect(() => {
+    if (!roomId || !userId) {
+      history.replace("/enter-room");
+      return;
+    }
     const usersRef = collection(db, `hgs/v1/rooms/${roomId}/users`);
-
     let unmount = false;
     browserBackProtection();
     (async () => {
@@ -172,7 +183,15 @@ export const Game = () => {
       unmount = true;
       snapshot();
     };
-  }, [fetchRoom, fetchUser, orderByAllUsers, roomId, updateCurrentActorNumber]);
+  }, [
+    fetchRoom,
+    fetchUser,
+    history,
+    orderByAllUsers,
+    roomId,
+    updateCurrentActorNumber,
+    userId,
+  ]);
 
   useEffect(() => {
     let unmount = false;
@@ -226,6 +245,7 @@ export const Game = () => {
         doc.data().isDuringGame === false && history.push("/guest-entrance");
       } else {
         history.push("/");
+        sessionStorage.removeItem("userInfo");
       }
     });
   }, [history, isFinished, roomId]);
