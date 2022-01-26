@@ -42,7 +42,7 @@ export const ScreenView: VFC = () => {
                 className="w-auto h-full border-2"
               />
             </div>
-            <div className="h-1/2 px-2 pt-3 md:px-4 text-left text-2.5v leading-none">
+            <div className="h-1/2 w-full px-2 pt-3 md:px-8 text-left text-2.5v leading-none">
               <DescriptionText pageNum={page} />
             </div>
           </div>
